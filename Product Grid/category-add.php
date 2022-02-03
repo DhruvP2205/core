@@ -3,26 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Add Product</title>
+    <title>Add Category</title>
 </head>
 <body>
-    <h2>Add Product</h2>
+    <h2>Add Category</h2>
 
-    <form action="product-save.php" method="post">
+    <form action="category-save.php" method="post">
         <label>Name</label>
-        <input type="text" name="productName" required />
-        <br>
-        <br>
-        <label>Price</label>
-        <input type="number" name="productPrice" required/>
-        <br>
-        <br>
-        <label>Quantity</label>
-        <input type="number" name="productQunty" required/>
+        <input type="text" name="categoryName" required />
         <br>
         <br>
         <label>Status</label>
-        <select name="productStatus">
+        <select name="categoryStatus">
             <option value="1" selected>Active</option>
             <option value="2">Inactive</option>
         </select>

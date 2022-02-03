@@ -1,3 +1,13 @@
+<?php
+    include 'Adapter.php';
+
+    $productID = $_GET['id'];
+
+    $adapter = new Adapter();
+    $result = $adapter->fetchRow("select * FROM product WHERE productID = $productID");
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,58 +17,28 @@
 </head>
 <body>
     <h2>Edit Product</h2>
-
-    <?php
-
-        $conn = mysqli_connect('localhost:3308','root','1234','demodb') or die("Connection failed");
-        $productID = $_GET['id'];
-
-        $query = "select * from product where productID = {$productID}";
-
-        $result = mysqli_query($conn,$query) or die("Unsuccessful!");  
-        
-        if (mysqli_num_rows($result)>0) 
-        { 
-            while($row = mysqli_fetch_assoc($result))
-            {
-
-        ?>
-
-        <form action="product-update.php" method="post">
-            <label>Name</label>
-            <input type="hidden" name="productID" value="<?php echo $row['productID']; ?>" required/>
-            <input type="text" name="productName" value="<?php echo $row['name']; ?>" required/>
-            <br>
-            <br>
-            <label>Price</label>
-            <input type="text" name="productPrice" value="<?php echo $row['price']; ?>" required/>
-            <br>
-            <br>
-            <label>Quantity</label>
-            <input type="text" name="productQunty" value="<?php echo $row['quantity']; ?>" required/>
-            <br>
-            <br>
-            <label>Status</label>
-            <select name="productStatus">
-                <option value="1" selected>Active</option>
-                <option value="0">Inactive</option>
-            </select>
-            <br>
-            <br>
-            <label>Created Date</label>
-            <input type="datetime-local" name="createdDate" value="<?php echo $row['createdDate']; ?>" required/>
-            <br>
-            <br>
-            <label>Updated Date</label>
-            <input type="datetime-local" name="updatedDate" value="<?php echo $row['updatedDate']; ?>" required/>
-            <br>
-            <br>
-            
-            <input class="submit" type="submit" value="Update"/>
-        </form>
-        <?php 
-            }
-        } 
-    ?>
+    <form action="product-save.php" method="post">
+        <label>Name</label>
+        <input type="hidden" name="productID" value="<?php echo $productID; ?>" required/>
+        <input type="text" name="productName" value="<?php echo $result['name']; ?>" required/>
+        <br>
+        <br>
+        <label>Price</label>
+        <input type="text" name="productPrice" value="<?php echo $result['price']; ?>" required/>
+        <br>
+        <br>
+        <label>Quantity</label>
+        <input type="text" name="productQunty" value="<?php echo $result['quantity']; ?>" required/>
+        <br>
+        <br>
+        <label>Status</label>
+        <select name="productStatus">
+            <option value="1" selected>Active</option>
+            <option value="2">Inactive</option>
+        </select>
+        <br>
+        <br>        
+        <input type='submit' name='Update' id='submit' value='update'/>
+    </form>
 </body>
 </html>

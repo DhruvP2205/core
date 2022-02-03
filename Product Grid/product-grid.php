@@ -1,3 +1,9 @@
+<?php
+    include 'Adapter.php';
+
+    $adapter = new Adapter();
+    $result = $adapter->fetchAll("select * FROM product");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,16 +14,11 @@
 </head>
 <body>
     <a href='product-add.php'>Add Product</a>
-    <h2>All Records</h2>
-
-    <?php 
-
-        $conn = mysqli_connect('localhost:3308','root','1234','demodb');
-      
-        $query = "Select * from product";
-        $result = mysqli_query($conn,$query) or die("Unsuccessful!");  
-        if (mysqli_num_rows($result)>0) 
-        { ?>
+    <?php
+        if($result)
+        {
+    ?>
+            <h2>All Records</h2>
             <table cellpadding="7px">
                 <thead>
                     <th>Sr No.</th>
@@ -31,41 +32,31 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                
                 <?php 
-                    $i=1;
-                    while($row =mysqli_fetch_assoc($result))
-                    {
+                    for($i=0; $i < count($result); $i++){
                 ?>
                 <tr>
-                    <td><?php echo $i; ?></td>
-                    <td><?php echo $row['productID']; ?></td>
-                    <td><?php echo $row['name']; ?></td>
-                    <td><?php echo $row['price']; ?></td>
-                    <td><?php echo $row['quantity']; ?></td>
-                    <td><?php echo $row['status']; ?></td>
-                    <td><?php echo $row['createdDate']; ?></td>
-                    <td><?php echo $row['updatedDate']; ?></td>
+                    <td><?php echo($i+1); ?></td>
+                    <td><?php echo($result[$i]['productID']); ?></td>
+                    <td><?php echo($result[$i]['name']); ?></td>
+                    <td><?php echo($result[$i]['price']); ?></td>
+                    <td><?php echo($result[$i]['quantity']); ?></td>
+                    <td><?php echo($result[$i]['status']); ?></td>
+                    <td><?php echo($result[$i]['createdDate']); ?></td>
+                    <td><?php echo($result[$i]['updatedDate']); ?></td>
                     <td>
-                        <a href="product-edit.php?id=<?php echo($row['productID']);?>">Edit</a>
-                        <a href="product-delete.php?id=<?php echo($row['productID']);?>">Delete</a>
+                        <a href="product-edit.php?id=<?php echo($result[$i]['productID']);?>">Edit</a>
+                        <a href="product-delete.php?id=<?php echo($result[$i]['productID']);?>">Delete</a>
                     </td>
                 </tr>
-
                 <?php
-                    $i++; 
+                        }
+                    }
+                    else{
+                        echo("<h2>No record found!</h2>");
                     }
                 ?>
-                
-                </tbody>
-            </table>
-        <?php
-            } 
-            else
-            {
-                echo "<h2>NO RECORD FOUND!</h2>";
-            }
-            mysqli_close($conn);
-        ?>
+        </tbody>
+    </table>
 </body>
 </html>
