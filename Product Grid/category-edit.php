@@ -1,10 +1,10 @@
 <?php
-    include 'Adapter.php';
+    require_once('Adapter.php');
 
     $categoryID = $_GET['id'];
 
     $adapter = new Adapter();
-    $result = $adapter->fetchRow("select * from category where categoryID = $categoryID");
+    $category = $adapter->fetchRow("select * from category where categoryID = $categoryID");
 ?>
 
 
@@ -17,16 +17,20 @@
 </head>
 <body>
     <h2>Edit Category</h2>
-    <form action="category-save.php" method="post">
+    <form action="category-index.php?a=saveAction&id=<?php echo $categoryID ?>" method="post">
         <label>Name</label>
-        <input type="hidden" name="categoryID" value="<?php echo $categoryID; ?>" required/>
-        <input type="text" name="categoryName" value="<?php echo $result['name']; ?>" required/>
+        <input type="text" name="category[name]" value="<?php echo $category['name']; ?>" required/>
         <br>
         <br>
         <label>Status</label>
-        <select name="categoryStatus">
+        <select name="category[status]">
+            <?php if($category['status']==1): ?>
             <option value="1" selected>Active</option>
             <option value="2">Inactive</option>
+            <?php else: ?>
+            <option value="1">Active</option>
+            <option value="2" selected>Inactive</option>                
+            <?php endif; ?>
         </select>
         <br>
         <br>        

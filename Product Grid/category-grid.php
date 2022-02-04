@@ -1,8 +1,8 @@
 <?php
-    include 'Adapter.php';
+    require_once('Adapter.php');
 
     $adapter = new Adapter();
-    $result = $adapter->fetchAll("select * from category");
+    $categories = $adapter->fetchAll("select * from category");
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,15 +13,10 @@
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href='category-add.php'>Add Category</a>
-    <?php
-        if($result)
-        {
-    ?>
+    <a href='category-index.php?a=addAction'>Add Product</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
                 <thead>
-                    <th>Sr No.</th>
                     <th>Category ID</th>
                     <th>Name</th> 
                     <th>Status</th>
@@ -31,28 +26,28 @@
                 </thead>
                 <tbody>
                     <?php
-                        for ($i=0; $i < count($result); $i++){
-                    ?>
-                        <tr>
-                            <td><?php echo($i+1); ?></td>
-                            <td><?php echo($result[$i]['categoryID']); ?></td>
-                            <td><?php echo($result[$i]['name']); ?></td>
-                            <td><?php echo($result[$i]['status']); ?></td>
-                            <td><?php echo($result[$i]['createdDate']); ?></td>
-                            <td><?php echo($result[$i]['updatedDate']); ?></td>
-                            <td>
-                            <a href="category-edit.php?id=<?php echo($result[$i]['categoryID']);?>">Edit</a>
-                            <a href="category-delete.php?id=<?php echo($result[$i]['categoryID']);?>">Delete</a>
-                            </td>
-                        </tr>
-                    <?php
-                        }
-                    }
-                    else{
-                        echo("<h2>No record found!</h2>");
-                    }
+                        if(!$categories):?>
+                            <tr><td colspan="10">No Record available.</td></tr>
+                    
+                <?php else:
+                    foreach ($categories as $category):
                 ?>
-                </tbody>
-            </table>
+                <tr>
+                    <td><?php echo($category['categoryID']); ?></td>
+                    <td><?php echo($category['name']); ?></td>
+                    <td><?php echo($category['status']); ?></td>
+                    <td><?php echo($category['createdDate']); ?></td>
+                    <td><?php echo($category['updatedDate']); ?></td>
+                    <td>
+                        <a href="category-index.php?a=editAction&id=<?php echo $category['categoryID'] ?>">Edit</a>
+                        <a href="category-index.php?a=deleteAction&id=<?php echo $category['categoryID'] ?>">Delete</a>
+                    </td>
+                </tr>
+                <?php
+                        endforeach;
+                    endif;
+                ?>
+        </tbody>
+    </table>
 </body>
 </html>

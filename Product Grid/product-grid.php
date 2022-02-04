@@ -1,8 +1,8 @@
 <?php
-    include 'Adapter.php';
+    require_once('Adapter.php');
 
     $adapter = new Adapter();
-    $result = $adapter->fetchAll("select * FROM product");
+    $products = $adapter->fetchAll("select * FROM product");
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,15 +13,10 @@
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href='product-add.php'>Add Product</a>
-    <?php
-        if($result)
-        {
-    ?>
+    <a href='product-index.php?a=addAction'>Add Product</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
                 <thead>
-                    <th>Sr No.</th>
                     <th>Product ID</th>
                     <th>Name</th>  
                     <th>Price</th>
@@ -32,29 +27,29 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                <?php 
-                    for($i=0; $i < count($result); $i++){
+                    <?php
+                        if(!$products):?>
+                            <tr><td colspan="10">No Record available.</td></tr>
+                    
+                <?php else:
+                    foreach ($products as $product):
                 ?>
                 <tr>
-                    <td><?php echo($i+1); ?></td>
-                    <td><?php echo($result[$i]['productID']); ?></td>
-                    <td><?php echo($result[$i]['name']); ?></td>
-                    <td><?php echo($result[$i]['price']); ?></td>
-                    <td><?php echo($result[$i]['quantity']); ?></td>
-                    <td><?php echo($result[$i]['status']); ?></td>
-                    <td><?php echo($result[$i]['createdDate']); ?></td>
-                    <td><?php echo($result[$i]['updatedDate']); ?></td>
+                    <td><?php echo($product['productID']); ?></td>
+                    <td><?php echo($product['name']); ?></td>
+                    <td><?php echo($product['price']); ?></td>
+                    <td><?php echo($product['quantity']); ?></td>
+                    <td><?php echo($product['status']); ?></td>
+                    <td><?php echo($product['createdDate']); ?></td>
+                    <td><?php echo($product['updatedDate']); ?></td>
                     <td>
-                        <a href="product-edit.php?id=<?php echo($result[$i]['productID']);?>">Edit</a>
-                        <a href="product-delete.php?id=<?php echo($result[$i]['productID']);?>">Delete</a>
+                        <a href="product-index.php?a=editAction&id=<?php echo $product['productID'] ?>">Edit</a>
+                        <a href="product-index.php?a=deleteAction&id=<?php echo $product['productID'] ?>">Delete</a>
                     </td>
                 </tr>
                 <?php
-                        }
-                    }
-                    else{
-                        echo("<h2>No record found!</h2>");
-                    }
+                        endforeach;
+                    endif;
                 ?>
         </tbody>
     </table>
