@@ -10,36 +10,51 @@ class Category{
 
     public function saveAction()
     {
-        if($_SERVER['REQUEST_METHOD']=='POST')
-        {
-            $adapter = new Adapter();
-
-            $categoryName = $_POST['category']['name'];
-            $categoryStatus = $_POST['category']['status'];
-            $createdDate = date("Y-m-d H:i:s");
-            $updatedDate = date("Y-m-d H:i:s");
-
-            if($_POST["submit"] == "Save")
-            {
-                $result = $adapter->insert("insert into category(name,status,createdDate) values ('{$categoryName}','{$categoryStatus}','{$createdDate}')");
-
-                if($result)
-                {
-                    header('Location: category-index.php?a=gridAction');
-                }
-            }
-            
-            if($_POST["Update"] == "update")
+        try {
+            if($_SERVER['REQUEST_METHOD']=='POST')
             {
                 $adapter = new Adapter();
-                $categoryID = $_GET['id'];
 
-                $result = $adapter->update("update category set name ='$categoryName', status ='$categoryStatus', updatedDate='$updatedDate' where categoryID = $categoryID");
-                if($result)
+                $categoryName = $_POST['category']['name'];
+                $categoryStatus = $_POST['category']['status'];
+                $createdDate = date("Y-m-d H:i:s");
+                $updatedDate = date("Y-m-d H:i:s");
+
+
+                if($_POST["submit"] == "Save")
                 {
-                    header('Location: category-index.php?a=gridAction');
+                    $result = $adapter->insert("insert into category(name,status,createdDate) values ('{$categoryName}','{$categoryStatus}','{$createdDate}')");
+
+                    if(!$result)
+                    {
+                        throw new Exception("System is unable to save record.",1);
+                    }
+                    $this->redirect('category-index.php?a=gridAction');
+                }
+                
+                if($_POST["Update"] == "update")
+                {
+                    if(!isset($_GET['id'])){
+                        throw new Exception("Invalid Request.", 1);
+                    }
+                    if(!(int)$_GET['id']){
+                        throw new Exception("Invalid Request.", 1);
+                    }
+                    $adapter = new Adapter();
+                    $categoryID = $_GET['id'];
+
+                    $result = $adapter->update("update category set name ='$categoryName', status ='$categoryStatus', updatedDate='$updatedDate' where categoryID = $categoryID");
+                    if(!$result)
+                    {
+                        throw new Exception("System is unable to update record.",1);
+                    }
+                    $this->redirect('category-index.php?a=gridAction');
                 }
             }
+        }
+        catch (Exception $e) {
+            /*echo $e->getMessage();*/
+            $this->redirect('category-index.php?a=gridAction');
         }
     }
 
@@ -55,16 +70,34 @@ class Category{
 
     public function deleteAction()
     {
-        if($_SERVER['REQUEST_METHOD']=='GET')
-        {
-            $categoryID = $_GET['id'];
-            $adapter = new Adapter();
-            $result = $adapter->delete("DELETE FROM category WHERE categoryID = '$categoryID'");
-            if($result)
+        try {
+            if($_SERVER['REQUEST_METHOD']=='GET')
             {
-                header('Location: category-index.php?a=gridAction');
+                if(!isset($_GET['id'])){
+                    throw new Exception("Invalid Request.", 1);
+                }
+                if(!(int)$_GET['id']){
+                    throw new Exception("Invalid Request.", 1);
+                }
+                $categoryID = $_GET['id'];
+                $adapter = new Adapter();
+                $result = $adapter->delete("DELETE FROM category WHERE categoryID = '$categoryID'");
+                if(!$result)
+                {
+                    throw new Exception("System is unable to delete record.",1);
+                }
+                $this->redirect('category-index.php?a=gridAction');
             }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            $this->redirect('category-index.php?a=gridAction');
         }
+    }
+
+    public function redirect($url)
+    {
+        header("Location: $url");
+        exit();
     }
 
     public function errorAction()

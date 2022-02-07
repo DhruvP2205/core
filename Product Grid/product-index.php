@@ -10,38 +10,51 @@ class Product{
 
     public function saveAction()
     {
-        if($_SERVER['REQUEST_METHOD']=='POST')
-        {
-            $adapter = new Adapter();
-
-            $productName = $_POST['product']['name'];
-            $productPrice = $_POST['product']['price'];
-            $productQunty = $_POST['product']['quantity'];
-            $productStatus = $_POST['product']['status'];
-            $createdDate = date("Y-m-d H:i:s");
-            $updatedDate = date("Y-m-d H:i:s");
-
-            if($_POST["submit"] == "Save")
+        try {
+            if($_SERVER['REQUEST_METHOD']=='POST')
             {
-                $result = $adapter->insert("insert into product(name,price,quantity,status,createdDate) values ('{$productName}','{$productPrice}','{$productQunty}','{$productStatus}','{$createdDate}')");
+                $adapter = new Adapter();
 
-                if($result)
+                $productName = $_POST['product']['name'];
+                $productPrice = $_POST['product']['price'];
+                $productQunty = $_POST['product']['quantity'];
+                $productStatus = $_POST['product']['status'];
+                $createdDate = date("Y-m-d H:i:s");
+                $updatedDate = date("Y-m-d H:i:s");
+
+                if($_POST["submit"] == "Save")
                 {
-                    header('Location: product-index.php?a=gridAction');
+                    $result = $adapter->insert("insert into product(name,price,quantity,status,createdDate) values ('{$productName}','{$productPrice}','{$productQunty}','{$productStatus}','{$createdDate}')");
+
+                    if(!$result)
+                    {
+                        throw new Exception("System is unable to save record.",1);
+                    }
+                    $this->redirect('product-index.php?a=gridAction');
+                }
+                
+                if($_POST["Update"] == "update")
+                {
+                    if(!isset($_GET['id'])){
+                        throw new Exception("Invalid Request.", 1);
+                    }
+                    if(!(int)$_GET['id']){
+                        throw new Exception("Invalid Request.", 1);
+                    }
+                    $adapter=new Adapter();
+                    $productID = $_GET['id'];
+
+                    $result=$adapter->update("update product set name ='$productName', price = '$productPrice', quantity='$productQunty',status ='$productStatus', updatedDate='$updatedDate' where productID = $productID");
+                    if(!$result)
+                    {
+                        throw new Exception("System is unable to update record.",1);
+                    }
+                    $this->redirect('product-index.php?a=gridAction');
                 }
             }
-            
-            if($_POST["Update"] == "update")
-            {
-                $adapter=new Adapter();
-                $productID = $_GET['id'];
-
-                $result=$adapter->update("update product set name ='$productName', price = '$productPrice', quantity='$productQunty',status ='$productStatus', updatedDate='$updatedDate' where productID = $productID");
-                if($result)
-                {
-                    header('Location: product-index.php?a=gridAction');
-                }
-            }
+        } catch (Exception $e) {
+            /*echo $e->getMessage();*/
+            $this->redirect('product-index.php?a=gridAction');
         }
     }
 
@@ -57,16 +70,35 @@ class Product{
 
     public function deleteAction()
     {
-        if($_SERVER['REQUEST_METHOD']=='GET')
-        {
-            $productID = $_GET['id'];
-            $adapter = new Adapter();
-            $result = $adapter->delete("DELETE FROM product WHERE productID = '$productID'");
-            if($result)
+        try {
+            if($_SERVER['REQUEST_METHOD']=='GET')
             {
-                header('Location: product-index.php?a=gridAction');
+                if(!isset($_GET['id'])){
+                    throw new Exception("Invalid Request.", 1);
+                }
+                if(!(int)$_GET['id']){
+                    throw new Exception("Invalid Request.", 1);
+                }
+                $productID = $_GET['id'];
+                $adapter = new Adapter();
+                $result = $adapter->delete("DELETE FROM product WHERE productID = '$productID'");
+                if(!$result)
+                {
+                    throw new Exception("System is unable to delete record.",1);
+                }
+                $this->redirect('product-index.php?a=gridAction');
             }
+        } catch (Exception $e) {
+            /*echo $e->getMessage();*/
+            $this->redirect('product-index.php?a=gridAction');
         }
+        
+    }
+
+    public function redirect($url)
+    {
+        header("Location: $url");
+        exit();
     }
 
     public function errorAction()

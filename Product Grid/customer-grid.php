@@ -2,7 +2,7 @@
     require_once('Adapter.php');
 
     $adapter = new Adapter();
-    $customers = $adapter->fetchAll("select * from customer");
+    $customers = $adapter->fetchAll("SELECT c.`customerID`, c.`firstName`, c.`lastName`, c.`email`, c.`mobile`, c.`status`, c.`createdDate`, c.`updatedDate`, a.`addressID`, a.`address`, a.`zipcode`, a.`city`, a.`state`, a.`country`, a.`billingAddress`,a.`shipingAddress`, a.`createdDate`, a.`updatedDate` FROM `customer` c LEFT JOIN `address` a ON c.customerID = a.customerID ORDER BY c.customerID ASC");
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,8 +23,14 @@
                     <th>Email</th>  
                     <th>Mobile</th>
                     <th>Status</th>
-                    <th>Created Date</th>
-                    <th>Updated Date</th>
+                    <th>AddressID</th>
+                    <th>Address</th>
+                    <th>Zipcode</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Billing Address</th>
+                    <th>Shiping Address</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
@@ -41,9 +47,41 @@
                     <td><?php echo($customer['lastName']); ?></td>
                     <td><?php echo($customer['email']); ?></td>
                     <td><?php echo($customer['mobile']); ?></td>
-                    <td><?php echo($customer['status']); ?></td>
-                    <td><?php echo($customer['createdDate']); ?></td>
-                    <td><?php echo($customer['updatedDate']); ?></td>
+                    <td>
+                        <?php 
+                            if($customer['status'] == 1){
+                                echo("Active");
+                            } 
+                            else{
+                                echo("Inactive");
+                            } ?>
+                    </td>
+                    <td><?php echo($customer['addressID']); ?></td>
+                    <td><?php echo($customer['address']); ?></td>
+                    <td><?php echo($customer['zipcode']); ?></td>
+                    <td><?php echo($customer['city']); ?></td>
+                    <td><?php echo($customer['state']); ?></td>
+                    <td><?php echo($customer['country']); ?></td>
+                    <td>
+                        <?php 
+                            if($customer['billingAddress'] == 1){
+                                echo("Yes");
+                            } 
+                            else{
+                                echo("No");
+                            } ?>
+                    </td>
+                    <td>
+                        <?php 
+                            if($customer['shipingAddress'] == 1){
+                                echo("Yes");
+                            } 
+                            else{
+                                echo("No");
+                            } ?>
+                    </td>
+                    <!-- <td><?php echo($customer['createdDate']); ?></td>
+                    <td><?php echo($customer['updatedDate']); ?></td> -->
                     <td>
                         <a href="customer-index.php?a=editAction&id=<?php echo $customer['customerID'] ?>">Edit</a>
                         <a href="customer-index.php?a=deleteAction&id=<?php echo $customer['customerID'] ?>">Delete</a>
