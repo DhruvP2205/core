@@ -1,10 +1,22 @@
 <?php
+try {
     require_once('Adapter.php');
+    if(!isset($_GET['id'])){
+        throw new Exception("Invalid Request.", 1);
+    }
+    if(!(int)$_GET['id']){
+        throw new Exception("Invalid Request.", 1);
+    }
 
     $customerID = $_GET['id'];
 
     $adapter = new Adapter();
     $customer = $adapter->fetchRow("SELECT c.`customerID`, c.`firstName`, c.`lastName`, c.`email`, c.`mobile`, c.`status`, a.`addressID`, a.`address`, a.`zipcode`, a.`city`, a.`state`, a.`country`, a.`billingAddress`,a.`shipingAddress` FROM `customer` c LEFT JOIN `address` a ON c.customerID = a.customerID WHERE c.customerID = '$customerID' ORDER BY c.customerID ASC");
+} catch (Exception $e) {
+    /*echo $e->getMessage();*/
+    $this->redirect('customer-index.php?a=gridAction');
+}
+    
 ?>
 
 <!DOCTYPE html>

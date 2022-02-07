@@ -1,10 +1,24 @@
 <?php
+try {
     require_once('Adapter.php');
+    if(!isset($_GET['id'])){
+        throw new Exception("Invalid Request.", 1);
+    }
+    if(!(int)$_GET['id']){
+        throw new Exception("Invalid Request.", 1);
+    }
+
+    $customerID = $_GET['id'];
 
     $productID = $_GET['id'];
 
     $adapter = new Adapter();
     $product = $adapter->fetchRow("select * FROM product WHERE productID = $productID");
+
+} catch (Exception $e) {
+    /*echo $e->getMessage();*/
+    $this->redirect('customer-index.php?a=gridAction');
+}    
 ?>
 
 <!DOCTYPE html>
