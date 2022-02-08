@@ -1,5 +1,5 @@
 <?php
-    class Adapter{
+    class Model_Core_Adapter{
         public $config = [
             "host" => "localhost:3308",
             "userName" => "root",
@@ -85,4 +85,5 @@
             return false;
         }
     }
+    $adapter = new Model_Core_Adapter();
 ?>

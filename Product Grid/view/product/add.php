@@ -8,7 +8,7 @@
 <body>
     <h2>Add Product</h2>
 
-    <form action="product-index.php?a=saveAction" method="post">
+    <form action="index.php?c=product&a=save" method="post">
         <label>Name</label>
         <input type="text" name="product[name]" required />
         <br>

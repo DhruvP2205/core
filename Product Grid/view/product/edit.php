@@ -1,6 +1,5 @@
 <?php
 try {
-    require_once('Adapter.php');
     if(!isset($_GET['id'])){
         throw new Exception("Invalid Request.", 1);
     }
@@ -8,16 +7,14 @@ try {
         throw new Exception("Invalid Request.", 1);
     }
 
-    $customerID = $_GET['id'];
-
     $productID = $_GET['id'];
 
-    $adapter = new Adapter();
+    $adapter = new Model_Core_Adapter();
     $product = $adapter->fetchRow("select * FROM product WHERE productID = $productID");
 
 } catch (Exception $e) {
     /*echo $e->getMessage();*/
-    $this->redirect('customer-index.php?a=gridAction');
+    $this->redirect('index.php?c=product&a=grid');
 }    
 ?>
 
@@ -30,7 +27,7 @@ try {
 </head>
 <body>
     <h2>Edit Product</h2>
-    <form action="product-index.php?a=saveAction&id=<?php echo $productID ?>" method="post">
+    <form action="index.php?c=product&a=save&id=<?php echo $productID ?>" method="post">
         <label>Name</label>
         <input type="text" name="product[name]" value="<?php echo $product['name']; ?>" required/>
         <br>

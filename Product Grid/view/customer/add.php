@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>Add Customer</h2>
-    <form action="customer-index.php?a=saveAction" method="post">
+    <form action="index.php?c=customer&a=save" method="post">
         <h3>Personal Information: </h3>
         <label>First Name</label>
         <input type="text" name="customer[firstName]" required />

@@ -1,7 +1,6 @@
 <?php
-    require_once('Adapter.php');
 
-    $adapter = new Adapter();
+    $adapter = new Model_Core_Adapter();
     $categories = $adapter->fetchAll("select * from category");
 ?>
 <!DOCTYPE html>
@@ -13,7 +12,7 @@
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href='category-index.php?a=addAction'>Add Product</a>
+    <a href='index.php?c=category&a=add'>Add Category</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
                 <thead>
@@ -35,12 +34,20 @@
                 <tr>
                     <td><?php echo($category['categoryID']); ?></td>
                     <td><?php echo($category['name']); ?></td>
-                    <td><?php echo($category['status']); ?></td>
+                    <td>
+                        <?php 
+                            if($category['status'] == 1){
+                                echo("Active");
+                            } 
+                            else{
+                                echo("Inactive");
+                            } ?>
+                    </td>
                     <td><?php echo($category['createdDate']); ?></td>
                     <td><?php echo($category['updatedDate']); ?></td>
                     <td>
-                        <a href="category-index.php?a=editAction&id=<?php echo $category['categoryID'] ?>">Edit</a>
-                        <a href="category-index.php?a=deleteAction&id=<?php echo $category['categoryID'] ?>">Delete</a>
+                        <a href="index.php?c=category&a=edit&id=<?php echo $category['categoryID'] ?>">Edit</a>
+                        <a href="index.php?c=category&a=delete&id=<?php echo $category['categoryID'] ?>">Delete</a>
                     </td>
                 </tr>
                 <?php

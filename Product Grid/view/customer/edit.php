@@ -1,6 +1,5 @@
 <?php
 try {
-    require_once('Adapter.php');
     if(!isset($_GET['id'])){
         throw new Exception("Invalid Request.", 1);
     }
@@ -10,11 +9,11 @@ try {
 
     $customerID = $_GET['id'];
 
-    $adapter = new Adapter();
+    $adapter = new Model_Core_Adapter();
     $customer = $adapter->fetchRow("SELECT c.`customerID`, c.`firstName`, c.`lastName`, c.`email`, c.`mobile`, c.`status`, a.`addressID`, a.`address`, a.`zipcode`, a.`city`, a.`state`, a.`country`, a.`billingAddress`,a.`shipingAddress` FROM `customer` c LEFT JOIN `address` a ON c.customerID = a.customerID WHERE c.customerID = '$customerID' ORDER BY c.customerID ASC");
 } catch (Exception $e) {
     /*echo $e->getMessage();*/
-    $this->redirect('customer-index.php?a=gridAction');
+    $this->redirect('index.php?a=grid');
 }
     
 ?>
@@ -28,7 +27,7 @@ try {
 </head>
 <body>
     <h2>Edit customer</h2>
-    <form action="customer-index.php?a=saveAction&id=<?php echo $customerID ?>" method="POST">
+    <form action="index.php?c=customer&a=save&id=<?php echo $customerID ?>" method="POST">
         <table border="1" width="100%" cellspacing="4">
             <tr>
                 <td colspan="2">Personal Information:</td>
@@ -111,7 +110,7 @@ try {
                 <td width="10%">&nbsp;</td>
                 <td>
                     <input type="submit" name="submit" value="update">
-                    <button type="button"><a href="customer-index.php?a=gridAction">Cancel</a></button>
+                    <button type="button"><a href="index.php?c=customer&a=grid">Cancel</a></button>
                 </td>
             </tr>
             

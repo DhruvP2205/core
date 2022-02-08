@@ -1,7 +1,6 @@
 <?php
-    require_once('Adapter.php');
 
-    $adapter = new Adapter();
+    $adapter = new Model_Core_Adapter();
     $customers = $adapter->fetchAll("SELECT c.`customerID`, c.`firstName`, c.`lastName`, c.`email`, c.`mobile`, c.`status`, c.`createdDate`, c.`updatedDate`, a.`addressID`, a.`address`, a.`zipcode`, a.`city`, a.`state`, a.`country`, a.`billingAddress`,a.`shipingAddress`, a.`createdDate`, a.`updatedDate` FROM `customer` c LEFT JOIN `address` a ON c.customerID = a.customerID ORDER BY c.customerID ASC");
 ?>
 <!DOCTYPE html>
@@ -13,7 +12,7 @@
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href='customer-index.php?a=addAction'>Add Customer</a>
+    <a href='index.php?c=customer&a=add'>Add Customer</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
                 <thead>
@@ -83,8 +82,8 @@
                     <!-- <td><?php echo($customer['createdDate']); ?></td>
                     <td><?php echo($customer['updatedDate']); ?></td> -->
                     <td>
-                        <a href="customer-index.php?a=editAction&id=<?php echo $customer['customerID'] ?>">Edit</a>
-                        <a href="customer-index.php?a=deleteAction&id=<?php echo $customer['customerID'] ?>">Delete</a>
+                        <a href="index.php?c=customer&a=edit&id=<?php echo $customer['customerID'] ?>">Edit</a>
+                        <a href="index.php?c=customer&a=delete&id=<?php echo $customer['customerID'] ?>">Delete</a>
                     </td>
                 </tr>
                 <?php

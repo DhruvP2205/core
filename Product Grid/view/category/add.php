@@ -8,7 +8,7 @@
 <body>
     <h2>Add Category</h2>
 
-    <form action="category-index.php?a=saveAction" method="post">
+    <form action="index.php?c=category&a=save" method="post">
         <label>Name</label>
         <input type="text" name="category[name]" required />
         <br>
