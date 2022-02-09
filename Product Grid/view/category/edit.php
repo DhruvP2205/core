@@ -10,12 +10,29 @@ try {
     $categoryID = $_GET['id'];
 
     $adapter = new Model_Core_Adapter();
-    $category = $adapter->fetchRow("select * from category where categoryID = $categoryID");
+    $category = $adapter->fetchRow("SELECT * FROM category WHERE categoryID = $categoryID");  
     
 } catch (Exception $e) {
-    /*echo $e->getMessage();*/
+    echo $e->getMessage();
     $this->redirect('index.php?c=category&a=grid');
-}    
+} 
+
+$adapter = new Model_Core_Adapter();
+$categories = $adapter->fetchAll("SELECT * FROM category");
+
+function path($categoryID,$array){
+    $len = count($array);
+
+    for($i = 0;$i< $len-1;$i++){
+
+        if($categoryID == $array[$i]["categoryID"]){
+            if($array[$i]["parentID"] == null){
+                return $array[$i]["name"];
+            }
+            return path($array[$i]["parentID"],$array)." => ".$array[$i]["name"];
+        }
+    }
+}
 ?>
 
 
@@ -28,11 +45,19 @@ try {
 </head>
 <body>
     <h2>Edit Category</h2>
-    <form action="index.php?c=category&a=save&id=<?php echo $categoryID ?>" method="post">
+    <form action="index.php?c=category&a=save&id=<?php echo $category['categoryID']?>" method="post">
         <label>Name</label>
         <input type="text" name="category[name]" value="<?php echo $category['name']; ?>" required/>
         <br>
         <br>
+
+        <label>Sub-Category</label>
+        <select name="category[parentID]">
+            <option value="<?php echo $category['categoryID']; ?>"><?php echo path($category['categoryID'],$categories); ?></option>
+        </select>
+        <br>
+        <br>
+        
         <label>Status</label>
         <select name="category[status]">
             <?php if($category['status']==1): ?>

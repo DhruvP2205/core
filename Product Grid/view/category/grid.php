@@ -1,7 +1,22 @@
 <?php
 
     $adapter = new Model_Core_Adapter();
-    $categories = $adapter->fetchAll("select * from category");
+    $categories = $adapter->fetchAll("SELECT * FROM category");
+
+    function path($categoryID,$array){
+
+    $len = count($array);
+
+    for($i = 0;$i< $len;$i++){
+
+        if($categoryID == $array[$i]["categoryID"]){
+            if($array[$i]["parentID"] == null){
+                return $array[$i]["name"];
+            }
+            return path($array[$i]["parentID"],$array)." => ".$array[$i]["name"];
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,7 +48,8 @@
                 ?>
                 <tr>
                     <td><?php echo($category['categoryID']); ?></td>
-                    <td><?php echo($category['name']); ?></td>
+                    <!-- <td><?php echo($category['name']); ?></td> -->
+                    <td><?php echo path($category['categoryID'],$categories); ?></td>
                     <td>
                         <?php 
                             if($category['status'] == 1){

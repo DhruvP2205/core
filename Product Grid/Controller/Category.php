@@ -11,7 +11,7 @@ class Controller_Category{
         try {
             if(!isset($_POST['category']))
             {
-                throw new Exception("Request Invelid.",1);
+                throw new Exception("Request Invalid.",1);
             }
             
             $adapter = new Model_Core_Adapter();
@@ -19,6 +19,7 @@ class Controller_Category{
             $row = $_POST['category'];
                 
             $categoryName = $_POST['category']['name'];
+            $categoryParentID = $_POST['category']['parentID'];
             $categoryStatus = $_POST['category']['status'];
             $createdDate = date('y-m-d h:m:s');
             $updatedDate = date('y-m-d h:m:s');
@@ -29,30 +30,32 @@ class Controller_Category{
                     throw new Exception("Invalid Request.", 1);
                 }
                 $categoryID = $_GET['id'];
-
-                $result = $adapter->update("update category set name ='$categoryName', status ='$categoryStatus', updatedDate='$updatedDate' where categoryID = $categoryID");
+                
+                $result = $adapter->update("UPDATE category SET name ='$categoryName', status ='$categoryStatus', updatedDate ='$updatedDate' where categoryID = $categoryID");
                 if(!$result)
                 {
                     throw new Exception("System is unable to update record.",1);
                 }
             }
             else{
-                $result = $adapter->insert("insert into category(name,status,createdDate) values ('{$categoryName}','{$categoryStatus}','{$createdDate}')");
-
-                if(!$result)
-                {
-                    throw new Exception("System is unable to save record.",1);
+                if(empty($categoryParentID)){
+                    $result = $adapter->insert("INSERT INTO `category` (`name`,`status`,`createdDate`) VALUE ('$categoryName','$categoryStatus','$createdDate')");
                 }
-
+                else{
+                    $result = $adapter->insert("INSERT INTO `category` (`parentID`,`name`,`status`,`createdDate`) VALUE ('$categoryParentID','$categoryName','$categoryStatus','$createdDate')");
+                }
+                if(!$result){
+                    throw new Exception("Sysetm is unable to save your data", 1);   
+                }
+                
                 return $result;
             }
         } catch (Exception $e) {
-            /*echo $e->getMessage();*/
+            echo $e->getMessage();
+            exit();
             $this->redirect('index.php?c=category&a=grid');
         }
     }
-
-
 
 
     public function saveAction()
