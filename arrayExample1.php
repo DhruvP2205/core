@@ -13,8 +13,7 @@ $data = [
     ['category'=>2,'attribute'=>4,'option'=>8]
 ];
 
-
-//Print data row by row and store option value
+echo "JSON Format\n";
 $i=0;
 while($i<count($data)){
     $result[$data[$i]['category']][$data[$i]['attribute']][$data[$i]['option']]=$data[$i]['option'];
@@ -23,6 +22,23 @@ while($i<count($data)){
 
 print_r($result);
 
+
+
+echo "\n\nNormal Format\n";
+$final = [];
+
+foreach ($result as $categoryID => $level1) {
+    $row['category'] = $categoryID;
+    foreach ($level1 as $attributeID => $level2) {
+        $row['attribute'] = $attributeID;
+        foreach ($level2 as $optionID => $level3) {
+            $row['option'] = $optionID;
+            array_push($final,$row);
+        }
+    }
+}
+
+print_r($final);
 
 
 /*$data = [
@@ -49,3 +65,5 @@ print_r($result);
 ];*/
 
 ?>
+
+

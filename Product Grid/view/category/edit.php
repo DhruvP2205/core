@@ -10,7 +10,7 @@ try {
     $categoryID = $_GET['id'];
 
     $adapter = new Model_Core_Adapter();
-    $category = $adapter->fetchRow("SELECT * FROM category WHERE categoryID = $categoryID");  
+    $row = $adapter->fetchRow("SELECT * FROM category WHERE categoryID = $categoryID");  
     
 } catch (Exception $e) {
     echo $e->getMessage();
@@ -18,12 +18,12 @@ try {
 } 
 
 $adapter = new Model_Core_Adapter();
-$categories = $adapter->fetchAll("SELECT * FROM category");
+$categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
 
 function path($categoryID,$array){
     $len = count($array);
 
-    for($i = 0;$i< $len-1;$i++){
+    for($i = 0;$i< $len;$i++){
 
         if($categoryID == $array[$i]["categoryID"]){
             if($array[$i]["parentID"] == null){
@@ -45,15 +45,20 @@ function path($categoryID,$array){
 </head>
 <body>
     <h2>Edit Category</h2>
-    <form action="index.php?c=category&a=save&id=<?php echo $category['categoryID']?>" method="post">
+    <form action="index.php?c=category&a=save&id=<?php echo $row['categoryID']?>" method="post">
         <label>Name</label>
-        <input type="text" name="category[name]" value="<?php echo $category['name']; ?>" required/>
+        <input type="text" name="category[name]" value="<?php echo $row['name']; ?>" required/>
         <br>
         <br>
 
         <label>Sub-Category</label>
         <select name="category[parentID]">
-            <option value="<?php echo $category['categoryID']; ?>"><?php echo path($category['categoryID'],$categories); ?></option>
+            <option value="<?php echo null; ?>" <?php echo ($row['parentID'] == NULL) ? 'selected' : ''; ?>>Root Category</option>
+        <?php foreach($categories as $category): ?>
+            <?php if($row['categoryID'] != $category['categoryID']):  ?>
+            <option value="<?php echo $category['categoryID']; ?>" <?php echo ($row['parentID'] == $category['categoryID']) ? 'selected' : ''; ?>><?php echo path($category['categoryID'],$categories); ?></option>
+            <?php endif; ?>
+        <?php endforeach; ?>
         </select>
         <br>
         <br>

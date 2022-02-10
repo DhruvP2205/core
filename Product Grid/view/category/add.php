@@ -1,23 +1,20 @@
 <?php
 try {
-    
-
     $adapter = new Model_Core_Adapter();
-    $categories = $adapter->fetchAll("SELECT * FROM category");
+    $categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
 
     function path($categoryID,$array){
-    $len = count($array);
+        $len = count($array);
 
-    for($i = 0;$i< $len;$i++){
-
-        if($categoryID == $array[$i]["categoryID"]){
-            if($array[$i]["parentID"] == null){
-                return $array[$i]["name"];
+        for($i = 0;$i< $len;$i++){
+            if($categoryID == $array[$i]["categoryID"]){
+                if($array[$i]["parentID"] == null){
+                    return $array[$i]["name"];
+                }
+                return path($array[$i]["parentID"],$array)." => ".$array[$i]["name"];
             }
-            return path($array[$i]["parentID"],$array)." => ".$array[$i]["name"];
         }
     }
-}
     
 } catch (Exception $e) {
     echo $e->getMessage();

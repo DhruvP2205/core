@@ -17,7 +17,7 @@ class Controller_Category{
             $adapter = new Model_Core_Adapter();
 
             $row = $_POST['category'];
-                
+            
             $categoryName = $_POST['category']['name'];
             $categoryParentID = $_POST['category']['parentID'];
             $categoryStatus = $_POST['category']['status'];
@@ -36,13 +36,32 @@ class Controller_Category{
                 {
                     throw new Exception("System is unable to update record.",1);
                 }
+                if(empty($categoryParentID)){
+                    $path = $adapter->insert("UPDATE `category` SET `parentID` = null, `path` = '$categoryID' WHERE `categoryID` = '$categoryID' ");
+                }
+                else{
+                    $path = $adapter->fetchRow("SELECT * FROM `category` WHERE `categoryID` = '$categoryParentID' ");
+                    $path = $path['path']."/".$categoryID;
+                    $newPath = $adapter->insert("UPDATE `category` SET `parentID` = '$categoryParentID', `path` = '$path' WHERE `categoryID` = '$categoryID' ");
+                }
             }
             else{
                 if(empty($categoryParentID)){
                     $result = $adapter->insert("INSERT INTO `category` (`name`,`status`,`createdDate`) VALUE ('$categoryName','$categoryStatus','$createdDate')");
+                    if(!$result){
+                        throw new Exception("System is unabel to insert data", 1);                          
+                    }
+                    $path = $adapter->update("UPDATE `category` SET `path` = '$result' WHERE `categoryID` = '$result' ");
                 }
+                
                 else{
                     $result = $adapter->insert("INSERT INTO `category` (`parentID`,`name`,`status`,`createdDate`) VALUE ('$categoryParentID','$categoryName','$categoryStatus','$createdDate')");
+                    if(!$result){
+                        throw new Exception("System is unabel to insert data", 1);                          
+                    }
+                    $path = $adapter->fetchRow("SELECT * FROM `category` WHERE `categoryID` = '$categoryParentID' ");
+                    $path = $path['path']."/".$result;
+                    $newPath = $adapter->update("UPDATE `category` SET `path` = '$path' WHERE `categoryID` = '$result' ");
                 }
                 if(!$result){
                     throw new Exception("Sysetm is unable to save your data", 1);   

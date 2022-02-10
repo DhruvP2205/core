@@ -1,7 +1,7 @@
 <?php
 
     $adapter = new Model_Core_Adapter();
-    $categories = $adapter->fetchAll("SELECT * FROM category");
+    $categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
 
     function path($categoryID,$array){
 
@@ -32,7 +32,8 @@
             <table cellpadding="7px">
                 <thead>
                     <th>Category ID</th>
-                    <th>Name</th> 
+                    <th>Name</th>
+                    <th>Path</th>
                     <th>Status</th>
                     <th>Created Date</th>
                     <th>Updated Date</th>
@@ -50,6 +51,7 @@
                     <td><?php echo($category['categoryID']); ?></td>
                     <!-- <td><?php echo($category['name']); ?></td> -->
                     <td><?php echo path($category['categoryID'],$categories); ?></td>
+                    <td><?php echo($category['path']); ?></td>
                     <td>
                         <?php 
                             if($category['status'] == 1){

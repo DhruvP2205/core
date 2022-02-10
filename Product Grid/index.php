@@ -1,4 +1,5 @@
 <?php require_once('Model/Core/Adapter.php');  ?>
+<?php require_once('menu.php');  ?>
 <?php 
 
 class Ccc
