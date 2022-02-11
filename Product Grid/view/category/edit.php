@@ -19,20 +19,7 @@ try {
 
 $adapter = new Model_Core_Adapter();
 $categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
-
-function path($categoryID,$array){
-    $len = count($array);
-
-    for($i = 0;$i< $len;$i++){
-
-        if($categoryID == $array[$i]["categoryID"]){
-            if($array[$i]["parentID"] == null){
-                return $array[$i]["name"];
-            }
-            return path($array[$i]["parentID"],$array)." => ".$array[$i]["name"];
-        }
-    }
-}
+$result = $adapter->pathAction();
 ?>
 
 
@@ -52,20 +39,17 @@ function path($categoryID,$array){
         <br>
 
         <label>Sub-Category</label>
-        <select name="category[parentID]">
-            <option value="<?php echo null; ?>" <?php echo ($row['parentID'] == NULL) ? 'selected' : ''; ?>>Root Category</option>
-        <?php foreach($categories as $category): ?>
-            <?php if($row['categoryID'] != $category['categoryID']):  ?>
-            <option value="<?php echo $category['categoryID']; ?>" <?php echo ($row['parentID'] == $category['categoryID']) ? 'selected' : ''; ?>><?php echo path($category['categoryID'],$categories); ?></option>
-            <?php endif; ?>
-        <?php endforeach; ?>
+        <select name="category[parentID]" id="parentId">
+            <option value="<?php echo $row['categoryID']; ?>"><?php echo $result[$categoryID];?></option>
         </select>
+
+
         <br>
         <br>
         
         <label>Status</label>
         <select name="category[status]">
-            <?php if($category['status']==1): ?>
+            <?php if($row['status']==1): ?>
             <option value="1" selected>Active</option>
             <option value="2">Inactive</option>
             <?php else: ?>
