@@ -15,7 +15,9 @@ $data = [
 ];
 
 
+echo "------------\n";
 echo "JSON Format\n";
+echo "------------\n";
 
 $final['category']=[];
 
@@ -23,56 +25,66 @@ foreach ($data as $level1) {
 
     if(!array_key_exists($level1['category'], $final['category']))
     {
+        //Add Category value as an Index
         $final['category'][$level1['category']]=[];    
     }
     
     if(!array_key_exists('name',$final['category'][$level1['category']]))
     {
+        //Add Categoryname value
         $final['category'][$level1['category']]['name']=$level1['categoryname'];
+        
+        //Add attribute as an index
         $final['category'][$level1['category']]['attribute']=[];   
     }
     
     if(!array_key_exists($level1['attribute'],$final['category'][$level1['category']]['attribute']))
     {
+        //Add Attribute value as an index
         $final['category'][$level1['category']]['attribute'][$level1['attribute']]=[];
     }
     
     if(!array_key_exists('name',$final['category'][$level1['category']]['attribute'][$level1['attribute']]))
     {
+        //Add attributename value with name index
         $final['category'][$level1['category']]['attribute'][$level1['attribute']]['name']=$level1['attributename']; 
+        //Add option as an Index
         $final['category'][$level1['category']]['attribute'][$level1['attribute']]['option']=[];
     }
     
     if(!array_key_exists($level1['option'],$final['category'][$level1['category']]['attribute'][$level1['attribute']]['option']))
     {
+        //Add option value as an Index
         $final['category'][$level1['category']]['attribute'][$level1['attribute']]['option'][$level1['option']]=[];
     }
     
     if(!array_key_exists('name',$final['category'][$level1['category']]['attribute'][$level1['attribute']]['option'][$level1['option']]))
     {
+        //Add new index name and put optionname value
         $final['category'][$level1['category']]['attribute'][$level1['attribute']]['option'][$level1['option']]['name']=$level1['optionname'];  
     }
 }
 
 print_r($final);
 
-
-echo "\n\nNormal Format\n";
+echo "\n\n------------\n";
+echo "Normal Format\n";
+echo "------------\n";
 
 $row = [];
 $reverseArray = [];
 
-foreach($final['category'] as $categoryID => $level1){
-
+foreach($final['category'] as $categoryID => $level1) {
     $row['category'] = $categoryID;
-    $row['categoryname'] = $final['category'][$categoryID]['name'];
-
-    foreach($level1['attribute'] as $attributeId => $level2){
+    $row['categoryname'] = $level1['name'];
+    
+    foreach($level1['attribute'] as $attributeId => $level2) {
         $row['attribute'] = $attributeId;
-        $row['attributename'] = $final['category'][$categoryID]['attribute'][$attributeId]['name'];
+        $row['attributename'] = $level2['name'];
+
         foreach ($level2['option'] as $optionId => $level3) {
             $row['option'] = $optionId;
-            $row['optionname'] = $final['category'][$categoryID]['attribute'][$attributeId]['option'][$optionId]['name'];
+            $row['optionname'] = $level3['name'];
             array_push($reverseArray,$row);
         }
     }
@@ -81,3 +93,4 @@ foreach($final['category'] as $categoryID => $level1){
 print_r($reverseArray);
 
 ?>
+

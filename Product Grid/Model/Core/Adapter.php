@@ -76,13 +76,51 @@
             return false;
         }
 
-        public function fetchAll($query)
+        public function fetchAll($query,$mode=MYSQLI_ASSOC)
         {
             $result = $this->query($query);
             if($result->num_rows){
-                return $result->fetch_all(MYSQLI_ASSOC);
+                return $result->fetch_all($mode);
             }
             return false;
+        }
+
+        public function fetchPair($query)
+        {
+            $result = $this->fetchAll($query,MYSQLI_NUM);
+            if(!$result){
+                return false;
+            }
+            $keys = array_column($result, '0');
+            $values = array_column($result, '1');
+            if (!$values)   {
+                $values = array_fill(0,count($keys),NULL);
+            }
+            $result = array_combine($keys, $values);
+            return $result;
+        }
+
+
+        public function pathAction()
+        {
+            $categoryName=$this->fetchPair('SELECT `categoryID`, `name` FROM `category`');
+            $categoryPath=$this->fetchPair('SELECT `categoryID`, `path` FROM `category`');
+            $categories=[];
+            foreach ($categoryPath as $key => $value) {
+                    $explodeArray=explode('/', $value);
+                    $tempArray = [];
+
+                    foreach ($explodeArray as $keys => $value) {
+                        if(array_key_exists($value,$categoryName)){
+                            array_push($tempArray,$categoryName[$value]);
+                        }
+                    }
+
+                    $implodeArray = implode('/', $tempArray);
+                    $categories[$key]= $implodeArray;
+            }
+            return $categories;
+
         }
     }
     $adapter = new Model_Core_Adapter();
