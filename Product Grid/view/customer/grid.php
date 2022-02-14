@@ -1,7 +1,9 @@
 <?php
 
     $adapter = new Model_Core_Adapter();
-    $customers = $adapter->fetchAll("SELECT c.`customerID`, c.`firstName`, c.`lastName`, c.`email`, c.`mobile`, c.`status`, c.`createdDate`, c.`updatedDate`, a.`addressID`, a.`address`, a.`zipcode`, a.`city`, a.`state`, a.`country`, a.`billingAddress`,a.`shipingAddress`, a.`createdDate`, a.`updatedDate` FROM `customer` c LEFT JOIN `address` a ON c.customerID = a.customerID ORDER BY c.customerID ASC");
+
+    $customers = $this->getData('customers');
+    
 ?>
 <!DOCTYPE html>
 <html>

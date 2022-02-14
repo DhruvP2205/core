@@ -1,21 +1,5 @@
 <?php
-try {
-    if(!isset($_GET['id'])){
-        throw new Exception("Invalid Request.", 1);
-    }
-    if(!(int)$_GET['id']){
-        throw new Exception("Invalid Request.", 1);
-    }
-
-    $productID = $_GET['id'];
-
-    $adapter = new Model_Core_Adapter();
-    $product = $adapter->fetchRow("select * FROM product WHERE productID = $productID");
-
-} catch (Exception $e) {
-    /*echo $e->getMessage();*/
-    $this->redirect('index.php?c=product&a=grid');
-}    
+    $product = $this->getData('product');    
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +11,7 @@ try {
 </head>
 <body>
     <h2>Edit Product</h2>
-    <form action="index.php?c=product&a=save&id=<?php echo $productID ?>" method="post">
+    <form action="index.php?c=product&a=save&id=<?php echo $product['productID'] ?>" method="post">
         <label>Name</label>
         <input type="text" name="product[name]" value="<?php echo $product['name']; ?>" required/>
         <br>

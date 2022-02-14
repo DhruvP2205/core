@@ -1,9 +1,18 @@
 <?php
-class Controller_Product{
+
+Ccc::loadClass('Controller_Core_Action');
+
+class Controller_Product extends Controller_Core_Action{
 
     public function gridAction()
     {
-        require_once('view/product/grid.php');
+        $adapter = new Model_Core_Adapter();
+        $products = $adapter->fetchAll("SELECT * FROM product");
+        
+        $view = $this->getView();
+        $view->setTemplate('view/product/grid.php');
+        $view->addData('products',$products);
+        $view->toHtml();
     }
 
     protected function saveProduct(){
@@ -68,12 +77,41 @@ class Controller_Product{
 
     public function editAction()
     {
+        try
+        {
+            if(!isset($_GET['id']))
+            {
+                throw new Exception("Invalid Request.", 1);
+            }
+            if(!(int)$_GET['id'])
+            {
+                throw new Exception("Invalid Request.", 1);
+            }
+
+            $productID = $_GET['id'];
+
+            $adapter = new Model_Core_Adapter();
+            $product = $adapter->fetchRow("select * FROM product WHERE productID = $productID");
+
+            $view = $this->getView();
+            $view->addData('product',$product);
+            $view->setTemplate('view/product/edit.php');
+            $view->toHtml();
+
+        }
+        catch (Exception $e)
+        {
+            /*echo $e->getMessage();*/
+            $this->redirect('index.php?c=product&a=grid');
+        }
         require_once('view/product/edit.php');
     }
 
     public function addAction()
     {
-        require_once('view/product/add.php');
+        $view = $this->getView();
+        $view->setTemplate('view/product/add.php');
+        $view->toHtml();
     }
 
     protected function deleteProduct(){

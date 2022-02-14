@@ -1,9 +1,19 @@
 <?php
-class Controller_Customer{
+
+Ccc::loadClass('Controller_Core_Action');
+
+
+class Controller_Customer extends Controller_Core_Action{
 
     public function gridAction()
     {
-        require_once('view/customer/grid.php');
+        $adapter = new Model_Core_Adapter();
+        $customers = $adapter->fetchAll("SELECT c.`customerID`, c.`firstName`, c.`lastName`, c.`email`, c.`mobile`, c.`status`, c.`createdDate`, c.`updatedDate`, a.`addressID`, a.`address`, a.`zipcode`, a.`city`, a.`state`, a.`country`, a.`billingAddress`,a.`shipingAddress`, a.`createdDate`, a.`updatedDate` FROM `customer` c LEFT JOIN `address` a ON c.customerID = a.customerID ORDER BY c.customerID ASC");
+        
+        $view = $this->getView();
+        $view->setTemplate('view/customer/grid.php');
+        $view->addData('customers',$customers);
+        $view->toHtml();
     }
 
     protected function saveCustomer(){
@@ -139,12 +149,40 @@ class Controller_Customer{
 
     public function editAction()
     {
+        try
+        {
+            if(!isset($_GET['id']))
+            {
+                throw new Exception("Invalid Request.", 1);
+            }
+            if(!(int)$_GET['id'])
+            {
+                throw new Exception("Invalid Request.", 1);
+            }
+
+            $customerID = $_GET['id'];
+
+            $adapter = new Model_Core_Adapter();
+            $customer = $adapter->fetchRow("SELECT c.`customerID`, c.`firstName`, c.`lastName`, c.`email`, c.`mobile`, c.`status`, a.`addressID`, a.`address`, a.`zipcode`, a.`city`, a.`state`, a.`country`, a.`billingAddress`,a.`shipingAddress` FROM `customer` c LEFT JOIN `address` a ON c.customerID = a.customerID WHERE c.customerID = '$customerID' ORDER BY c.customerID ASC");
+
+            $view = $this->getView();
+            $view->addData('customer',$customer);
+            $view->setTemplate('view/customer/edit.php');
+            $view->toHtml();
+        }
+        catch (Exception $e)
+        {
+            /*echo $e->getMessage();*/
+            $this->redirect('index.php?a=grid');
+        }
         require_once('view/customer/edit.php');
     }
 
     public function addAction()
     {
-        require_once('view/customer/add.php');
+        $view = $this->getView();
+        $view->setTemplate('view/customer/add.php');
+        $view->toHtml();
     }
 
     public function deleteAction()

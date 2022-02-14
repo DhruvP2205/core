@@ -1,21 +1,5 @@
 <?php
-try {
-    if(!isset($_GET['id'])){
-        throw new Exception("Invalid Request.", 1);
-    }
-    if(!(int)$_GET['id']){
-        throw new Exception("Invalid Request.", 1);
-    }
-
-    $customerID = $_GET['id'];
-
-    $adapter = new Model_Core_Adapter();
-    $customer = $adapter->fetchRow("SELECT c.`customerID`, c.`firstName`, c.`lastName`, c.`email`, c.`mobile`, c.`status`, a.`addressID`, a.`address`, a.`zipcode`, a.`city`, a.`state`, a.`country`, a.`billingAddress`,a.`shipingAddress` FROM `customer` c LEFT JOIN `address` a ON c.customerID = a.customerID WHERE c.customerID = '$customerID' ORDER BY c.customerID ASC");
-} catch (Exception $e) {
-    /*echo $e->getMessage();*/
-    $this->redirect('index.php?a=grid');
-}
-    
+    $customer = $this->getData('customer');
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +11,7 @@ try {
 </head>
 <body>
     <h2>Edit customer</h2>
-    <form action="index.php?c=customer&a=save&id=<?php echo $customerID ?>" method="POST">
+    <form action="index.php?c=customer&a=save&id=<?php echo $customer['customerID'] ?>" method="POST">
         <table border="1" width="100%" cellspacing="4">
             <tr>
                 <td colspan="2">Personal Information:</td>

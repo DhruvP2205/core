@@ -99,29 +99,6 @@
             $result = array_combine($keys, $values);
             return $result;
         }
-
-
-        public function pathAction()
-        {
-            $categoryName=$this->fetchPair('SELECT `categoryID`, `name` FROM `category`');
-            $categoryPath=$this->fetchPair('SELECT `categoryID`, `path` FROM `category`');
-            $categories=[];
-            foreach ($categoryPath as $key => $value) {
-                    $explodeArray=explode('/', $value);
-                    $tempArray = [];
-
-                    foreach ($explodeArray as $keys => $value) {
-                        if(array_key_exists($value,$categoryName)){
-                            array_push($tempArray,$categoryName[$value]);
-                        }
-                    }
-
-                    $implodeArray = implode('/', $tempArray);
-                    $categories[$key]= $implodeArray;
-            }
-            return $categories;
-
-        }
     }
     $adapter = new Model_Core_Adapter();
 ?>

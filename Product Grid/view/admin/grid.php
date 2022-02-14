@@ -1,7 +1,6 @@
 <?php
-
     $adapter = new Model_Core_Adapter();
-    $admins = $adapter->fetchAll("SELECT * FROM `admin`ORDER BY `adminID` ASC");
+    $admins = $this->getData('admins');
 ?>
 <!DOCTYPE html>
 <html>

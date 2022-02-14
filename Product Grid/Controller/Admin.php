@@ -1,9 +1,19 @@
 <?php
-class Controller_Admin{
+
+Ccc::loadClass('Controller_Core_Action');
+
+class Controller_Admin extends Controller_Core_Action{
 
     public function gridAction()
     {
-        require_once('view/admin/grid.php');
+        $adapter = new Model_Core_Adapter();
+        $admins = $adapter->fetchAll("SELECT * FROM `admin`ORDER BY `adminID` ASC");
+        
+        $view = $this->getView();
+        $view->setTemplate('view/admin/grid.php');
+        $view->addData('admins',$admins);
+
+        $view->toHtml();
     }
 
     protected function saveAdmin(){
@@ -72,12 +82,36 @@ class Controller_Admin{
 
     public function editAction()
     {
+        try {
+            if(!isset($_GET['id'])){
+                throw new Exception("Invalid Request.", 1);
+            }
+            if(!(int)$_GET['id']){
+                throw new Exception("Invalid Request.", 1);
+            }
+
+            $adminID = $_GET['id'];
+
+            $adapter = new Model_Core_Adapter();
+            $admins = $adapter->fetchRow("SELECT * FROM `admin` WHERE adminID = '$adminID'");
+
+            $view = $this->getView();
+            $view->addData('admins',$admins);
+            $view->setTemplate('view/admin/edit.php');
+            $view->toHtml();
+
+        } catch (Exception $e) {
+            /*echo $e->getMessage();*/
+            $this->redirect('index.php?c=admin&a=grid');
+        }
         require_once('view/admin/edit.php');
     }
 
     public function addAction()
     {
-        require_once('view/admin/add.php');
+        $view = $this->getView();
+        $view->setTemplate('view/admin/add.php');
+        $view->toHtml();
     }
 
     public function deleteAction()

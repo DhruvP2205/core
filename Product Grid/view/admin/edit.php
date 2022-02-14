@@ -1,21 +1,5 @@
 <?php
-try {
-    if(!isset($_GET['id'])){
-        throw new Exception("Invalid Request.", 1);
-    }
-    if(!(int)$_GET['id']){
-        throw new Exception("Invalid Request.", 1);
-    }
-
-    $adminID = $_GET['id'];
-
-    $adapter = new Model_Core_Adapter();
-    $admin = $adapter->fetchRow("SELECT * FROM `admin` WHERE adminID = '$adminID'");
-} catch (Exception $e) {
-    /*echo $e->getMessage();*/
-    $this->redirect('index.php?c=admin&a=grid');
-}
-    
+    $admin = $this->getData('admins');
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +11,7 @@ try {
 </head>
 <body>
     <h2>Edit Admin</h2>
-    <form action="index.php?c=admin&a=save&id=<?php echo $adminID ?>" method="POST">
+    <form action="index.php?c=admin&a=save&id=<?php echo $admin['adminID'] ?>" method="POST">
         <table border="1" width="100%" cellspacing="4">
             <tr>
                 <td width="10%">First Name</td>

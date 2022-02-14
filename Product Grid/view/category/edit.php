@@ -1,25 +1,8 @@
 <?php
-try {
-    if(!isset($_GET['id'])){
-        throw new Exception("Invalid Request.", 1);
-    }
-    if(!(int)$_GET['id']){
-        throw new Exception("Invalid Request.", 1);
-    }
-
-    $categoryID = $_GET['id'];
-
-    $adapter = new Model_Core_Adapter();
-    $row = $adapter->fetchRow("SELECT * FROM category WHERE categoryID = $categoryID");  
-    
-} catch (Exception $e) {
-    echo $e->getMessage();
-    $this->redirect('index.php?c=category&a=grid');
-} 
-
-$adapter = new Model_Core_Adapter();
-$categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
-$result = $adapter->pathAction();
+    $Controller_Category = new Controller_Category();
+    $categories = $this->getData('categories');
+    $row = $this->getData('row');
+    $result = $Controller_Category->pathAction();
 ?>
 
 
@@ -40,7 +23,9 @@ $result = $adapter->pathAction();
 
         <label>Sub-Category</label>
         <select name="category[parentID]" id="parentId">
-            <option value="<?php echo $row['categoryID']; ?>"><?php echo $result[$categoryID];?></option>
+            <?php foreach($categories as $category): ?>
+            <option value="<?php echo $category['categoryID']; ?>"><?php echo $result[$category['categoryID']];?></option>
+            <?php endforeach; ?>
         </select>
 
 

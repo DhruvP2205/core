@@ -1,27 +1,7 @@
 <?php
-try {
-    $adapter = new Model_Core_Adapter();
-    $categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
-
-    function path($categoryID,$array){
-        $len = count($array);
-
-        for($i = 0;$i< $len;$i++){
-            if($categoryID == $array[$i]["categoryID"]){
-                if($array[$i]["parentID"] == null){
-                    return $array[$i]["name"];
-                }
-                return path($array[$i]["parentID"],$array)." => ".$array[$i]["name"];
-            }
-        }
-    }
-    
-} catch (Exception $e) {
-    echo $e->getMessage();
-    exit();
-    //$this->redirect('index.php?c=category&a=grid');
-} 
-
+    $Controller_Category = new Controller_Category();
+    $categories = $this->getData('categories');
+    $result = $Controller_Category->pathAction();
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +24,7 @@ try {
         <select name="category[parentID]">
             <option value=<?php echo NULL; ?>>Root Category</option>
             <?php foreach($categories as $category): ?>
-            <option value="<?php echo $category['categoryID']; ?>"><?php echo path($category['categoryID'],$categories); ?></option>
+            <option value="<?php echo $category['categoryID']; ?>"><?php echo $result[$category['categoryID']];?></option>
             <?php endforeach; ?>
         </select>
         <br>

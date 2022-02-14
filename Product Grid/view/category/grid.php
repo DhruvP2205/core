@@ -1,8 +1,6 @@
 <?php
-
-    $adapter = new Model_Core_Adapter();
-    $categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
-    $path = "";
+    $Controller_Category = new Controller_Category();
+    $categories = $this->getData('categories');
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,7 +33,7 @@
                 ?>
                 <tr>
                     <td><?php echo($category['categoryID']); ?></td>
-                    <td><?php $result1 = $adapter->pathAction(); echo $result1[$category['categoryID']];?></td>
+                    <td><?php $result1 = $Controller_Category->pathAction(); echo $result1[$category['categoryID']];?></td>
                     <td>
                         <?php 
                             if($category['status'] == 1){

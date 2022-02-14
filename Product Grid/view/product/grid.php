@@ -1,7 +1,8 @@
 <?php
     
     $adapter = new Model_Core_Adapter();
-    $products = $adapter->fetchAll("select * FROM product");
+    
+    $products = $this->getData('products');
 ?>
 <!DOCTYPE html>
 <html>
