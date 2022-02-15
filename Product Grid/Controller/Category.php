@@ -61,11 +61,75 @@ class Controller_Category extends Controller_Core_Action{
                     throw new Exception("Invalid Request.", 1);
                 }
                 $categoryID = $_GET['id'];
+                $parent = $_POST['category']['root'];
 
-                $result = $adapter->update("UPDATE category SET name ='$categoryName', status ='$categoryStatus', updatedDate ='$updatedDate' where categoryID = $categoryID");
-                if(!$result)
+                $data = $adapter->update("UPDATE category SET name ='$categoryName', status ='$categoryStatus', updatedDate ='$updatedDate' where categoryID = $categoryID");
+
+
+                if(empty($parent))
                 {
-                    throw new Exception("System is unable to update record.",1);
+                    $path = $adapter->update("UPDATE category SET parentID = NULL,`path`='$categoryID' WHERE categoryID = '$categoryID'");
+
+                    $parentID = $_POST['category']['parentID'];
+
+                    $data = $adapter->fetchAll("SELECT * FROM category WHERE `path` LIKE '%$categoryID%'");
+
+                    foreach($data as $allData)
+                    {
+                        $path = $allData['path'];
+                        if($allData['categoryID']!=$categoryID)
+                        {
+                            $currentID = $allData['categoryID'];
+                            $updatePath = ltrim($path , $parentID);
+                            $finalPath = ltrim($updatePath , '/');
+                            $parentID = $allData['parentID'];
+                                        
+                            $path = $adapter->update("UPDATE category SET parentID=$parentID,`path`='$finalPath' WHERE categoryID='$currentID'");
+                        }
+                    }
+                }
+                else
+                {
+                    $parentID = $_POST['category']['parentID'];
+
+                    $row = $adapter->fetchAssoc("SELECT * FROM category WHERE categoryID='$parent'");
+                    $parentPath = $row['path'];
+
+                    $query = $adapter->fetchAssoc("SELECT * FROM category where categoryID='$categoryID'");
+                    $currentpath = $query['path'];
+
+                    $possiblePath = $adapter->fetchAll("SELECT * from category where `path` LIKE '$currentpath%'");
+
+                    foreach($possiblePath as $allPath)
+                    {
+                        //$currentID = $allData['categoryID'];
+                        $path = $allPath['path'];
+
+                        $updatePath = ltrim($path , $parentID);
+                        $updatePath = ltrim($updatePath , '/');
+
+                        if($allPath['categoryID']!=$categoryID)
+                        {
+                            $parent = $allPath['parentID']; //Parent Id
+                            $FinalUpdate = $parentPath.'/'.$updatePath; // Updated Path
+                            $currentID = $allPath['categoryID']; // Current Id
+                        }
+                        else
+                        {
+                            $parent = $parentPath; // Parent Id
+                            $FinalUpdate = $parentPath.'/'.$updatePath; //Updated Path
+                            $currentID = $allPath['categoryID']; // Current Id
+                        }
+
+                        $path = $adapter->update("UPDATE category SET parentID='$parent',`path` = '$FinalUpdate' WHERE categoryID = '$currentID'");
+                    }
+                    if($data)
+                    {
+                        $this->redirect('index.php?c=category&a=grid');
+                    }
+                    else{
+                        throw new Exception("Data Not Upadated", 1);
+                    }
                 }
             }
             else
@@ -132,12 +196,12 @@ class Controller_Category extends Controller_Core_Action{
             $categoryID = $_GET['id'];
 
             $adapter = new Model_Core_Adapter();
-            $row = $adapter->fetchRow("SELECT * FROM category WHERE categoryID = $categoryID");
+            $row = $adapter->fetchAssoc("SELECT * FROM category WHERE categoryID = $categoryID");
             $categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
 
             $view = $this->getView();
-            $view->addData('categories',$categories);
-            $view->addData('row',$row);
+            $view->addData('categories',$row);
+            $view->addData('allData',$categories);
             $view->setTemplate('view/category/edit.php');
             $view->toHtml();
             

@@ -1,7 +1,10 @@
 <?php
     $Controller_Category = new Controller_Category();
+
     $categories = $this->getData('categories');
-    $row = $this->getData('row');
+    
+    $row = $this->getData('allData');
+
     $result = $Controller_Category->pathAction();
 ?>
 
@@ -15,17 +18,21 @@
 </head>
 <body>
     <h2>Edit Category</h2>
-    <form action="index.php?c=category&a=save&id=<?php echo $row['categoryID']?>" method="post">
+    <form action="index.php?c=category&a=save&id=<?php echo $categories['categoryID']?>" method="post">
+        <input type="text" name="category[parentID]" value="<?php echo $categories['parentID']; ?>" hidden />
         <label>Name</label>
-        <input type="text" name="category[name]" value="<?php echo $row['name']; ?>" required/>
+        <input type="text" name="category[name]" value="<?php echo $categories['name']; ?>" required/>
         <br>
         <br>
 
         <label>Sub-Category</label>
-        <select name="category[parentID]" id="parentId">
-            <?php foreach($categories as $category): ?>
-            <option value="<?php echo $category['categoryID']; ?>"><?php echo $result[$category['categoryID']];?></option>
-            <?php endforeach; ?>
+        <select name="category[root]">
+            <option selected value="" <?php echo ($categories['parentID']==NULL) ? "selected" : ''; ?>>Root Category</option>
+            <?php foreach ($row as $value) { ?>
+                <option value="<?php echo $value['categoryID']; ?>" <?php echo ($value['categoryID']==$categories['parentID']) ? "selected" : ''; ?>>
+                    <?php echo $result[$value['categoryID']]; ?>
+                </option>
+            <?php }?>
         </select>
 
 
@@ -34,7 +41,7 @@
         
         <label>Status</label>
         <select name="category[status]">
-            <?php if($row['status']==1): ?>
+            <?php if($categories['status']==1): ?>
             <option value="1" selected>Active</option>
             <option value="2">Inactive</option>
             <?php else: ?>

@@ -67,6 +67,12 @@
             return $result;
         }
 
+        public function fetchAssoc($query)
+        {
+            $result = $this->query($query);
+            return $result->fetch_assoc();
+        }
+
         public function fetchRow($query)
         {
             $result = $this->query($query);
