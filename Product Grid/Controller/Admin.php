@@ -55,6 +55,7 @@ class Controller_Admin extends Controller_Core_Action{
 
                 $data = ['firstName'=>$adminFname,'lastName'=>$adminLname,'email'=>$adminEmail,'password'=>$adminPassword,'status'=>$adminStatus,'updatedDate'=>$updatedDate];
 
+                $adminTable = new Model_Admin();
                 $admin_id = $adminTable->update($data,$adminID);
             }
             else
