@@ -4,32 +4,37 @@ class Model_Core_Request
 {
     public function getPost($key = null,$value = null)
     {
-        if($key == null && $value == null)
-        {   
-            //return $_POST;
-            print_r($_POST);
-        }
-        elseif($key == null && $value!=null)
+        if(!$this->ispost())
         {
-            return $_POST[$value];
+            return null;
         }
-        else
+        if($key == null)
         {
-            if(array_key_exists($key, $_POST))
-            {
-                return $_POST[$key];
-            }
+            return $_POST;
         }
+        if(!array_key_exists($key, $_POST))
+        {
+            return $value;
+        }
+        return $_POST[$key];
     }
     
-    public function getRequest($key,$value)
+    public function getRequest($key = null,$value = null)
     {
-        
+        if($key == null)
+        {
+            return $_REQUEST;
+        }
+        if(!array_key_exists($key, $_REQUEST))
+        {
+            return $value;
+        }
+        return $_REQUEST[$key];
     }
 
     public function ispost()
     {
-        if($SERVER['SERVER_REQUEST'] == 'POST')
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             return true;
         }
@@ -38,8 +43,9 @@ class Model_Core_Request
 
     public function getActionName()
     {
-        $actionName = (isset($_GET['a'])) ? $_GET['a'] : 'error';
-        return $actionName;
+        return $this->getRequest('a', 'index');
+        /*$actionName = (isset($_GET['a'])) ? $_GET['a'] : 'error';
+        return $actionName;*/
     }
 
     public function getControllerName()

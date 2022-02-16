@@ -12,6 +12,7 @@
 <body>
     <h2>Edit Product</h2>
     <form action="index.php?c=product&a=save&id=<?php echo $product['productID'] ?>" method="post">
+        <input type="text" name="product[productID]" value="<?php echo $product['productID'] ?>" hidden>
         <label>Name</label>
         <input type="text" name="product[name]" value="<?php echo $product['name']; ?>" required/>
         <br>

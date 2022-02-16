@@ -43,6 +43,6 @@ class Ccc
     }
 }
 
+$c = new Ccc();
 Ccc::init();
-
 ?>
