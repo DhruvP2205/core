@@ -106,5 +106,4 @@
             return $result;
         }
     }
-    $adapter = new Model_Core_Adapter();
-?>
+

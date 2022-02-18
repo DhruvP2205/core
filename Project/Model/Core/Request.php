@@ -32,7 +32,7 @@ class Model_Core_Request
         return $_REQUEST[$key];
     }
 
-    public function ispost()
+    public function isPost()
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
@@ -44,8 +44,6 @@ class Model_Core_Request
     public function getActionName()
     {
         return $this->getRequest('a', 'index');
-        /*$actionName = (isset($_GET['a'])) ? $_GET['a'] : 'error';
-        return $actionName;*/
     }
 
     public function getControllerName()

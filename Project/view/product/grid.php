@@ -1,9 +1,4 @@
-<?php
-    
-    $adapter = new Model_Core_Adapter();
-    
-    $products = $this->getData('products');
-?>
+<?php $products = $this->getProducts(); ?>
 <!DOCTYPE html>
 <html>
 <head>

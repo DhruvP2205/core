@@ -1,5 +1,5 @@
 <?php
-    $admin = $this->getData('admins');
+    $admin = $this->getAdmin();
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <td width="10%">Password</td>
-                <td><input type="text" name="admin[password]" value="<?php echo $admin['password'] ?>"></td>
+                <td><input type="password" name="admin[password]" value="<?php echo $admin['password'] ?>"></td>
             </tr>
             <tr>
                 <td width="10%">Status</td>

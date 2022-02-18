@@ -1,5 +1,5 @@
 <?php
-Ccc::loadClass('Model_Admin');
+
 class Model_Core_Table
 {
     protected $tableName = null;

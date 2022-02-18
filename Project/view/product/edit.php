@@ -1,5 +1,5 @@
 <?php
-    $product = $this->getData('product');    
+    $product = $this->getProduct();    
 ?>
 
 <!DOCTYPE html>

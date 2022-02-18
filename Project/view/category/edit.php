@@ -27,7 +27,7 @@
 
         <label>Sub-Category</label>
         <select name="category[root]">
-            <option selected value="" <?php echo ($categories['parentID']==NULL) ? "selected" : ''; ?>>Root Category</option>
+            <option value="" <?php echo ($categories['parentID']==NULL) ? "selected" : ''; ?>>Root Category</option>
             <?php foreach ($row as $value) { ?>
                 <option value="<?php echo $value['categoryID']; ?>" <?php echo ($value['categoryID']==$categories['parentID']) ? "selected" : ''; ?>>
                     <?php echo $result[$value['categoryID']]; ?>

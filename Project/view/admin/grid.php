@@ -1,7 +1,4 @@
-<?php
-    $adapter = new Model_Core_Adapter();
-    $admins = $this->getData('admins');
-?>
+<?php $admins = $this->getAdmins(); ?>
 <!DOCTYPE html>
 <html>
 <head>

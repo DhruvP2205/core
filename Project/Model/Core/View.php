@@ -41,7 +41,7 @@
         public function addData($key, $value)
         {
             $this->data[$key] = $value;
-            return $this->data;
+            return $this;
         }
 
         public function removeData($key)

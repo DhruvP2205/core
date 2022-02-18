@@ -90,36 +90,42 @@ class Controller_Category extends Controller_Core_Action{
                 }
                 else
                 {
-                    $parentID = $_POST['category']['parentID'];
+                    $parentID = $_POST['category']['root'];
+                    $currParentID = $_POST['category']['parentID'];
+                    echo "<pre>";
+                    print_r("\ncurrParentID: ".$currParentID);
 
-                    $row = $adapter->fetchAssoc("SELECT * FROM category WHERE categoryID='$parent'");
-                    $parentPath = $row['path'];
+                    $row = $adapter->fetchAssoc("SELECT * FROM category WHERE categoryID='$parentID'");
+                    print_r("\nSelected Parent Path: ".$parentPath = $row['path']);
 
                     $query = $adapter->fetchAssoc("SELECT * FROM category where categoryID='$categoryID'");
-                    $currentpath = $query['path'];
+                    print_r("\nCurrent Path: ".$currentpath = $query['path']);
 
                     $possiblePath = $adapter->fetchAll("SELECT * from category where `path` LIKE '$currentpath%'");
+                    
+                    echo "\n";
+                    print_r($possiblePath);
 
                     foreach($possiblePath as $allPath)
                     {
-                        //$currentID = $allData['categoryID'];
                         $path = $allPath['path'];
+                        print_r("All Path:".$path);
 
-                        $updatePath = ltrim($path , $parentID);
+                        $updatePath = str_replace($currParentID,"", $path);
+                        print_r("\nRemove OLD Parent Path: ".$updatePath);
                         $updatePath = ltrim($updatePath , '/');
+                        print_r("\nRemove slash: ".$updatePath);
 
-                        if($allPath['categoryID']!=$categoryID)
-                        {
-                            $parent = $allPath['parentID']; //Parent Id
-                            $FinalUpdate = $parentPath.'/'.$updatePath; // Updated Path
-                            $currentID = $allPath['categoryID']; // Current Id
-                        }
-                        else
-                        {
-                            $parent = $parentPath; // Parent Id
-                            $FinalUpdate = $parentPath.'/'.$updatePath; //Updated Path
-                            $currentID = $allPath['categoryID']; // Current Id
-                        }
+                        
+                        $parent = $parentPath; // Parent Id
+                        print_r("\nParent Id: ".$parent);
+                        $FinalUpdate = $parentPath.'/'.$updatePath; //Updated Path
+                        print_r("\nUpdated Path: ".$FinalUpdate);
+                        $currentID = $allPath['categoryID']; // Current Id
+                        print_r("\nCurrent Id: ".$currentID);
+
+                        print_r("\nQuery: "."UPDATE category SET parentID='$parent',`path` = '$FinalUpdate' WHERE categoryID = '$currentID'");
+                        exit();
 
                         $path = $adapter->update("UPDATE category SET parentID='$parent',`path` = '$FinalUpdate' WHERE categoryID = '$currentID'");
                     }
@@ -197,7 +203,7 @@ class Controller_Category extends Controller_Core_Action{
 
             $adapter = new Model_Core_Adapter();
             $row = $adapter->fetchAssoc("SELECT * FROM category WHERE categoryID = $categoryID");
-            $categories = $adapter->fetchAll("SELECT * FROM category ORDER BY `path`");
+            $categories = $adapter->fetchAll("SELECT * FROM category WHERE path NOT LIKE '%{$categoryID}%' ORDER BY `path`");
 
             $view = $this->getView();
             $view->addData('categories',$row);
