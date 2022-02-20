@@ -48,8 +48,14 @@
                         <?php endif; ?>
                     </select>
                 </td>
-            </tr>   
-        <input type='submit' name='Update' id='submit' value='update'/>
+            </tr> 
+            <tr>
+                <td width="10%">&nbsp;</td>
+                <td>
+                    <input type='submit' name='Update' id='submit' value='update'/>
+                    <button type="button"><a href="<?php echo $this->getUrl('customer','grid') ?>">Cancel</a></button>
+                </td>
+            </tr> 
     </table>
     </form>
 </body>
