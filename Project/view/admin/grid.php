@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href='index.php?c=admin&a=add'>Add Admin</a>
+    <a href="<?php echo $this->getUrl('admin','add') ?>">Add Admin</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
                 <thead>
@@ -48,8 +48,8 @@
                     <td><?php echo($admin['createdDate']); ?></td>
                     <td><?php echo($admin['updatedDate']); ?></td>
                     <td>
-                        <a href="index.php?c=admin&a=edit&id=<?php echo $admin['adminID'] ?>">Edit</a>
-                        <a href="index.php?c=admin&a=delete&id=<?php echo $admin['adminID'] ?>">Delete</a>
+                        <a href="<?php echo $this->getUrl('admin','edit',['id'=>$admin['adminID']],true) ?>">Edit</a>
+                        <a href="<?php echo $this->getUrl('admin','delete',['id'=>$admin['adminID']],true) ?>">Delete</a>
                     </td>
                 </tr>
                 <?php

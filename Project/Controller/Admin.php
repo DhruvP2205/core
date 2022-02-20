@@ -9,6 +9,11 @@ class Controller_Admin extends Controller_Core_Action
         Ccc::getBlock('Admin_Grid')->toHtml();
     }
 
+    public function addAction()
+    {
+        Ccc::getBlock('Admin_Add')->toHtml();
+    }
+
     public function saveAction()
     {
         try
@@ -45,12 +50,14 @@ class Controller_Admin extends Controller_Core_Action
                 $postData['createdDate'] = date('y-m-d h:m:s');
                 $adminInsertedID = $adminTable->insert($postData);
             }
-            $this->redirect('index.php?c=admin&a=grid');
+            $this->redirect($this->getView()->getUrl('admin','grid'));
         } 
         
         catch (Exception $e) 
         {
-            $this->redirect('index.php?c=admin&a=grid');
+            echo $e->getMessage();
+            exit();
+            $this->redirect($this->getView()->getUrl('admin','grid'));
         }
     }
 
@@ -59,7 +66,6 @@ class Controller_Admin extends Controller_Core_Action
         try
         {
             $adminID = $this->getRequest()->getRequest('id');
-
             if(!$adminID)
             {
                 throw new Exception("Id is not valid.");
@@ -72,28 +78,24 @@ class Controller_Admin extends Controller_Core_Action
 
             $adminModel = Ccc::getModel('Admin');
             $adminTable = new Model_Admin();
-            $admin = $adminTable->fetchRow($adminID);
+            $admin = $adminTable->fetchRow("SELECT * FROM admin WHERE adminID = {$adminID}");
 
             Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();
-
-        } catch (Exception $e) {
+        }
+        catch (Exception $e)
+        {
             echo $e->getMessage();
             exit();
-            /*$this->redirect('index.php?c=admin&a=grid');*/
+            $this->redirect($this->getView()->getUrl('admin','grid'));
         }
     }
 
-    public function addAction()
-    {
-        Ccc::getBlock('Admin_Add')->toHtml();
-    }
 
     public function deleteAction()
     {
         try
         {
             $request = $this->getRequest();
-
             if(!$request->getRequest('id'))
             {
                 throw new Exception("Invalid Request.", 1);
@@ -108,13 +110,13 @@ class Controller_Admin extends Controller_Core_Action
 
             $adminTable = Ccc::getModel('Admin');
             $adminTable->delete($adminId);
-            $this->redirect('index.php?c=admin&a=grid');
+            $this->redirect($this->getView()->getUrl('admin','grid',[],true));
         }
         catch (Exception $e)
         {
             echo $e->getMessage();
             exit();
-            /*$this->redirect('index.php?c=admin&a=grid');*/
+            $this->redirect('index.php?c=admin&a=grid');
         }
     }
 }

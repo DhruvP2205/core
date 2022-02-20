@@ -1,6 +1,5 @@
 <?php
 Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Core_Request');
 
 class Controller_Product extends Controller_Core_Action
 {
@@ -44,13 +43,13 @@ class Controller_Product extends Controller_Core_Action
                 $postData['createdDate'] = date('y-m-d h:m:s');
                 $productInsertedId = $productTable->insert($postData);
             }
-            $this->redirect('index.php?c=product&a=grid');
+            $this->redirect($this->getView()->getUrl('product','grid',[],true));
         }
         catch (Exception $e)
         {
             echo $e->getMessage();
             exit();
-            /*$this->redirect('index.php?c=product&a=grid');*/
+            $this->redirect($this->getView()->getUrl('product','grid',[],true));
         }
     }
 
@@ -71,7 +70,7 @@ class Controller_Product extends Controller_Core_Action
 
             $productModel = Ccc::getModel('Product');
             $productTable = new Model_Product();
-            $product = $productTable->fetchRow($productID);
+            $product = $productTable->fetchRow("SELECT * FROM product WHERE productID = {$productID}");
 
             Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();
 
@@ -80,7 +79,7 @@ class Controller_Product extends Controller_Core_Action
         {
             echo $e->getMessage();
             exit();
-            /*$this->redirect('index.php?c=product&a=grid');*/
+            $this->redirect($this->getView()->getUrl('product','grid',[],true));
         }
     }
 
@@ -109,13 +108,13 @@ class Controller_Product extends Controller_Core_Action
 
             $productTable = Ccc::getModel('product');
             $productTable->delete($productID);
-            $this->redirect('index.php?c=product&a=grid');
+            $this->redirect($this->getView()->getUrl('product','grid',[],true));
         }
         catch (Exception $e)
         {
             echo $e->getMessage();
             exit();
-            /*$this->redirect('index.php?c=product&a=grid');*/
+            $this->redirect($this->getView()->getUrl('product','grid',[],true));
         }
     }
 }

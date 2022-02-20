@@ -76,7 +76,8 @@
         public function fetchRow($query)
         {
             $result = $this->query($query);
-            if($result->num_rows){
+            if($result->num_rows)
+            {
                 return $result->fetch_assoc();
             }
             return false;
@@ -106,4 +107,6 @@
             return $result;
         }
     }
+    $adapter = new Model_Core_Adapter();
+?>
 

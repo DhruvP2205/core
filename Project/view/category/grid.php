@@ -1,8 +1,6 @@
 <?php
-    $Controller_Category = new Controller_Category();
-    $categories = $this->getData('categories');
-
-    $result = $Controller_Category->pathAction();
+    $categories = $this->getCategories();
+    $result = $this->pathAction();
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,7 +11,7 @@
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href='index.php?c=category&a=add'>Add Category</a>
+    <a href="<?php echo $this->getUrl('category','add',[],true) ?>">Add Category</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
                 <thead>

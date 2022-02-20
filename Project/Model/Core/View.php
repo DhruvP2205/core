@@ -52,5 +52,51 @@
             }
             return $this;
         }
+
+        public function getUrl($c=null, $a=null, array $data = [], $reset = false)
+        {
+            $url = [];
+
+            if($c==null && $a==null && $data==null && $reset==false)
+            {
+                $url = Ccc::getFront()->getRequest()->getRequest();
+            }
+            
+            if($c == null)
+            {
+                $url['c'] = Ccc::getFront()->getRequest()->getRequest('c');
+            }
+            else
+            {
+                $url['c'] = $c;
+            }
+
+            if($a == null)
+            {
+                $url['a'] = Ccc::getFront()->getRequest()->getRequest('a');
+            }
+            else
+            {
+                $url['a'] = $a;
+            }
+            
+            if($reset)
+            {
+                if($data)
+                {
+                    $url = array_merge($url, $data);
+                }
+            }
+            else
+            {
+                $url = array_merge(Ccc::getFront()->getRequest()->getRequest(),$url);
+                if($data)
+                {
+                    $url = array_merge($url, $data);
+                }   
+            }
+            $finalUrl = "index.php?".http_build_query($url);
+            return $finalUrl;
+        }
     }
 ?>

@@ -1,5 +1,6 @@
 <?php
-    $customer = $this->getData('customer');
+    $customer = $this->getCustomer();
+    $address = $this->getAddress();
 ?>
 
 <!DOCTYPE html>
@@ -11,10 +12,11 @@
 </head>
 <body>
     <h2>Edit customer</h2>
-    <form action="index.php?c=customer&a=save&id=<?php echo $customer['customerID'] ?>" method="POST">
+    <form action="<?php echo $this->getUrl('customer','save',['id'=>$customer['customerID']],true) ?>" method="POST">
         <table border="1" width="100%" cellspacing="4">
             <tr>
                 <td colspan="2">Personal Information:</td>
+                <td><input type="text" name="customer[customerID]" value="<?php echo $customer['customerID'] ?>" hidden></td>
             </tr>
             <tr>
                 <td width="10%">First Name</td>
@@ -51,39 +53,40 @@
             </tr>
             <tr>
                 <td width="10%">Address</td>
-                <td><textarea name="address[address]" rows="4" cols="50" required><?php echo $customer['address'] ?></textarea></td>
+                <!-- <input type="text" name="address[customerID]" value="<?php echo $customer['customerID'] ?>" hidden> -->
+                <td><textarea name="address[address]" rows="4" cols="50" required><?php echo $address['address'] ?></textarea></td>
             </tr>
             <tr>
                 <td width="10%">Zip code</td>
-                <td><input type="text" name="address[zipcode]" value="<?php echo $customer['zipcode'] ?>"></td>
+                <td><input type="text" name="address[zipcode]" value="<?php echo $address['zipcode'] ?>"></td>
             </tr>
             <tr>
                 <td width="10%">City</td>
-                <td><input type="text" name="address[city]" value="<?php echo $customer['city'] ?>"></td>
+                <td><input type="text" name="address[city]" value="<?php echo $address['city'] ?>"></td>
             </tr>
             <tr>
                 <td width="10%">State</td>
-                <td><input type="text" name="address[state]" value="<?php echo $customer['state'] ?>"></td>
+                <td><input type="text" name="address[state]" value="<?php echo $address['state'] ?>"></td>
             </tr>
             <tr>
                 <td width="10%">Country</td>
-                <td><input type="text" name="address[country]" value="<?php echo $customer['country'] ?>"></td>
+                <td><input type="text" name="address[country]" value="<?php echo $address['country'] ?>"></td>
             </tr>
             <tr>
                 <td width="10%">Address Type</td>
                 <td>
-                    <?php if($customer['billingAddress'] == 1): ?>
-                    <input type="checkbox" name="address[billing]" value="1" checked>
+                    <?php if($address['billingAddress'] == 1): ?>
+                    <input type="checkbox" name="address[billingAddress]" value="1" checked>
                     <label> Billing</label>
                     <?php else: ?>
-                    <input type="checkbox" name="address[billing]" value="1">
+                    <input type="checkbox" name="address[billingAddress]" value="1">
                     <label> Billing</label>
                     <?php endif; ?>
-                    <?php if($customer['shipingAddress'] == 1): ?>
-                    <input type="checkbox" name="address[shiping]" value="1" checked>
+                    <?php if($address['shipingAddress'] == 1): ?>
+                    <input type="checkbox" name="address[shipingAddress]" value="1" checked>
                     <label> Shiping</label>
                     <?php else: ?>
-                    <input type="checkbox" name="address[shiping]" value="1">
+                    <input type="checkbox" name="address[shipingAddress]" value="1">
                     <label> Shiping</label>
                     <?php endif; ?>
                     <br>
@@ -94,7 +97,7 @@
                 <td width="10%">&nbsp;</td>
                 <td>
                     <input type="submit" name="submit" value="update">
-                    <button type="button"><a href="index.php?c=customer&a=grid">Cancel</a></button>
+                    <button type="button"><a href="<?php echo $this->getUrl('customer','grid',[],true) ?>">Cancel</a></button>
                 </td>
             </tr>
             

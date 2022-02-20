@@ -1,6 +1,4 @@
-<?php
-    $product = $this->getProduct();    
-?>
+<?php $product = $this->getProduct(); ?>
 
 <!DOCTYPE html>
 <html>
@@ -11,33 +9,44 @@
 </head>
 <body>
     <h2>Edit Product</h2>
-    <form action="index.php?c=product&a=save&id=<?php echo $product['productID'] ?>" method="post">
-        <input type="text" name="product[productID]" value="<?php echo $product['productID'] ?>" hidden>
-        <label>Name</label>
-        <input type="text" name="product[name]" value="<?php echo $product['name']; ?>" required/>
-        <br>
-        <br>
-        <label>Price</label>
-        <input type="text" name="product[price]" value="<?php echo $product['price']; ?>" required/>
-        <br>
-        <br>
-        <label>Quantity</label>
-        <input type="text" name="product[quantity]" value="<?php echo $product['quantity']; ?>" required/>
-        <br>
-        <br>
-        <label>Status</label>
-        <select name="product[status]">
-            <?php if($product['status']==1): ?>
-            <option value="1" selected>Active</option>
-            <option value="2">Inactive</option>
-            <?php else: ?>
-            <option value="1">Active</option>
-            <option value="2" selected>Inactive</option>                
-            <?php endif; ?>
-        </select>
-        <br>
-        <br>        
-        <input type='submit' name='Update' id='submit' value='update'/>
+    <form action="<?php echo $this->getUrl('product','save',['id'=>$product['productID']],true) ?>" method="post">
+        <table border="1" cellspacing="4">
+            <input type="text" name="product[productID]" value="<?php echo $product['productID'] ?>" hidden>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" name="product[name]" value="<?php echo $product['name']; ?>" required/></td>
+            </tr>
+            <tr>
+                <td>Price</td>
+                <td><input type="text" name="product[price]" value="<?php echo $product['price']; ?>" required/></td>
+            </tr>
+            <tr>
+                <td>Quantity</td>
+                <td><input type="text" name="product[quantity]" value="<?php echo $product['quantity']; ?>" required/></td>
+            </tr>
+        
+            <tr>
+                <td>Status</td>
+                <td>
+                    <select name="product[status]">
+                        <?php if($product['status']==1): ?>
+                        <option value="1" selected>Active</option>
+                        <option value="2">Inactive</option>
+                        <?php else: ?>
+                        <option value="1">Active</option>
+                        <option value="2" selected>Inactive</option>                
+                        <?php endif; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%">&nbsp;</td>
+                <td>
+                    <input type='submit' name='Update' value='update'/>
+                    <button type="button"><a href="<?php echo $this->getUrl('product','grid') ?>">Cancel</a></button>
+                </td>
+            </tr>
+        </table>
     </form>
 </body>
 </html>

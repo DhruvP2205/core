@@ -27,119 +27,83 @@ class Model_Core_Table
         return $this;
     }
 
-
     public function insert(array $data=null)
     {
         global $adapter;
-    
-        $prep = array();
+        $arrayData = array();
         foreach($data as $key => $value )
         {
-            $prep[''.$key] ="'".$value."'";
+            $arrayData[''.$key] = "'".$value."'";
         }
 
         $insertQuery = ("INSERT INTO $this->tableName (" . implode(',',array_keys($data)) . 
-            ") VALUES ( ". implode(',', array_values($prep)) . ")");
+            ") VALUES ( ". implode(',', array_values($arrayData)) . ")");
 
-        try
-        {
-            $insertId=$adapter->insert($insertQuery);
-            if(!$insertId)
-            {
-                throw new Exception("Error Processing Request", 1);
-            }
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();
-        }
+        $insertId = $adapter->insert($insertQuery);
+        return $insertId;
     }
 
 
     public function update(array $data=null,$primaryKey=null)
     {
         global $adapter;
-        $f="";
+        $stringData = "";
+
         foreach($data as $key => $value )
         {
-            $prep[''.$key] ="'".$value."'";
-            $f.= $key."=".$prep[''.$key].",";
+            $arrayData[''.$key] = "'".$value."'";
+            $stringData.= $key."=".$arrayData[''.$key].",";
         }
 
-        $final=rtrim($f,',');
-        $updateQuery="UPDATE $this->tableName SET $final WHERE $this->tableName.$this->primaryKey = $primaryKey";
+        $stringData = rtrim($stringData,',');
+        $updateQuery = "UPDATE $this->tableName SET $stringData WHERE $this->tableName.$this->primaryKey = $primaryKey";
+        if($this->tableName == 'address')
+        {
+            print_r($updateQuery);
+            exit;
+        }
 
-        try
+        $update = $adapter->update($updateQuery);
+        /*if(!$update)
         {
-            $update = $adapter->update($updateQuery);
-            if(!$update)
-            {
-                throw new Exception("Error Processing Request", 1);
-            }
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();
-        }
+            throw new Exception("Error Processing Request", 1);
+        }*/
     }
 
 
     public function delete($primaryKey = null,array $data = null)
     {
-        $deleteQuery = "DELETE FROM $this->tableName WHERE $this->primaryKey=$primaryKey";
+        $deleteQuery = "DELETE FROM $this->tableName WHERE $this->primaryKey = $primaryKey";
         global $adapter;
     
-        try
+        $delete = $adapter->delete($deleteQuery);
+        if(!$delete)
         {
-            $delete = $adapter->delete($deleteQuery);
-            if(!$delete)
-            {
-                throw new Exception("Error Processing Request", 1);
-            }
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();
+            throw new Exception("Error Processing Request", 1);
         }
     }
 
 
-    public function fetchAll()
+    public function fetchAll($query)
     {
-        $fetchQuery="SELECT * FROM $this->tableName";
         global $adapter;
-        try
+        $fetchAll = $adapter->fetchAll($query);
+        if(!$fetchAll)
         {
-            $fetchAll=$adapter->fetchAll($fetchQuery);
-            if(!$fetchAll)
-            {
-                throw new Exception("Error Processing Request", 1);
-            }
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();
-        }
+            throw new Exception("Error Processing Request", 1);
+        } 
         return $fetchAll;
     }
 
 
-    public function fetchRow($primaryKey=null)
+    public function fetchRow($query)
     {
-        $fetchQuery="SELECT * FROM $this->tableName WHERE $this->primaryKey=$primaryKey";
         global $adapter;
-        try
+        
+        $fetchRow = $adapter->fetchRow($query);
+        if(!$fetchRow)
         {
-            $fetchRow=$adapter->fetchRow($fetchQuery);
-            if(!$fetchRow)
-            {
-                throw new Exception("Error Processing Request", 1);
-                
-            }
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();
+            return null;
         }
         return $fetchRow;
     }

@@ -7,31 +7,44 @@
 </head>
 <body>
     <h2>Add Customer</h2>
-    <form action="index.php?c=admin&a=save" method="post">
-        <label>First Name</label>
-        <input type="text" name="admin[firstName]" required />
-        <br>
-        <br>
-        <label>Last Name</label>
-        <input type="text" name="admin[lastName]" required />
-        <br>
-        <br>
-        <label>Email</label>
-        <input type="text" name="admin[email]" required />
-        <br>
-        <br>
-        <label>Password</label>
-        <input type="password" name="admin[password]" required />
-        <br>
-        <br>
-        <label>Status</label>
-        <select name="admin[status]">
-            <option value="1" selected>Active</option>
-            <option value="2">Inactive</option>
-        </select>
-        <br>
-        <br>
-        <input class="submit" type="submit" name='submit' id='submit' value="Save"  />
+    <form action="<?php echo $this->getUrl('admin','save') ?>" method="post">
+        <table border="1" cellspacing="4">
+            <tr>
+                <td colspan="2"><b>Personal Information</b></td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td><input type="text" name="admin[firstName]" required /></td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td><input type="text" name="admin[lastName]" required /></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="text" name="admin[email]" required /></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" name="admin[password]" required /></td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>
+                    <select name="admin[status]">
+                        <option value="1" selected>Active</option>
+                        <option value="2">Inactive</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%">&nbsp;</td>
+                <td>
+                    <input type="submit" name='submit' value="Save"  />
+                    <button type="button"><a href="<?php echo $this->getUrl('admin','grid') ?>">Cancel</a></button>
+                </td>
+            </tr>
+        </table>
     </form>
 </body>
 </html>

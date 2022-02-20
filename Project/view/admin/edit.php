@@ -11,11 +11,9 @@
 </head>
 <body>
     <h2>Edit Admin</h2>
-    <form action="index.php?c=admin&a=save&id=<?php echo $admin['adminID'] ?>" method="POST">
-        <table border="1" width="100%" cellspacing="4">
-            
+    <form action="<?php echo $this->getUrl('admin','save',['id'=>$admin['adminID']],true) ?>" method="POST">
+        <table border="1" cellspacing="4"> 
             <input type="text" name="admin[adminID]" value="<?php echo $admin['adminID'] ?>" hidden>
-            
             <tr>
                 <td width="10%">First Name</td>
                 <td><input type="text" name="admin[firstName]" value="<?php echo $admin['firstName'] ?>"></td>
@@ -50,7 +48,7 @@
                 <td width="10%">&nbsp;</td>
                 <td>
                     <input type="submit" name="submit" value="update">
-                    <button type="button"><a href="index.php?c=admin&a=grid">Cancel</a></button>
+                    <button type="button"><a href="<?php echo $this->getUrl('admin','grid') ?>">Cancel</a></button>
                 </td>
             </tr>
             

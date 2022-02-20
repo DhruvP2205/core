@@ -22,7 +22,7 @@
 
         public function init()
         {
-            $request = new Model_Core_Request();
+            $request = $this->getRequest();
 
             $actionName = $request->getActionName();
             $actionName = $actionName.'Action';
