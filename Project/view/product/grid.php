@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href='index.php?c=product&a=add'>Add Product</a>
+    <a href="<?php echo $this->getUrl('product','add') ?>">Add Product</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
                 <thead>

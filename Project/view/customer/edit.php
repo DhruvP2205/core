@@ -53,7 +53,8 @@
             </tr>
             <tr>
                 <td width="10%">Address</td>
-                <!-- <input type="text" name="address[customerID]" value="<?php echo $customer['customerID'] ?>" hidden> -->
+                <input type="text" name="address[customerID]" value="<?php echo $customer['customerID'] ?>" hidden>
+                <input type="text" name="address[addressID]" value="<?php echo $address['addressID'] ?>" hidden>
                 <td><textarea name="address[address]" rows="4" cols="50" required><?php echo $address['address'] ?></textarea></td>
             </tr>
             <tr>

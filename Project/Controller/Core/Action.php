@@ -32,7 +32,6 @@
             exit();
         }
 
-
         public function getRequest()
         {
             return Ccc::getFront()->getRequest();

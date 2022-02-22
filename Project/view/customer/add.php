@@ -63,9 +63,9 @@
         <tr>
             <td>Address type</td>
             <td>
-                <input type="checkbox" name="address[billing]" value="1" checked>
+                <input type="checkbox" name="address[billingAddress]" value="1" checked>
                 <label> Billing</label>
-                <input type="checkbox" name="address[shiping]" value="1">
+                <input type="checkbox" name="address[shipingAddress]" value="1">
                 <label> Shiping</label>
             </td>
         </tr>

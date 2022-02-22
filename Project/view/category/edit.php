@@ -53,7 +53,7 @@
                 <td width="10%">&nbsp;</td>
                 <td>
                     <input type='submit' name='Update' id='submit' value='update'/>
-                    <button type="button"><a href="<?php echo $this->getUrl('customer','grid') ?>">Cancel</a></button>
+                    <button type="button"><a href="<?php echo $this->getUrl('category','grid') ?>">Cancel</a></button>
                 </td>
             </tr> 
     </table>

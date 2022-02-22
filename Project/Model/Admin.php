@@ -5,7 +5,9 @@ class Model_Admin extends Model_Core_Table
 {
     public function __construct()
     {
-        $this->setTableName('admin')->setPrimaryKey('adminID');
+        $this->setTableName('admin');
+        $this->setPrimaryKey('adminID');
+        $this->setRowClassName('Admin_Row');
     }
 }
 ?>
