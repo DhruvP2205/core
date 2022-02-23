@@ -1,13 +1,10 @@
-<?php
-Ccc::loadClass('Model_Core_Table');
+<?php Ccc::loadClass('Model_Core_Table_Row');
 
-class Model_Admin extends Model_Core_Table
+class Model_Admin extends Model_Core_Table_Row
 {
     public function __construct()
     {
-        $this->setTableName('admin');
-        $this->setPrimaryKey('adminID');
-        $this->setRowClassName('Admin_Row');
+        $this->setTableClassName('Admin');
     }
 }
 ?>

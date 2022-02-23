@@ -15,6 +15,12 @@ class Model_Core_Table_Row
         return $this;
     }
 
+    public function getTableObj()
+    {
+        Ccc::loadClass('Model_Core_Table');
+        return new Model_Core_Table();
+    }
+
     public function setData(array $data)
     {
         $this->data = $data;
@@ -69,5 +75,32 @@ class Model_Core_Table_Row
             return $id;
         }
         return $this;
+    }
+
+    public function load($id)
+    {
+        $rowData = $this->getTableObj()->fetchRow("SELECT * FROM {$this->getTableName()} WHERE {$this->getPrimaryKey()} = {$id}");
+        if(!$rowData)
+        {
+            return false;
+        }
+        $row = $this->getRow();
+        $row->setData($rowData);
+        return $row;
+    }
+
+    public function fetchAll($query)
+    {
+        $customers = $this->getTableObj()->fetchAll($query);
+        if(!$customers)
+        {
+            return $customers;
+        }
+        $customerObj = [];
+        foreach ($customers as &$customer) 
+        {
+            $customer = (new $this())->setData($customer);  
+        }
+        return $customers;
     }
 }

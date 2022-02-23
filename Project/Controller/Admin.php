@@ -13,6 +13,11 @@ class Controller_Admin extends Controller_Core_Action
         $admin->firstName = "Dhruv";
         $admin->lastName = "Prajapati";
         print_r($admin);*/
+
+        /*$admins = Ccc::getModel('Admin_Collection')->toHtml()->fetchAll("select * from admin")
+        echo "<pre>";
+        print_r($admins);*/
+
         Ccc::getBlock('Admin_Grid')->toHtml();
     }
 
