@@ -18,6 +18,23 @@ class Model_Core_Request
         }
         return $_POST[$key];
     }
+
+    public function getFile($key = null,$value = null)
+    {
+        if(!$this->isPost())
+        {
+            return null;    
+        }
+        if($key == null)
+        {
+            return $_FILES;
+        }
+        if(!array_key_exists($key,$_FILES))
+        {
+            return $value;
+        }
+        return $_FILES[$key];
+    }
     
     public function getRequest($key = null,$value = null)
     {

@@ -68,20 +68,27 @@ class Model_Core_Row
         return Ccc::getModel($this->getResourceClassName());
     }
 
-    public function save()
+    public function save($column = null,$tableName = null)
     {
-        if(array_key_exists($this->getResource()->getPrimaryKey(), $this->data))
+        if(!$column)
         {
-            $id = $this->data[$this->getResource()->getPrimaryKey()];
-            unset($this->data[$this->getResource()->getPrimaryKey()]);
-            
-            $this->getResource()->update($this->data,$id);
+            $column = $this->getResource()->getPrimaryKey();
+        }
+        if(array_key_exists($column, $this->data))
+        {
+            $id = $this->data[$column];
+            if(!$tableName){
+                $result = $this->getResource()->update($this->data, [$column=>$id]);
+            }   
+            else{
+                $result = $this->getResource()->update($this->data, [$column=>$id],$tableName);
+            }
         }
         else
         {
-            $id = $this->getResource()->insert($this->data);
+            $result = $this->getResource()->insert($this->data);
         }
-        return $id;
+        return $result;
     }
 
     public function delete()
@@ -97,26 +104,26 @@ class Model_Core_Row
     }
 
     public function load($id, $column = null)
-    {
-        if($column == null){
+    { 
+        if($column == null)
+        {
             $column = $this->getResource()->getPrimaryKey();
         }
-        $tableName = $this->getResource()->getResourceName();
-        $query = "SELECT * FROM $tableName WHERE $column = $id";
-        
+        $tableName = $this->getResource()->getTableName();
+        $query = "SELECT * FROM $tableName WHERE $column = $id";        
         return $this->fetchRow($query);
     }
 
     public function fetchRow($query)
     {
         $result = $this->getResource()->fetchRow($query);
-        if(!$result){
+        if(!$result)
+        {
             return $result;
         }
         return (new $this())->setData($result);
     }
 
-    // new fetchall method
     public function fetchAll($query)
     {
         $results = $this->getResource()->fetchAll($query);

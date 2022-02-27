@@ -7,11 +7,12 @@ class Block_Admin_Grid extends Block_Core_Template
 		$this->setTemplate('view/admin/grid.php');
 	}
 
-   public function getAdmins()
-   {
-   		$admins = Ccc::getModel('Admin')->fetchAll("SELECT * FROM admin");
-		return $admins;
-   }
+     public function getAdmins()
+     {
+          $adminModel = Ccc::getModel('Admin');
+          $admins = $adminModel->fetchAll("SELECT * FROM admin");
+          return $admins;
+     }
 }
 
 ?>

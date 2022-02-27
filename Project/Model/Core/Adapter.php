@@ -39,7 +39,8 @@
 
         public function query($query)
         {
-            if(!$this->getConnect()){
+            if(!$this->getConnect())
+            {
                 $this->connect();
             }
             $result = $this->getConnect()->query($query);
@@ -49,7 +50,9 @@
         public function insert($query)
         {
             $result = $this->query($query);
-            if($result){
+
+            if($result)
+            {
                 return $this->getConnect()->insert_id;
             }
             return $result;
@@ -86,7 +89,8 @@
         public function fetchAll($query,$mode=MYSQLI_ASSOC)
         {
             $result = $this->query($query);
-            if($result->num_rows){
+            if($result->num_rows)
+            {
                 return $result->fetch_all($mode);
             }
             return false;
@@ -95,12 +99,15 @@
         public function fetchPair($query)
         {
             $result = $this->fetchAll($query,MYSQLI_NUM);
-            if(!$result){
+            if(!$result)
+            {
                 return false;
             }
             $keys = array_column($result, '0');
             $values = array_column($result, '1');
-            if (!$values)   {
+
+            if (!$values)
+            {
                 $values = array_fill(0,count($keys),NULL);
             }
             $result = array_combine($keys, $values);

@@ -1,4 +1,5 @@
 <?php
+
 class Model_Core_Row_Resource
 {
     protected $tableName = null;
@@ -38,9 +39,9 @@ class Model_Core_Row_Resource
 
     public function insert(array $insertArray)
     {
-
         $columnName = [];
         $columnValue = [];
+
         foreach ($insertArray as $columnKey => $value) 
         {
             if($value != null) 
@@ -48,7 +49,6 @@ class Model_Core_Row_Resource
                 array_push($columnName, $columnKey);
                 array_push($columnValue, $value);
             }
-            
         }
         $columnNames = implode(',', $columnName);
         $columnValues = "'". implode("','", $columnValue) . "'";
@@ -56,18 +56,22 @@ class Model_Core_Row_Resource
 
         $query = "INSERT INTO $tableName($columnNames) VALUES($columnValues)";
         $result = $this->getAdapter()->insert($query);
-
         return $result;
     }
 
-    public function update(array $updateArray, array $updateWhere)
+    public function update(array $updateArray, array $updateWhere,$tableName = null)
     {
         $date = date('Y-m-d H:i:s');
-        $tableName = $this->getTableName();
+
+        if(!$tableName)
+        {
+            $tableName = $this->getTableName();
+        }
         $valueArray = [];
         $nullValueArray = [];
         $key = key($updateWhere);
         $value = $updateWhere[$key];
+
         foreach ($updateArray as $columnName => $columnValue) 
         {
             if($columnValue == null)
@@ -78,27 +82,17 @@ class Model_Core_Row_Resource
             {
                 $valueArray[] = "$columnName='$columnValue'";
             }
-            
         }
-        foreach ($nullValueArray as $nullColumnName) {
+
+        foreach ($nullValueArray as $nullColumnName)
+        {
             $query2 = "UPDATE {$tableName} SET {$nullColumnName} = null WHERE $key = $value";
             $result = $this->getAdapter()->update($query2);
         }
+
         $setString = implode(",", $valueArray);
         $query = "UPDATE $tableName SET $setString WHERE $key = $value";
         $result = $this->getAdapter()->update($query);
-        return $result;
-    }
-
-    public function fetchAll($query)
-    {
-        $result = $this->getAdapter()->fetchAll($query);
-        return $result;
-    }
-
-    public function fetchRow($query)
-    {
-        $result = $this->getAdapter()->fetchRow($query);
         return $result;
     }
 
@@ -112,18 +106,16 @@ class Model_Core_Row_Resource
         return $result;
     }
 
-    public function load($id)
+    public function fetchAll($query)
     {
-        $tableName = $this->getTableName();
-        $primaryKey = $this->getPrimaryKey();
-        $query = "SELECT * FROM $tableName WHERE $primaryKey = $id";
+        $result = $this->getAdapter()->fetchAll($query);
+        return $result;
+    }
+
+    public function fetchRow($query)
+    {
         $result = $this->getAdapter()->fetchRow($query);
-        if(!$result)
-        {
-            return $result;
-        }
-        $setdata = $this->getRow()->setData($result);
-        return $setdata;
+        return $result;
     }
 }
 ?>

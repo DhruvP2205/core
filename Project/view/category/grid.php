@@ -1,62 +1,68 @@
-<?php
-    $categories = $this->getCategories();
-    $result = $this->pathAction();
-?>
+<?php $categories = $this->getCategories(); ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Category</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href="<?php echo $this->getUrl('category','add',[],true) ?>">Add Category</a>
-            <h2>All Records</h2>
-            <table cellpadding="7px">
-                <thead>
-                    <th>Category ID</th>
-                    <th>Name</th>
-                    
-                    <th>Status</th>
-                    <th>Created Date</th>
-                    <th>Updated Date</th>
-                    <th>Action</th>
-                </thead>
-                <tbody>
-                    <?php
-                        if(!$categories):?>
-                            <tr><td colspan="10">No Record available.</td></tr>
-                    
-                <?php else:
-                    foreach ($categories as $category):
-                ?>
+    <a href="<?php echo $this->getUrl('add','category') ?>">Add Category</a>
+    <h2>All Records</h2>
+        <table cellpadding="7px">
+            <thead>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Base Image</th>
+                <th>Thumb Image</th>
+                <th>Small Image</th>
+                <th>Status</th>
+                <th>Created Date</th>
+                <th>Updated Date</th>
+                <th>Action</th>
+            </thead>
+            <?php if(!$categories): ?>
+                <tr><td colspan="7">No Recored Receive</td></tr>
+            <?php else: ?>
+                <?php foreach($categories as $category): ?>
                 <tr>
-                    <td><?php echo($category['categoryID']); ?></td>
-                    <td><?php echo $result[$category['categoryID']]; ?></td>
+                    <td><?php  echo $category->categoryId; ?></td>
+                    <td><?php echo $this->getPath($category->categoryId,$category->path); ?></td>
+                    <?php if($category->base ): ?>
+                        <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->base)['name']; ?>" alt="No Image found" width=50 height=50></td>
+                    <?php else: ?>
+                        <td>No base image</td>
+                    <?php endif; ?>
+
+                    <?php if($category->thumb ): ?>
+                        <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->thumb)['name']; ?>" alt="No Image found" width=50 height=50></td>
+                    <?php else: ?>
+                        <td>No thumb image</td>
+                    <?php endif; ?>
+
+                    <?php if($category->small ): ?>
+                        <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->small)['name']; ?>" alt="No Image found" width=50 height=50></td>
+                    <?php else: ?>
+                        <td>No small image</td>
+                    <?php endif; ?>
+                    
+                    <td><?php echo $category->getStatus($category->status); ?></td>
+                    
+                    <td><?php echo $category->createdDate; ?></td>
+                    
+                    <td><?php echo $category->updatedDate; ?></td>
                     <td>
-                        <?php 
-                            if($category['status'] == 1){
-                                echo("Active");
-                            } 
-                            else{
-                                echo("Inactive");
-                            } ?>
-                    </td>
-                    <td><?php echo($category['createdDate']); ?></td>
-                    <td><?php echo($category['updatedDate']); ?></td>
-                    <td>
-                        <a href="index.php?c=category&a=edit&id=<?php echo $category['categoryID'] ?>">Edit</a>
-                        <a href="index.php?c=category&a=delete&id=<?php echo $category['categoryID'] ?>">Delete</a>
+                        <a href='<?php echo $this->getUrl('edit','category',['id'=>$category->categoryId],true) ?>'>Edit</a>
+                        <a href='<?php echo $this->getUrl('delete','category',['id'=>$category->categoryId],true) ?>'>Delete</a>
+                        <a href="<?php echo $this->getUrl('grid','category_media',['id'=>$category->categoryId],true) ?>">Gallary</a>
                     </td>
                 </tr>
-                <?php
-                        endforeach;
-                    endif;
-                ?>
-        </tbody>
-    </table>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </tabel>
+    </div>
 </body>
 </html>
-
-

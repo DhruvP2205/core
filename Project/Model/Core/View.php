@@ -16,6 +16,7 @@
 
         public function toHtml()
         {
+            $data = $this->data;
             require($this->getTemplate());
         }
 
@@ -53,7 +54,7 @@
             return $this;
         }
 
-        public function getUrl($c=null, $a=null, array $data = [], $reset = false)
+        public function getUrl($a=null, $c=null, array $data = [], $reset = false)
         {
             $url = [];
 
@@ -98,5 +99,18 @@
             $finalUrl = "index.php?".http_build_query($url);
             return $finalUrl;
         }
+        
+        
+        public function getBaseUrl($subUrl = null)
+        {
+            $url = "C:/xampp/htdocs/phpwork/core/Project";
+            if($subUrl)
+            {
+                $url = $url."/".$subUrl;
+            }
+            return $url;
+        }
     }
+
+
 ?>

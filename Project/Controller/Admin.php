@@ -1,87 +1,71 @@
 <?php
 Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Core_Request');
 
 class Controller_Admin extends Controller_Core_Action
 {
     public function gridAction()
     {
-        /*$adminModel = Ccc::getModel('Admin');
-        echo "<pre>";
-        print_r($adminModel);
-        $admin = $adminModel->getRow();
-        $admin->firstName = "Dhruv";
-        $admin->lastName = "Prajapati";
-        print_r($admin);*/
-
-        /*$admins = Ccc::getModel('Admin_Collection')->toHtml()->fetchAll("select * from admin")
-        echo "<pre>";
-        print_r($admins);*/
-
         Ccc::getBlock('Admin_Grid')->toHtml();
     }
 
     public function addAction()
     {
-        Ccc::getBlock('Admin_Add')->toHtml();
+        $adminModel = Ccc::getModel('Admin');
+        Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel])->toHtml();
     }
 
     public function saveAction()
     {
         try
         {
-            $request = $this->getRequest();
+            $request=$this->getRequest();
+            $adminModel= Ccc::getModel('Admin');
 
             if(!$request->isPost())
             {
-                throw new Exception("Invalid request.",1);
+                throw new Exception("Request Invalid.",1);
             }
 
-            $postData = $request->getPost('admin');
+            $postData=$request->getPost('admin');
 
             if(!$postData)
             {
-                throw new Exception("Invalid data posted.", 1);
-                
+                throw new Exception("Invalid data Posted.", 1);
             }
-            $adminModel = Ccc::getModel('Admin');
-            $admin = $adminModel->getRow();
-            $admin->firstName = $postData['firstName'];
-            $admin->lastName = $postData['lastName'];
-            $admin->email = $postData['email'];
-            $admin->password = $postData['password'];
-            $admin->status = $postData['status'];
-            $adminTable = Ccc::getModel('Admin');
 
-            if(array_key_exists('adminID',$postData))
+            $admin = $adminModel;
+            $admin->setData($postData);
+
+            if(!($admin->adminId))
             {
-                $adminID = $postData['adminID'];
-                if(!(int)$adminID)
+                unset($admin->adminId);
+                $admin->createdDate = date('y-m-d h:m:s');
+                $result=$admin->save();
+                if(!$result)
                 {
-                    throw new Exception("Invalid Request.", 1);
-                }
-                $admin->adminID = $postData["adminID"];
-                $admin->updatedDate = date('y-m-d h:m:s');
-                $update = $admin->save($admin->adminID, $admin);
+                    throw new Exception("unable to Updated Record.", 1);        
+                }   
             }
             else
             {
-
-                $admin->createdDate = date('y-m-d h:m:s');
-                $adminInsertedID = $admin->save();
-                if($adminInsertedID == null)
+                if(!(int)$admin->adminId)
                 {
-                    throw new Exception("System is unable to Insert.", 1);
+                    throw new Exception("Invelid Request.",1);
+                }
+                $admin->updatedDate = date('y-m-d h:m:s');
+                $result=$admin->save();
+                if(!$result)
+                {
+                    throw new Exception("unable to insert Record.", 1);
                 }
             }
-            $this->redirect($this->getView()->getUrl('admin','grid'));
-        } 
-        
-        catch (Exception $e) 
+            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
+        }
+        catch (Exception $e)
         {
             echo $e->getMessage();
             exit();
-            $this->redirect($this->getView()->getUrl('admin','grid'));
+            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
         }
     }
 
@@ -91,39 +75,32 @@ class Controller_Admin extends Controller_Core_Action
         {
             $adminModel = Ccc::getModel('Admin');
             $request = $this->getRequest();
-            $adminID = $request->getRequest('id');
+            $id = (int)$request->getRequest('id');
 
-            if(!$adminID)
+            if(!$id)
             {
-                throw new Exception("Id is not valid.");
+                throw new Exception("Invalid Request", 1);
             }
-
-            if(!(int)$adminID)
-            {
-                throw new Exception("Invalid Request.", 1);
-            }
-
-            $admin = $adminModel->fetchRow("SELECT * FROM admin WHERE adminID = {$adminID}");
-
+            
+            $admin = $adminModel->load($id);
+            
             if(!$admin)
-            {
+            {   
                 throw new Exception("System is unable to find record.", 1); 
             }
-
-            Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();
+            Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
         }
         catch (Exception $e)
         {
             echo $e->getMessage();
             exit();
-            $this->redirect($this->getView()->getUrl('admin','grid'));
         }
     }
 
 
     public function deleteAction()
     {
-        try
+        try 
         {
             $adminModel = Ccc::getModel('Admin');
             $request = $this->getRequest();
@@ -134,20 +111,23 @@ class Controller_Admin extends Controller_Core_Action
             }
 
             $adminId = $request->getRequest('id');
-            
-            if(!(int)$adminId)
+
+            if(!$adminId)
             {
-                throw new Exception("Invalid Request.", 1);
+                throw new Exception("Unable to fetch ID.", 1);
+                
             }
-            
-            $adminTable->delete($adminId);
-            $this->redirect($this->getView()->getUrl('admin','grid',[],true));
-        }
+            $result = $adminModel->load($adminId)->delete();
+            if(!$result)
+            {
+                throw new Exception("Unable to Delet Record.", 1);
+                
+            }
+            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
+        } 
         catch (Exception $e)
         {
-            echo $e->getMessage();
-            exit();
-            $this->redirect('index.php?c=admin&a=grid');
+            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
         }
     }
 }

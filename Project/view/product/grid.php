@@ -1,60 +1,59 @@
-<?php $products = $this->getProducts(); ?>
-<!DOCTYPE html>
+<?php $products=$this->getProducts();    ?>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Product</title>
-    <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <a href="<?php echo $this->getUrl('product','add') ?>">Add Product</a>
-            <h2>All Records</h2>
-            <table cellpadding="7px">
-                <thead>
-                    <th>Product ID</th>
-                    <th>Name</th>  
-                    <th>Price</th>
-                    <th>Quantity</th>  
-                    <th>Status</th>
-                    <th>Created Date</th>
-                    <th>Updated Date</th>
-                    <th>Action</th>
-                </thead>
-                <tbody>
-                    <?php
-                        if(!$products):?>
-                            <tr><td colspan="10">No Record available.</td></tr>
-                    
-                <?php else:
-                    foreach ($products as $product):
-                ?>
-                <tr>
-                    <td><?php echo($product['productID']); ?></td>
-                    <td><?php echo($product['name']); ?></td>
-                    <td><?php echo($product['price']); ?></td>
-                    <td><?php echo($product['quantity']); ?></td>
-                    <td>
-                        <?php 
-                            if($product['status'] == 1){
-                                echo("Active");
-                            } 
-                            else{
-                                echo("Inactive");
-                            } ?>
-                    </td>
-                    <td><?php echo($product['createdDate']); ?></td>
-                    <td><?php echo($product['updatedDate']); ?></td>
-                    <td>
-                        <a href="index.php?c=product&a=edit&id=<?php echo $product['productID'] ?>">Edit</a>
-                        <a href="index.php?c=product&a=delete&id=<?php echo $product['productID'] ?>">Delete</a>
-                    </td>
-                </tr>
-                <?php
-                        endforeach;
-                    endif;
-                ?>
-        </tbody>
+    <button name="Add"><a href="<?php echo $this->getUrl('add') ?>"><h3>Add</h3></a></button>
+    <table border="1" width="100%" cellspacing="4">
+        <tr>
+            <th>product Id</th>
+            <th>Name</th>
+            <th>Base Image</th>
+            <th>Thumb Image</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Created Date</th>
+            <th>Updated Date</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            <th>Galary</th>
+        </tr>
+        <?php if(!$products):  ?>
+            <tr><td colspan="12">No Record available.</td></tr>
+        <?php else:  ?>
+            <?php foreach ($products as $product): ?>
+            <tr>
+                <td><?php echo $product->productId ?></td>
+                <td><?php echo $product->name ?></td>
+                <?php if($product->base): ?>
+                <td><img src="<?php echo "Media/Product/".$this->getMedia($product->base)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+                <?php else: ?>
+                <td>No Base Image</td>
+                <?php endif; ?> 
+                <?php if($product->thumb): ?>
+                <td><img src="<?php echo "Media/Product/".$this->getMedia($product->thumb)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+                <?php else: ?>
+                <td>No Thumb Image</td>
+                <?php endif; ?> 
+                <?php if($product->small): ?>
+                <td><img src="<?php echo "Media/Product/".$this->getMedia($product->small)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+                <?php else: ?>
+                <td>No Small Image</td>
+                <?php endif; ?> 
+                <td><?php echo $product->price ?></td>
+                <td><?php echo $product->quantity ?></td>
+                <td><?php echo $product->getStatus($product->status)?></td>
+                <td><?php echo $product->createdDate ?></td>
+                <td><?php echo $product->updatedDate ?></td>
+                <td><a href="<?php echo $this->getUrl('edit','product',['id'=>$product->productId],true) ?>">Edit</a></td>
+                <td><a href="<?php echo $this->getUrl('delete','product',['id'=>$product->productId],true) ?>">Delete</a></td>
+                <td><a href="<?php echo $this->getUrl('grid','product_media',['id'=>$product->productId],true) ?>">Edit Galary</a></td>
+            </tr>
+            <?php endforeach;   ?>
+        <?php endif;  ?>
+        
     </table>
+    
 </body>
-</html>
