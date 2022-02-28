@@ -24,13 +24,15 @@
                 <th>Updated Date</th>
                 <th>Action</th>
             </thead>
+
             <?php if(!$categories): ?>
-                <tr><td colspan="7">No Recored Receive</td></tr>
+            <tr><td colspan="7">No Recored Receive</td></tr>
             <?php else: ?>
                 <?php foreach($categories as $category): ?>
                 <tr>
                     <td><?php  echo $category->categoryId; ?></td>
                     <td><?php echo $this->getPath($category->categoryId,$category->path); ?></td>
+                    
                     <?php if($category->base ): ?>
                         <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->base)['name']; ?>" alt="No Image found" width=50 height=50></td>
                     <?php else: ?>

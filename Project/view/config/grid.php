@@ -21,13 +21,11 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <?php
-                        if(!$configs):?>
+                    <?php if(!$configs):?>
                             <tr><td colspan="10">No Record available.</td></tr>
-                    
-                <?php else:
-                    foreach ($configs as $config):
-                ?>
+                    <?php else:
+                        foreach ($configs as $config):
+                    ?>
                 <tr>
                     <td><?php echo($config->configId); ?></td>
                     <td><?php echo($config->name); ?></td>

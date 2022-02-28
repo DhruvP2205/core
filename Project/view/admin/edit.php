@@ -10,7 +10,7 @@
     <title>Edit admin</title>
 </head>
 <body>
-    <h2>Edit Admin</h2>
+    <h2>Admin</h2>
     <form action="<?php echo $this->getUrl('save','admin',['id'=>$admin->adminId],true) ?>" method="POST">
         <table border="1" cellspacing="4">
             <input type="text" name="admin[adminId]" value="<?php echo $admin->adminId ?>" hidden>
@@ -42,7 +42,7 @@
             <tr>
                 <td width="10%">&nbsp;</td>
                 <td>
-                    <input type="submit" name="submit" value="update">
+                    <input type="submit" name="submit" value="Save">
                     <button type="button"><a href="<?php echo $this->getUrl('grid','admin') ?>">Cancel</a></button>
                 </td>
             </tr>

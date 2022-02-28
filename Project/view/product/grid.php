@@ -1,10 +1,18 @@
 <?php $products=$this->getProducts();    ?>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+    <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
-    <button name="Add"><a href="<?php echo $this->getUrl('add') ?>"><h3>Add</h3></a></button>
-    <table border="1" width="100%" cellspacing="4">
+    <a href="<?php echo $this->getUrl('add','product') ?>">Add Product</a>
+    <h2>All Records</h2>
+    <table border="1" >
         <tr>
             <th>product Id</th>
             <th>Name</th>
@@ -16,9 +24,7 @@
             <th>Status</th>
             <th>Created Date</th>
             <th>Updated Date</th>
-            <th>Edit</th>
-            <th>Delete</th>
-            <th>Galary</th>
+            <th>Action</th>
         </tr>
         <?php if(!$products):  ?>
             <tr><td colspan="12">No Record available.</td></tr>
@@ -27,29 +33,40 @@
             <tr>
                 <td><?php echo $product->productId ?></td>
                 <td><?php echo $product->name ?></td>
+                
                 <?php if($product->base): ?>
                 <td><img src="<?php echo "Media/Product/".$this->getMedia($product->base)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
                 <?php else: ?>
                 <td>No Base Image</td>
                 <?php endif; ?> 
+                
                 <?php if($product->thumb): ?>
                 <td><img src="<?php echo "Media/Product/".$this->getMedia($product->thumb)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
                 <?php else: ?>
                 <td>No Thumb Image</td>
                 <?php endif; ?> 
+                
                 <?php if($product->small): ?>
                 <td><img src="<?php echo "Media/Product/".$this->getMedia($product->small)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
                 <?php else: ?>
                 <td>No Small Image</td>
                 <?php endif; ?> 
+                
                 <td><?php echo $product->price ?></td>
+                
                 <td><?php echo $product->quantity ?></td>
+                
                 <td><?php echo $product->getStatus($product->status)?></td>
+                
                 <td><?php echo $product->createdDate ?></td>
+                
                 <td><?php echo $product->updatedDate ?></td>
-                <td><a href="<?php echo $this->getUrl('edit','product',['id'=>$product->productId],true) ?>">Edit</a></td>
-                <td><a href="<?php echo $this->getUrl('delete','product',['id'=>$product->productId],true) ?>">Delete</a></td>
-                <td><a href="<?php echo $this->getUrl('grid','product_media',['id'=>$product->productId],true) ?>">Edit Galary</a></td>
+                
+                <td>
+                    <a href="<?php echo $this->getUrl('edit','product',['id'=>$product->productId],true) ?>">Edit</a>
+                    <a href="<?php echo $this->getUrl('delete','product',['id'=>$product->productId],true) ?>">Delete</a>
+                    <a href="<?php echo $this->getUrl('grid','product_media',['id'=>$product->productId],true) ?>">Edit Galary</a>
+                </td>
             </tr>
             <?php endforeach;   ?>
         <?php endif;  ?>

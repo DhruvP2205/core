@@ -2,13 +2,20 @@
 $customers = $this->getCustomers();
 $addresses = $this->getAddresses();
 ?>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+    <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
     <a href="<?php echo $this->getUrl('add','customer') ?>">Add Customer</a>
     <h2>All Records</h2>
-    <table border="1" width="100%" cellspacing="4">
+    <table cellpadding="7px">
         <tr>
             <th>customer Id</th>
             <th>First Name</th>
@@ -53,7 +60,7 @@ $addresses = $this->getAddresses();
                             <?php else: ?>
                                 <td><?php echo "No"?></td>
                             <?php endif; ?>
-                            <?php if($address->getStatus($address->shippingAddress) == 'Active'): ?>
+                            <?php if($address->getStatus($address->shipingAddress) == 'Active'): ?>
                                 <td><?php echo "Yes"?></td>
                             <?php else: ?>
                                 <td><?php echo "No"?></td>
