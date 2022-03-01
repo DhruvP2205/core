@@ -1,40 +1,61 @@
 <?php
-    Ccc::loadClass('Model_Core_View');
+Ccc::loadClass('Model_Core_View');
 
-    class Controller_Core_Action
+class Controller_Core_Action
+{
+    protected $view = null;
+    protected $layout = null;
+    
+    public function getLayout()
     {
-        protected $view = null;
-
-        public function getAdapter()
+        if(!$this->layout)
         {
-            global $adapter;
-            return $adapter;
+            $this->setLayout(Ccc::getBlock('Core_Layout'));
         }
-
-        public function getView()
-        {
-            if (!$this->view)
-            {
-                $this->setView(new Model_Core_View());
-            }
-            return $this->view;
-        }
-
-        public function setView($view)
-        {
-            $this->view = $view;
-            return $this;
-        }
-        
-        public function redirect($url)
-        {
-            header("Location: $url");
-            exit();
-        }
-
-        public function getRequest()
-        {
-            return Ccc::getFront()->getRequest();
-        }
+        return $this->layout;
     }
+
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+        return $this;
+    }
+
+    public function randerLayout()
+    {
+        return $this->getLayout()->toHtml();
+    }
+
+    public function getAdapter()
+    {
+        global $adapter;
+        return $adapter;
+    }
+
+    public function getView()
+    {
+        if (!$this->view)
+        {
+            $this->setView(new Model_Core_View());
+        }
+        return $this->view;
+    }
+
+    public function setView($view)
+    {
+        $this->view = $view;
+        return $this;
+    }
+    
+    public function redirect($url)
+    {
+        header("Location: $url");
+        exit();
+    }
+
+    public function getRequest()
+    {
+        return Ccc::getFront()->getRequest();
+    }
+}
 ?>

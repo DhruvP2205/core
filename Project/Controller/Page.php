@@ -1,36 +1,35 @@
 <?php Ccc::loadClass('Controller_Core_Action');?>
 <?php 
 
-class Controller_Config extends Controller_Core_Action{
-
-
+class Controller_Page extends Controller_Core_Action
+{
     public function gridAction()
     {
-        Ccc::getBlock('Config_Grid')->toHtml();
+        Ccc::getBlock('Page_Grid')->toHtml();
     }
     public function addAction()
     {
-        $configModel = Ccc::getModel('Config');
-        Ccc::getBlock('Config_Edit')->setData(['config'=>$configModel])->toHtml();
+        $pageModel = Ccc::getModel('Page');
+        Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel])->toHtml();
     }
     public function editAction()
     {
         try 
         {
-            $configModel = Ccc::getModel('Config');
+            $pageModel = Ccc::getModel('Page');
             $request = $this->getRequest();
             $id = (int)$request->getRequest('id');
             if(!$id)
             {
                 throw new Exception("Invalid Request", 1);
             }
-            $config = $configModel->load($id);
-            if(!$config)
+            $page = $pageModel->load($id);
+            if(!$page)
             {
                 throw new Exception("System is unable to find record.", 1);
                 
             }
-            Ccc::getBlock('Config_Edit')->setData(['config'=>$config])->toHtml();
+            Ccc::getBlock('Page_Edit')->setData(['page'=>$page])->toHtml();
         }    
         catch (Exception $e) 
         {
@@ -43,72 +42,80 @@ class Controller_Config extends Controller_Core_Action{
     {
         try
         {
-            $configModel = Ccc::getModel('Config');
+            $pageModel = Ccc::getModel('Page');
             $request=$this->getRequest();
+
             if(!$request->getRequest('id'))
             {
                 throw new Exception("Invelid Request", 1);
             }
-            $id=$request->getRequest('id');
-            $config_id=$configModel->load($id)->delete();
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+
+            $id = $request->getRequest('id');
+            $page_id = $pageModel->load($id)->delete();
+
+            $this->redirect($this->getView()->getUrl('grid','page',[],true));
         }
         catch(Exception $e)
         {
             echo $e->getMessage();
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+            $this->redirect($this->getView()->getUrl('grid','page',[],true));
         }
     }
+
+
     public function saveAction()
     {
         try
         {
-            $request=$this->getRequest();
-            $configModel= Ccc::getModel('Config');
+            $pageModel = Ccc::getModel('Page');
+            $request = $this->getRequest();
+
             if(!$request->isPost())
             {
                 throw new Exception("Request Invalid.",1);
             }
-            $postData=$request->getPost('config');
+
+            $postData = $request->getPost('page');
+
             if(!$postData)
             {
                 throw new Exception("Invalid data Posted.", 1);
             }
-            $config=$configModel;
-            $config->setData($postData);
-            if(!($config->configId))
+
+            $page = $pageModel;
+            $page->setData($postData);
+
+            if(!($page->pageId))
             {
-                unset($config->configId);
-                $config->createdDate = date('y-m-d h:m:s');
-                $result=$config->save();
+                unset($page->pageId);
+                $page->createdDate = date('y-m-d h:m:s');
+                $result=$page->save();
+
                 if(!$result)
                 {
                     throw new Exception("unable to Updated Record.", 1);
-                    
                 }   
             }
             else
             {
-                if(!(int)$config->configId)
+                if(!(int)$page->pageId)
                 {
                     throw new Exception("Invelid Request.",1);
                 }
-                $result=$config->save();
+                $page->updatedDate = date('y-m-d h:m:s');
+                $result=$page->save();
+                
                 if(!$result)
                 {
                     throw new Exception("unable to insert Record.", 1);
                 }
             }
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+            $this->redirect($this->getView()->getUrl('grid','page',[],true));
         } 
         catch (Exception $e) 
         {
-
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+            $this->redirect($this->getView()->getUrl('grid','page',[],true));
         }
     }
-
 }
-
-
 ?>

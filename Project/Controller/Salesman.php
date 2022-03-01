@@ -1,22 +1,17 @@
 <?php
 Ccc::loadClass('Controller_Core_Action');
 
-class Controller_Admin extends Controller_Core_Action
+class Controller_Salesman extends Controller_Core_Action
 {
     public function gridAction()
     {
-        $this->getLayout()->getHeader()->setData(['name'=>'Header: Dhruv Prajapati']);
-        $this->getLayout()->getFooter()->setData(['name'=>'Footer: Dhruv Prajapati']);
-        $this->getLayout()->getContent()->setData(['name'=>'Content: Dhruv Prajapati']);
-        $this->randerLayout();
-
-        //Ccc::getBlock('Admin_Grid')->toHtml();
+        Ccc::getBlock('Salesman_Grid')->toHtml();
     }
 
     public function addAction()
     {
-        $adminModel = Ccc::getModel('Admin');
-        Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel])->toHtml();
+        $salesmanModel = Ccc::getModel('Salesman');
+        Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel])->toHtml();
     }
 
     public function saveAction()
@@ -24,28 +19,28 @@ class Controller_Admin extends Controller_Core_Action
         try
         {
             $request=$this->getRequest();
-            $adminModel= Ccc::getModel('Admin');
+            $salesmanModel= Ccc::getModel('Salesman');
 
             if(!$request->isPost())
             {
                 throw new Exception("Request Invalid.",1);
             }
 
-            $postData=$request->getPost('admin');
+            $postData=$request->getPost('salesman');
 
             if(!$postData)
             {
                 throw new Exception("Invalid data Posted.", 1);
             }
 
-            $admin = $adminModel;
-            $admin->setData($postData);
+            $salesman = $salesmanModel;
+            $salesman->setData($postData);
 
-            if(!($admin->adminId))
+            if(!($salesman->salesmanId))
             {
-                unset($admin->adminId);
-                $admin->createdDate = date('y-m-d h:m:s');
-                $result=$admin->save();
+                unset($salesman->salesmanId);
+                $salesman->createdDate = date('y-m-d h:m:s');
+                $result=$salesman->save();
                 if(!$result)
                 {
                     throw new Exception("unable to Save Record.", 1);        
@@ -53,24 +48,24 @@ class Controller_Admin extends Controller_Core_Action
             }
             else
             {
-                if(!(int)$admin->adminId)
+                if(!(int)$salesman->salesmanId)
                 {
                     throw new Exception("Invelid Request.",1);
                 }
-                $admin->updatedDate = date('y-m-d h:m:s');
-                $result=$admin->save();
+                $salesman->updatedDate = date('y-m-d h:m:s');
+                $result=$salesman->save();
                 if(!$result)
                 {
                     throw new Exception("unable to uodate Record.", 1);
                 }
             }
-            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
+            $this->redirect($this->getView()->getUrl('grid','Salesman',[],true));
         }
         catch (Exception $e)
         {
             echo $e->getMessage();
             exit();
-            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
+            $this->redirect($this->getView()->getUrl('grid','Salesman',[],true));
         }
     }
 
@@ -78,7 +73,7 @@ class Controller_Admin extends Controller_Core_Action
     {
         try
         {
-            $adminModel = Ccc::getModel('Admin');
+            $salesmanModel = Ccc::getModel('Salesman');
             $request = $this->getRequest();
             $id = (int)$request->getRequest('id');
 
@@ -87,13 +82,13 @@ class Controller_Admin extends Controller_Core_Action
                 throw new Exception("Invalid Request", 1);
             }
             
-            $admin = $adminModel->load($id);
+            $salesman = $salesmanModel->load($id);
             
-            if(!$admin)
+            if(!$salesman)
             {   
                 throw new Exception("System is unable to find record.", 1); 
             }
-            Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
+            Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesman])->toHtml();
         }
         catch (Exception $e)
         {
@@ -107,7 +102,7 @@ class Controller_Admin extends Controller_Core_Action
     {
         try 
         {
-            $adminModel = Ccc::getModel('Admin');
+            $salesmanModel = Ccc::getModel('Salesman');
             $request = $this->getRequest();
 
             if(!$request->getRequest('id'))
@@ -115,24 +110,24 @@ class Controller_Admin extends Controller_Core_Action
                 throw new Exception("Invalid Request.", 1);
             }
 
-            $adminId = $request->getRequest('id');
+            $salesmanId = $request->getRequest('id');
 
-            if(!$adminId)
+            if(!$salesmanId)
             {
                 throw new Exception("Unable to fetch ID.", 1);
                 
             }
-            $result = $adminModel->load($adminId)->delete();
+            $result = $salesmanModel->load($salesmanId)->delete();
             if(!$result)
             {
                 throw new Exception("Unable to Delet Record.", 1);
                 
             }
-            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
+            $this->redirect($this->getView()->getUrl('grid','salesman',[],true));
         } 
         catch (Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
+            $this->redirect($this->getView()->getUrl('grid','salesman',[],true));
         }
     }
 }

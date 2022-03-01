@@ -34,7 +34,7 @@
                         <td><?php echo($admin->lastName); ?></td>
                         <td><?php echo($admin->email); ?></td>
                         <td><?php echo($admin->password); ?></td>
-                        <td><?php echo($admin->getStatus($admin->status));?></td>
+                        <td><?php echo $this->getStatus($admin->status);?></td>
                         <td><?php echo($admin->createdDate); ?></td>
                         <td><?php echo($admin->updatedDate); ?></td>
                         <td>
