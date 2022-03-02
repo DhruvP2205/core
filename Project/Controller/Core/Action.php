@@ -21,7 +21,7 @@ class Controller_Core_Action
         return $this;
     }
 
-    public function randerLayout()
+    public function renderLayout()
     {
         return $this->getLayout()->toHtml();
     }

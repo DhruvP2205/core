@@ -34,8 +34,8 @@
                 <td width="10%">Status</td>
                 <td>
                     <select name="admin[status]">
-                        <option value="1" <?php echo ($admin->getStatus($admin->status)=='Active')?'selected':'' ?>>Active</option>
-                        <option value="2" <?php echo ($admin->getStatus($admin->status)=='Inactive')?'selected':'' ?>>Inactive</option>
+                        <option value="1" <?php echo ($this->getStatus($admin->status)=='Active')?'selected':'' ?>>Active</option>
+                        <option value="2" <?php echo ($this->getStatus($admin->status)=='Inactive')?'selected':'' ?>>Inactive</option>
                     </select>
                 </td>
             </tr>

@@ -5,18 +5,19 @@ class Controller_Admin extends Controller_Core_Action
 {
     public function gridAction()
     {
-        $this->getLayout()->getHeader()->setData(['name'=>'Header: Dhruv Prajapati']);
-        $this->getLayout()->getFooter()->setData(['name'=>'Footer: Dhruv Prajapati']);
-        $this->getLayout()->getContent()->setData(['name'=>'Content: Dhruv Prajapati']);
-        $this->randerLayout();
-
-        //Ccc::getBlock('Admin_Grid')->toHtml();
+        $content = $this->getLayout()->getContent();
+        $adminGrid = Ccc::getBlock('Admin_Grid');
+        $content->addChild($adminGrid,'Grid');
+        $this->renderLayout();
     }
 
     public function addAction()
     {
         $adminModel = Ccc::getModel('Admin');
-        Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel])->toHtml();
+        $content = $this->getLayout()->getContent();
+        $adminAdd = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel]);
+        $content->addChild($adminAdd,'Add');
+        $this->renderLayout();
     }
 
     public function saveAction()
@@ -93,7 +94,11 @@ class Controller_Admin extends Controller_Core_Action
             {   
                 throw new Exception("System is unable to find record.", 1); 
             }
-            Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
+
+            $content = $this->getLayout()->getContent();
+            $adminEdit = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin]);
+            $content->addChild($adminEdit,'Edit');
+            $this->renderLayout();
         }
         catch (Exception $e)
         {
@@ -120,14 +125,13 @@ class Controller_Admin extends Controller_Core_Action
             if(!$adminId)
             {
                 throw new Exception("Unable to fetch ID.", 1);
-                
             }
             $result = $adminModel->load($adminId)->delete();
             if(!$result)
             {
                 throw new Exception("Unable to Delet Record.", 1);
-                
             }
+
             $this->redirect($this->getView()->getUrl('grid','admin',[],true));
         } 
         catch (Exception $e)

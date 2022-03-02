@@ -5,13 +5,19 @@ class Controller_Category extends Controller_Core_Action{
 
     public function gridAction()
     {
-        Ccc::getBlock('Category_Grid')->toHtml();
+        $content = $this->getLayout()->getContent();
+        $categoryGrid = Ccc::getBlock('Category_Grid');
+        $content->addChild($categoryGrid,'Grid');
+        $this->renderLayout();
     }
 
     public function addAction()
     {
-        $category = Ccc::getModel('Category');
-        Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();
+        $categoryModel = Ccc::getModel('Category');
+        $content = $this->getLayout()->getContent();
+        $categoryAdd = Ccc::getBlock('category_Edit')->setData(['category'=>$categoryModel]);
+        $content->addChild($categoryAdd,'Add');
+        $this->renderLayout();
     }
 
     public function saveAction()
@@ -146,7 +152,11 @@ class Controller_Category extends Controller_Core_Action{
             {
                 throw new Exception("Invalid request", 1);
             }
-            Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();
+
+            $content = $this->getLayout()->getContent();
+            $categoryEdit = Ccc::getBlock('Category_Edit')->setData(['category'=>$category]);
+            $content->addChild($categoryEdit,'Edit');
+            $this->renderLayout();
         }
         catch (Exception $e)
         {

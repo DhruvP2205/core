@@ -5,13 +5,21 @@ class Controller_Page extends Controller_Core_Action
 {
     public function gridAction()
     {
-        Ccc::getBlock('Page_Grid')->toHtml();
+        $content = $this->getLayout()->getContent();
+        $pageGrid = Ccc::getBlock('Page_Grid');
+        $content->addChild($pageGrid,'Grid');
+        $this->renderLayout();
     }
+
     public function addAction()
     {
         $pageModel = Ccc::getModel('Page');
-        Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel])->toHtml();
+        $content = $this->getLayout()->getContent();
+        $pageAdd = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel]);
+        $content->addChild($pageAdd,'Add');
+        $this->renderLayout();
     }
+
     public function editAction()
     {
         try 
@@ -23,13 +31,17 @@ class Controller_Page extends Controller_Core_Action
             {
                 throw new Exception("Invalid Request", 1);
             }
+            
             $page = $pageModel->load($id);
             if(!$page)
             {
                 throw new Exception("System is unable to find record.", 1);
-                
             }
-            Ccc::getBlock('Page_Edit')->setData(['page'=>$page])->toHtml();
+
+            $content = $this->getLayout()->getContent();
+            $pageEdit = Ccc::getBlock('Page_Edit')->setData(['page'=>$page]);
+            $content->addChild($pageEdit,'Edit');
+            $this->renderLayout();
         }    
         catch (Exception $e) 
         {
