@@ -4,13 +4,19 @@ class Controller_Product extends Controller_Core_Action
 {
     public function gridAction()
     {
-        Ccc::getBlock('Product_Grid')->toHtml();
+        $content = $this->getLayout()->getContent();
+        $productGrid = Ccc::getBlock('Product_Grid');
+        $content->addChild($productGrid,'Grid');
+        $this->renderLayout();
     }
 
     public function addAction()
     {
         $productModel = Ccc::getModel('Product');
-        Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel])->toHtml();
+        $content = $this->getLayout()->getContent();
+        $productAdd = Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel]);
+        $content->addChild($productAdd,'Add');
+        $this->renderLayout();
     }
 
     public function editAction()
@@ -23,17 +29,19 @@ class Controller_Product extends Controller_Core_Action
 
             if(!$id)
             {
-                throw new Exception("Invalid Request", 1);
+                $this->getMessage()->addMessage('Request Invalid.',3);
             }
 
             $product = $productModel->load($id);
 
             if(!$product)
             {
-                throw new Exception("System is unable to find record.", 1);
+                $this->getMessage()->addMessage('System is unable to find record.',3); 
             }
-            
-            Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();   
+            $content = $this->getLayout()->getContent();
+            $productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$product]);
+            $content->addChild($productEdit,'Edit');
+            $this->renderLayout();
         } 
         catch (Exception $e) 
         {
@@ -50,13 +58,13 @@ class Controller_Product extends Controller_Core_Action
 
             if(!$request->getRequest('id'))
             {
-                throw new Exception("Invalid Request.", 1);
+                $this->getMessage()->addMessage('Request Invalid.',3);
             }
 
             $productId = $request->getRequest('id');
             if(!$productId)
             {
-                throw new Exception("Unable to fetch ID.", 1);
+                $this->getMessage()->addMessage('Unable to fetch ID.',3);
             }
 
             $medias = $productModel->fetchAll("SELECT name FROM media WHERE  productId='$productId'");
@@ -68,9 +76,9 @@ class Controller_Product extends Controller_Core_Action
             $result = $productModel->load($productId)->delete();
             if(!$result)
             {
-                throw new Exception("Unable to Delet Record.", 1);   
+                $this->getMessage()->addMessage('Unable to Delete Record.',3);
             }
-
+            $this->getMessage()->addMessage('Data Deleted.');
             $this->redirect($this->getView()->getUrl('grid','product',[],true));
         } 
         catch (Exception $e) 
@@ -89,14 +97,14 @@ class Controller_Product extends Controller_Core_Action
 
             if(!$request->isPost())
             {
-                throw new Exception("Request Invalid.",1);
+                $this->getMessage()->addMessage('Request Invalid.',3);
             }
 
             $postData = $request->getPost('product');
 
             if(!$postData)
             {
-                throw new Exception("Invalid data Posted.", 1);
+                $this->getMessage()->addMessage('Invalid data Posted.',3);
             }
 
             $product = $productModel;
@@ -109,14 +117,15 @@ class Controller_Product extends Controller_Core_Action
                 $result = $product->save();
                 if(!$result)
                 {
-                    throw new Exception("unable to Updated Record.", 1);
-                }   
+                    $this->getMessage()->addMessage('Unable to Save Record.',3);
+                }
+                $this->getMessage()->addMessage('Your Data save Successfully');
             }
             else
             {
                 if(!(int)$product->productId)
                 {
-                    throw new Exception("Invelid Request.",1);
+                    $this->getMessage()->addMessage('Invalid Request.',3);
                 }
 
                 $product->updatedDate = date('y-m-d h:m:s');
@@ -124,8 +133,9 @@ class Controller_Product extends Controller_Core_Action
 
                 if(!$result)
                 {
-                    throw new Exception("unable to insert Record.", 1);
+                    $this->getMessage()->addMessage('Unable to Update Record.',3);
                 }
+                $this->getMessage()->addMessage('Your Data Update Successfully');
             }
             $this->redirect($this->getView()->getUrl('grid','product',[],true));
         } 

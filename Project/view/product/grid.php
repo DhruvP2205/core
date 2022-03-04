@@ -1,18 +1,8 @@
 <?php $products=$this->getProducts();    ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-<body>
     <a href="<?php echo $this->getUrl('add','product') ?>">Add Product</a>
     <h2>All Records</h2>
-    <table border="1" >
+    <table border="1" cellpadding="7px">
         <tr>
             <th>product Id</th>
             <th>Name</th>
@@ -72,5 +62,3 @@
         <?php endif;  ?>
         
     </table>
-    
-</body>

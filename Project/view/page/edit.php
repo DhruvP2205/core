@@ -1,14 +1,7 @@
 <?php
     $page = $this->getPage();
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edit page</title>
-</head>
-<body>
+
     <h2>Page</h2>
     <form action="<?php echo $this->getUrl('save','page',['id'=>$page->pageId],true) ?>" method="POST">
         <table border="1" cellspacing="7">
@@ -46,5 +39,3 @@
             
         </table>    
     </form>
-</body>
-</html>

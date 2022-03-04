@@ -5,6 +5,7 @@ class Controller_Core_Action
 {
     protected $view = null;
     protected $layout = null;
+    protected $message = null;
     
     public function getLayout()
     {
@@ -21,9 +22,24 @@ class Controller_Core_Action
         return $this;
     }
 
-    public function randerLayout()
+    public function renderLayout()
     {
         return $this->getLayout()->toHtml();
+    }
+
+    public function getMessage()
+    {
+        if(!$this->message)
+        {
+            $this->setMessage(Ccc::getModel('Core_Message'));
+        }
+        return $this->message;
+    }
+
+    public function setMessage($message)
+    {
+        $this->message = $message;
+        return $this;
     }
 
     public function getAdapter()
@@ -36,7 +52,7 @@ class Controller_Core_Action
     {
         if (!$this->view)
         {
-            $this->setView(new Model_Core_View());
+            $this->setView(Ccc::getModel('Core_View'));
         }
         return $this->view;
     }

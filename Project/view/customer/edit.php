@@ -3,14 +3,6 @@
     $address = $this->getAddress();
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edit customer</title>
-</head>
-<body>
     <h2>Customer</h2>
     <form action="<?php echo $this->getUrl('save','customer',['id'=>$customer->customerId],true) ?>" method="POST">
         <table border="1" cellspacing="7">
@@ -87,5 +79,3 @@
             
         </table>    
     </form>
-</body>
-</html>
