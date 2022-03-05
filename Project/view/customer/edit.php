@@ -30,8 +30,8 @@
                 <td>Status</td>
                 <td>
                     <select name="customer[status]">
-                        <option value="1" <?php echo ($customer->getStatus($customer->status)==1)?'selected':'' ?>>Active</option>
-                        <option value="2" <?php echo ($customer->getStatus($customer->status)==2)?'selected':'' ?>>Inactive</option>
+                        <option value="1" <?php echo ($customer->getStatus($customer->status)=='Active')?'selected':'' ?>>Active</option>
+                        <option value="2" <?php echo ($customer->getStatus($customer->status)=='Inactive')?'selected':'' ?>>Inactive</option>
                     </select>
                 </td>
             </tr>
