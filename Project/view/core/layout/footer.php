@@ -1,1 +1,3 @@
-<h1>This Is Footer</h1>
+<footer align="center">
+    <h3>© Dhruv Prajapati 2022</h3>
+</footer>

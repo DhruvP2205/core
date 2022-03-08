@@ -1,13 +1,5 @@
 <?php $configs = $this->getConfigs(); ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Config</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-<body>
+
     <a href="<?php echo $this->getUrl('add','config') ?>">Add Config</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
@@ -44,5 +36,3 @@
                 ?>
         </tbody>
     </table>
-</body>
-</html>

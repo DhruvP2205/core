@@ -1,16 +1,5 @@
 <?php $medias = $this->getMedias(); ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-<body>
-    <br>
     <form action="<?php echo $this->getUrl('save','product_media') ?>" method="POST">
         <input type="submit" value="Update">
         <button><a href="<?php echo $this->getUrl('grid','product',[],true); ?>">Cancel</a></button>
@@ -66,6 +55,3 @@
         <input type="file" name="name" style="border:1px solid black;">
         <input type="submit" value="Upload">
     </form>
-    
-</body>
-</html>

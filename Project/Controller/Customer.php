@@ -1,19 +1,24 @@
 <?php Ccc::loadClass('Controller_Core_Action'); ?>
 <?php
 
-class Controller_Customer extends Controller_Core_Action{
-
+class Controller_Customer extends Controller_Core_Action
+{
     public function gridAction()
     {
-        
-        Ccc::getBlock('Customer_Grid')->toHtml();
+        $content = $this->getLayout()->getContent();
+        $customerGrid = Ccc::getBlock('Customer_Grid');
+        $content->addChild($customerGrid,'Grid');
+        $this->renderLayout();
     }
 
     public function addAction()
     {
         $customerModel = Ccc::getModel('Customer'); 
         $addressModel = Ccc::getModel('Customer_Address');
-        Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'address'=>$addressModel])->toHtml();
+        $content = $this->getLayout()->getContent();
+        $customerAdd = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'address'=>$addressModel]);
+        $content->addChild($customerAdd,'Add');
+        $this->renderLayout();
     }
 
     public function editAction()
@@ -23,23 +28,26 @@ class Controller_Customer extends Controller_Core_Action{
         $id = (int)$request->getRequest('id');
         if(!$id)
         {
-            throw new Exception("Invalid Request", 1);
+            $this->getMessage()->addMessage('Request Invalid.',3);
         }
         
-        $customer=$customerModel->load($id);
+        $customer = $customerModel->load($id);
         
         if(!$customer)
         {   
-            throw new Exception("System is unable to find record.", 1); 
+            $this->getMessage()->addMessage('System is unable to find record.',3);
         }
         $addressModel = Ccc::getModel('Customer_Address');
         $address = $addressModel->load($id,'customerId');
         if(!$address)
         {
-            $address = ['address' => null,
-                         'postalCode' => null,'city' => null, 'state' => null, 'country' => null, 'billingAddress' => 2, 'shippingAddress'=>2, 'customerId' => $customer['customerId']];    
+            $address = ['address' => null,'postalCode' => null,'city' => null, 'state' => null, 'country' => null, 'billingAddress' => 2, 'shippingAddress'=>2, 'customerId' => $customer['customerId']];    
         }
-        Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->addData('address',$address)->toHtml();
+
+        $content = $this->getLayout()->getContent();
+        $customerEdit = Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->addData('address',$address);
+        $content->addChild($customerEdit,'Edit');
+        $this->renderLayout();
     }
 
     public function deleteAction()
@@ -50,21 +58,21 @@ class Controller_Customer extends Controller_Core_Action{
             $request = $this->getRequest();
             if(!$request->getRequest('id'))
             {
-                throw new Exception("Invalid Request.", 1);
+                $this->getMessage()->addMessage('Request Invalid.',3);
             }
 
             $customerId = $request->getRequest('id');
             if(!$customerId)
             {
-                throw new Exception("Unable to fetch ID.", 1);
-                
+                $this->getMessage()->addMessage('Unable to fetch ID.',3);
             }
+
             $result = $customerModel->load($customerId)->delete();
             if(!$result)
             {
-                throw new Exception("Unable to Delet Record.", 1);
-                
+                $this->getMessage()->addMessage('Unable to Delete Record.',3);
             }
+            $this->getMessage()->addMessage('Data Deleted.');
             $this->redirect($this->getView()->getUrl('grid','customer',[],true));
         } 
         catch (Exception $e) 
@@ -79,12 +87,12 @@ class Controller_Customer extends Controller_Core_Action{
         $request = $this->getRequest();
         if(!$request->getPost('customer'))
         {
-            throw new Exception("Invalid Request", 1);
+            $this->getMessage()->addMessage('Request Invalid.',3);
         }   
         $postData = $request->getPost('customer');
         if(!$postData)
         {
-            throw new Exception("Invalid data posted.", 1); 
+            $this->getMessage()->addMessage('Invalid data Posted.',3);
         }
         $customer = $customerModel;
         $customer->setData($postData);
@@ -95,18 +103,24 @@ class Controller_Customer extends Controller_Core_Action{
             $insert = $customer->save();
             if($insert==null)
             {
-                throw new Exception("System is unable to Insert.", 1);
+                $this->getMessage()->addMessage('Unable to Save Record.',3);
             }
+            $this->getMessage()->addMessage('Your Data save Successfully');
             return $insert;
         }
         else
         {
             if(!(int)$customer->customerId)
             {
-                throw new Exception("Invalid Request.", 1);
+                $this->getMessage()->addMessage('Invalid Request.',3);
             }
             $customer->updatedDate = date('y-m-d h:i:s');
             $update = $customer->save();
+            if(!$update)
+            {
+                $this->getMessage()->addMessage('Unable to Update Record.',3);
+            }
+            $this->getMessage()->addMessage('Your Data Update Successfully');
         }
          
     }
@@ -117,16 +131,16 @@ class Controller_Customer extends Controller_Core_Action{
         $request = $this->getRequest();
         if(!$request->getPost('address'))
         {
-            throw new Exception("Invalid Request", 1);
+            $this->getMessage()->addMessage('Request Invalid.',3);
         }   
         $postData = $request->getPost('address');
         if(!$postData)
         {
-            throw new Exception("Invalid data posted.", 1); 
+            $this->getMessage()->addMessage('Invalid data Posted.',3);
         }
         $address = $addressModel;
         $address->setData($postData);
-        //$address->getStatus($address->billing)
+
         if($address->addressId == null)
         {   
             $address->customerId = $customerId;
@@ -134,8 +148,9 @@ class Controller_Customer extends Controller_Core_Action{
             $insert = $address->save();
             if(!$insert)
             {
-                throw new Exception("System is unable to Insert.", 1);
+                $this->getMessage()->addMessage('Unable to Save Record.',3);
             }
+            $this->getMessage()->addMessage('Your Data save Successfully');
         }
         else
         {
@@ -144,8 +159,9 @@ class Controller_Customer extends Controller_Core_Action{
             $update = $address->save();
             if(!$update)
             {
-                throw new Exception("System is unable to Update.", 1);
+                $this->getMessage()->addMessage('Unable to Update Record.',3);
             }
+            $this->getMessage()->addMessage('Your Data Update Successfully');
         }
     }
 

@@ -2,14 +2,6 @@
     $admin = $this->getAdmin();
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edit admin</title>
-</head>
-<body>
     <h2>Admin</h2>
     <form action="<?php echo $this->getUrl('save','admin',['id'=>$admin->adminId],true) ?>" method="POST">
         <table border="1" cellspacing="4">
@@ -34,8 +26,8 @@
                 <td width="10%">Status</td>
                 <td>
                     <select name="admin[status]">
-                        <option value="1" <?php echo ($admin->getStatus($admin->status)=='Active')?'selected':'' ?>>Active</option>
-                        <option value="2" <?php echo ($admin->getStatus($admin->status)=='Inactive')?'selected':'' ?>>Inactive</option>
+                        <option value="1" <?php echo ($this->getStatus($admin->status)=='Active')?'selected':'' ?>>Active</option>
+                        <option value="2" <?php echo ($this->getStatus($admin->status)=='Inactive')?'selected':'' ?>>Inactive</option>
                     </select>
                 </td>
             </tr>
@@ -48,5 +40,3 @@
             </tr>
         </table>    
     </form>
-</body>
-</html>
