@@ -1,14 +1,5 @@
-<?php
-    $config = $this->getConfig();
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edit config</title>
-</head>
-<body>
+<?php $config = $this->getConfig();?>
+
     <h2>config</h2>
     <form action="<?php echo $this->getUrl('save','config',['id'=>$config->configId],true) ?>" method="POST">
         <table border="1" cellspacing="7">
@@ -46,5 +37,3 @@
             
         </table>    
     </form>
-</body>
-</html>

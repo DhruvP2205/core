@@ -36,31 +36,26 @@ class Block_Category_Edit extends Block_Core_Template
         return $finalPath;
     }
 
-    /*public function pathAction()
+    const STATUS_ENABLED = 1;
+    const STATUS_DISABLED = 2;
+    const STATUS_DEFAULT = 1;
+    const STATUS_ENABLED_LBL = 'Active';
+    const STATUS_DISABLED_LBL = 'Inactive';
+    public function getStatus($key = null)
     {
-        $adapter = new Model_Core_Adapter();
-
-        $categoryName = $adapter->fetchPair('SELECT `categoryID`, `name` FROM `category`');
-        $categoryPath = $adapter->fetchPair('SELECT `categoryID`, `path` FROM `category`');
-
-        $categories=[];
-
-        foreach ($categoryPath as $key => $value)
+        $statuses = [
+            self::STATUS_ENABLED => self::STATUS_ENABLED_LBL,
+            self::STATUS_DISABLED => self::STATUS_DISABLED_LBL
+        ];
+        if(!$key)
         {
-            $explodeArray=explode('/', $value);
-            $tempArray = [];
-
-            foreach ($explodeArray as $keys => $value)
-            {
-                if(array_key_exists($value,$categoryName))
-                {
-                    array_push($tempArray,$categoryName[$value]);
-                }
-            }
-            $implodeArray = implode('/', $tempArray);
-            $categories[$key]= $implodeArray;
+            return $statuses;
         }
-        return $categories;
-    }*/
+
+        if(array_key_exists($key, $statuses)) {
+            return $statuses[$key];
+        }
+        return $statuses[self::STATUS_DEFAULT];
+    }
 }
 ?>

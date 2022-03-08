@@ -1,13 +1,5 @@
 <?php $salesmans = $this->getSalesmans(); ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Admin</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-<body>
+
     <a href="<?php echo $this->getUrl('add') ?>">Add Salesman</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
@@ -46,5 +38,3 @@
                     endif; ?>
         </tbody>
     </table>
-</body>
-</html>

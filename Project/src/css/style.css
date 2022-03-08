@@ -7,3 +7,34 @@ table{
     box-sizing: border-box;
     width: 100%;
 }
+
+body
+{
+    margin: 0;
+}
+
+.topnav
+{
+    display: table;
+    text-align: center;
+    width: 100%;
+
+    overflow: hidden;
+    background-color: #006699;
+}
+
+.topnav a
+{
+    color: #f2f2f2;
+    display: inline-block;
+    float: none;
+    font-size: 25px;
+    padding: 10px 30px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.topnav a:hover
+{
+    color: #E96B15; 
+}

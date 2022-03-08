@@ -3,16 +3,6 @@ $categoryData =  $this->getCategory();
 $categories = $this->getCategories();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category</title>
-</head>
-
-<body>
     <h2>Category</h2>
         <form action="<?php echo $this->getUrl('save','category',['id'=>$categoryData->categoryId],true) ?>" method="POST" enctype="multipart/form-data">
             <table border="1" cellspacing="4">
@@ -36,14 +26,9 @@ $categories = $this->getCategories();
                 <tr>
                     <td>Status</td>
                     <td>
-                        <select name="category[status]" id="status">
-                            <?php if($categoryData->status == 1):?>
-                            <option value="1" selected>Active</option>
-                            <option value="2">Inactive</option>
-                        <?php else: ?>
-                            <option value="1">Active</option>
-                            <option value="2" selected>Inactive</option>
-                        <?php endif; ?>
+                        <select name="category[status]">
+                            <option value="1" <?php echo ($this->getStatus($category->status)=='Active')?'selected':'' ?>>Active</option>
+                            <option value="2" <?php echo ($this->getStatus($category->status)=='Inactive')?'selected':'' ?>>Inactive</option>
                         </select>
                     </td>
                 </tr>
@@ -56,6 +41,3 @@ $categories = $this->getCategories();
                 </tr>
             </table>   
         </form>
-    </div>
-</body>
-</html>

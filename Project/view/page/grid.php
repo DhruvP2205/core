@@ -1,13 +1,5 @@
 <?php $pages = $this->getPages(); ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-<body>
+
     <a href="<?php echo $this->getUrl('add','page') ?>">Add Page</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
@@ -32,7 +24,7 @@
                     <td><?php echo($page->name); ?></td>
                     <td><?php echo($page->code); ?></td>
                     <td><?php echo($page->content); ?></td>
-                    <td><?php echo $page->getStatus($page->status)?></td>
+                    <td><?php echo $this->getStatus($page->status)?></td>
                     <td><?php echo($page->createdDate); ?></td>
                     <td><?php echo($page->updatedDate); ?></td>
                     <td>
@@ -44,5 +36,3 @@
                     endif; ?>
         </tbody>
     </table>
-</body>
-</html>

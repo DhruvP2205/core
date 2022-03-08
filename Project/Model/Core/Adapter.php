@@ -3,8 +3,8 @@
         public $config = [
             "host" => "localhost:3308",
             "userName" => "root",
-            "password" => "1234",
-            "dbName" => "demodb"
+            "password" => "",
+            "dbName" => "project_dhruv"
         ];
         private $connect = null;
 
