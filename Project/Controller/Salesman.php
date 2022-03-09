@@ -1,5 +1,4 @@
-<?php
-Ccc::loadClass('Controller_Core_Action');
+<?php Ccc::loadClass('Controller_Core_Action');
 
 class Controller_Salesman extends Controller_Core_Action
 {
@@ -72,11 +71,11 @@ class Controller_Salesman extends Controller_Core_Action
                 }
                 $this->getMessage()->addMessage('Your Data Update Successfully');
             }
-            $this->redirect($this->getView()->getUrl('grid','Salesman',[],true));
+            $this->redirect('grid','Salesman',[],true);
         }
         catch (Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','Salesman',[],true));
+            $this->redirect('grid','Salesman',[],true);
         }
     }
 
@@ -109,7 +108,7 @@ class Controller_Salesman extends Controller_Core_Action
         }
         catch (Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','salesman',[],true));
+            $this->redirect('grid','salesman',[],true);
         }
     }
 
@@ -141,13 +140,11 @@ class Controller_Salesman extends Controller_Core_Action
                 throw new Exception("Error Processing Request", 1);
             }
             $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect($this->getView()->getUrl('grid','salesman',[],true));
+            $this->redirect('grid','salesman',[],true);
         } 
         catch (Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','salesman',[],true));
+            $this->redirect('grid','salesman',[],true);
         }
     }
 }
-
-?>

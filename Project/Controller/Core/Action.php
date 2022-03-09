@@ -1,5 +1,4 @@
-<?php
-Ccc::loadClass('Model_Core_View');
+<?php Ccc::loadClass('Model_Core_View');
 
 class Controller_Core_Action
 {
@@ -42,17 +41,11 @@ class Controller_Core_Action
         return $this;
     }
 
-    public function getAdapter()
-    {
-        global $adapter;
-        return $adapter;
-    }
-
     public function getView()
     {
         if (!$this->view)
         {
-            $this->setView(Ccc::getModel('Core_View'));
+            $this->setView(new Model_Core_View());
         }
         return $this->view;
     }
@@ -61,6 +54,12 @@ class Controller_Core_Action
     {
         $this->view = $view;
         return $this;
+    }
+
+    public function getAdapter()
+    {
+        global $adapter;
+        return $adapter;
     }
     
     public function redirect($a=null, $c=null, array $data = [], $reset = false)
@@ -74,4 +73,3 @@ class Controller_Core_Action
         return Ccc::getFront()->getRequest();
     }
 }
-?>

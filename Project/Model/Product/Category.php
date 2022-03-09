@@ -8,5 +8,3 @@ class Model_Product_Category extends Model_Core_Row
         parent::__construct();
     }
 }
-
-?>

@@ -31,4 +31,3 @@ class Model_Customer_Address extends Model_Core_Row
         return self::STATUS_DISABLED_DEFAULT;
     }
 }
-?>

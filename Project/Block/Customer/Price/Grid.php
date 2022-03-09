@@ -20,7 +20,9 @@ class Block_Customer_Price_Grid extends Block_Core_Template
         $request = Ccc::getFront()->getRequest();
         $customerId = $request->getRequest('id');
         $customerPriceModel = Ccc::getModel('Customer_Price');
-        $discount = $customerPriceModel->fetchAll("SELECT * FROM `customer_price` WHERE `productId` = '$productId' AND `customerId` = '$customerId' ");
+
+        $discount = $customerPriceModel->fetchAll("SELECT * FROM `customer_price` WHERE `productId` = {$productId} AND `customerId` = {$customerId}");
+        
         if(!$discount)
         {
             return null;
@@ -28,5 +30,3 @@ class Block_Customer_Price_Grid extends Block_Core_Template
         return $discount[0]->getData()['discount'];
     }
 }
-
-?>

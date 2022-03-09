@@ -2,8 +2,8 @@
 <?php $categories = $this->getCategories(); ?>
 
 
-    <h2>Product</h2>
-    <form action="<?php echo $this->getUrl('save','product',['id'=>$product->productId],true) ?>" method="POST">
+<h2>Product</h2>
+<form action="<?php echo $this->getUrl('save','product',['id'=>$product->productId],true) ?>" method="POST">
     <table border="1">
         <tr>
             <td colspan="2"><b>Product Information</b><input type="text" name="product[productId]" value="<?php echo $product->productId ?>" hidden></td>

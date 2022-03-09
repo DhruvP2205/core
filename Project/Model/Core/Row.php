@@ -3,7 +3,6 @@ class Model_Core_Row
 {
     protected $data = [];
     protected $resourceClassName = null;
-    
 
     public function __construct()
     {
@@ -29,7 +28,7 @@ class Model_Core_Row
 
     public function setData(array $data)
     {
-        $this->data = $data;
+        $this->data = array_merge($this->data,$data);
         return $this;
     }
 
@@ -82,8 +81,9 @@ class Model_Core_Row
         else
         {
             $result = $this->getResource()->insert($this->data);
+            $this->setData([$column=>$result]);
         }
-        return $result;
+        return $this;
     }
 
     public function delete()
@@ -105,7 +105,7 @@ class Model_Core_Row
             $column = $this->getResource()->getPrimaryKey();
         }
         $tableName = $this->getResource()->getTableName();
-        $query = "SELECT * FROM $tableName WHERE $column = $id";        
+        $query = "SELECT * FROM {$tableName} WHERE {$column} = {$id}";        
         return $this->fetchRow($query);
     }
 

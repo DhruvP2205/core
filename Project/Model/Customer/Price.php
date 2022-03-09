@@ -8,4 +8,3 @@ class Model_Customer_Price extends Model_Core_Row
         parent::__construct();
     }
 }
-?>

@@ -1,5 +1,4 @@
-<?php
-Ccc::loadClass('Controller_Core_Action');
+<?php Ccc::loadClass('Controller_Core_Action');
 
 class Controller_Admin extends Controller_Core_Action
 {
@@ -91,13 +90,15 @@ class Controller_Admin extends Controller_Core_Action
             if(!$id)
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
             
             $admin = $adminModel->load($id);
             
             if(!$admin)
             {   
-                $this->getMessage()->addMessage('System is unable to find record.',3); 
+                $this->getMessage()->addMessage('System is unable to find record.',3);
+                throw new Exception("System is unable to find record.", 1);
             }
 
             $content = $this->getLayout()->getContent();
@@ -107,7 +108,7 @@ class Controller_Admin extends Controller_Core_Action
         }
         catch (Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','admin',[],true));
+            $this->redirect('grid','admin',[],true);
         }
     }
 
@@ -122,6 +123,7 @@ class Controller_Admin extends Controller_Core_Action
             if(!$request->getRequest('id'))
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
 
             $adminId = $request->getRequest('id');
@@ -129,11 +131,13 @@ class Controller_Admin extends Controller_Core_Action
             if(!$adminId)
             {
                 $this->getMessage()->addMessage('Unable to fetch ID.',3);
+                throw new Exception("Unable to fetch ID.", 1);
             }
             $result = $adminModel->load($adminId)->delete();
             if(!$result)
             {
                 $this->getMessage()->addMessage('Unable to Delete Record.',3);
+                throw new Exception("Unable to Delete Record.", 1);
             }
             $this->getMessage()->addMessage('Data Deleted.');
             $this->redirect('grid','admin',[],true);
@@ -144,5 +148,3 @@ class Controller_Admin extends Controller_Core_Action
         }
     }
 }
-
-?>

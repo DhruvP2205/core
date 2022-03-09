@@ -1,5 +1,4 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
-<?php
+<?php Ccc::loadClass('Block_Core_Template');
 
 class Block_Salesman_Customer_Grid extends Block_Core_Template
 {
@@ -12,7 +11,7 @@ class Block_Salesman_Customer_Grid extends Block_Core_Template
     {
         $salesmanId = Ccc::getFront()->getRequest()->getRequest('id');
         $customerModel = Ccc::getModel('Customer');
-        $customers = $customerModel->fetchAll("SELECT * FROM `customer` WHERE (`salesmanId` is null OR `salesmanId` = '$salesmanId') AND `status` = '1' ");
+        $customers = $customerModel->fetchAll("SELECT * FROM `customer` WHERE (`salesmanId` is null OR `salesmanId` = {$salesmanId}) AND `status` = '1' ");
         return $customers;
     }
 
@@ -26,12 +25,11 @@ class Block_Salesman_Customer_Grid extends Block_Core_Template
         $request = Ccc::getFront()->getRequest();
         $salesmanId = $request->getRequest('id');
         $customerModel = Ccc::getModel('Customer');
-        $select = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `customerId` = '$customerId' AND `salesmanId` = '$salesmanId'");
+        $select = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `customerId` = {$customerId} AND `salesmanId` = {$salesmanId}");
         if($select)
         {
             return 'checked disabled';
         }
         return null;
     }
-
 }

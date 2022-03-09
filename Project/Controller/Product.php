@@ -61,15 +61,17 @@ class Controller_Product extends Controller_Core_Action
             if(!$request->getRequest('id'))
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
 
             $productId = $request->getRequest('id');
             if(!$productId)
             {
                 $this->getMessage()->addMessage('Unable to fetch ID.',3);
+                throw new Exception("Unable to fetch ID.", 1);
             }
             
-            $medias = $productModel->fetchAll("SELECT name FROM media WHERE  productId='$productId'");
+            $medias = $productModel->fetchAll("SELECT `name` FROM `media` WHERE  `productId` = {$productId}");
             foreach ($medias as $media)
             {
                 unlink($this->getView()->getBaseUrl("Media/Product/"). $media->name);
@@ -79,6 +81,7 @@ class Controller_Product extends Controller_Core_Action
             if(!$result)
             {
                 $this->getMessage()->addMessage('Unable to Delete Record.',3);
+                throw new Exception("Unable to Delete Record.", 1);
             }
             $this->getMessage()->addMessage('Data Deleted.');
             $this->redirect('grid','product',[],true);
@@ -100,6 +103,7 @@ class Controller_Product extends Controller_Core_Action
             if(!$request->isPost())
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
 
             $postData = $request->getPost('product');
@@ -107,6 +111,7 @@ class Controller_Product extends Controller_Core_Action
             if(!$postData)
             {
                 $this->getMessage()->addMessage('Invalid data Posted.',3);
+                throw new Exception("Invalid data Posted.", 1);
             }
             
             $product = $productModel;
@@ -149,6 +154,3 @@ class Controller_Product extends Controller_Core_Action
         }
     }
 }
-
-
-?>

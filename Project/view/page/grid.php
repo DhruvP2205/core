@@ -24,7 +24,7 @@
                     <td><?php echo($page->name); ?></td>
                     <td><?php echo($page->code); ?></td>
                     <td><?php echo($page->content); ?></td>
-                    <td><?php echo $this->getStatus($page->status)?></td>
+                    <td><?php echo($page->getStatus($page->status));?></td>
                     <td><?php echo($page->createdDate); ?></td>
                     <td><?php echo($page->updatedDate); ?></td>
                     <td>

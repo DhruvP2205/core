@@ -67,5 +67,3 @@ class Model_Core_Message
         return $this->session;
     }
 }
-
-?>
