@@ -83,5 +83,3 @@ class Model_Core_Session
         return $this;
     }
 }
-
-?>

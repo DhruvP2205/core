@@ -1,5 +1,4 @@
-<?php Ccc::loadClass('Controller_Core_Action');?>
-<?php 
+<?php Ccc::loadClass('Controller_Core_Action');
 
 class Controller_Config extends Controller_Core_Action
 {
@@ -30,11 +29,13 @@ class Controller_Config extends Controller_Core_Action
             if(!$id)
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
             $config = $configModel->load($id);
             if(!$config)
             {
-                $this->getMessage()->addMessage('System is unable to find record.',3); 
+                $this->getMessage()->addMessage('System is unable to find record.',3);
+                throw new Exception("System is unable to find record.", 1); 
             }
             $content = $this->getLayout()->getContent();
             $configEdit = Ccc::getBlock('Config_Edit')->setData(['config'=>$config]);
@@ -43,7 +44,7 @@ class Controller_Config extends Controller_Core_Action
         }    
         catch (Exception $e) 
         {
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+            $this->redirect('grid','config',[],true);
         }
     }
 
@@ -53,23 +54,26 @@ class Controller_Config extends Controller_Core_Action
         try
         {
             $configModel = Ccc::getModel('Config');
-            $request=$this->getRequest();
+            $request = $this->getRequest();
             if(!$request->getRequest('id'))
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
-            $id=$request->getRequest('id');
-            $result=$configModel->load($id)->delete();
+            
+            $id = $request->getRequest('id');
+            $result = $configModel->load($id)->delete();
             if(!$result)
             {
                 $this->getMessage()->addMessage('Unable to Delete Record.',3);
+                throw new Exception("Unable to Delete Record.", 1);
             }
             $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+            $this->redirect('grid','config',[],true);
         }
         catch(Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+            $this->redirect('grid','config',[],true);
         }
     }
 
@@ -78,28 +82,31 @@ class Controller_Config extends Controller_Core_Action
     {
         try
         {
-            $request=$this->getRequest();
-            $configModel= Ccc::getModel('Config');
+            $request = $this->getRequest();
+            $configModel = Ccc::getModel('Config');
             if(!$request->isPost())
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
-            $postData=$request->getPost('config');
+            $postData = $request->getPost('config');
             if(!$postData)
             {
                 $this->getMessage()->addMessage('Invalid data Posted.',3);
+                throw new Exception("Invalid data Posted.", 1);
             }
-            $config=$configModel;
+            $config = $configModel;
             $config->setData($postData);
 
             if(!($config->configId))
             {
                 unset($config->configId);
                 $config->createdDate = date('y-m-d h:m:s');
-                $result=$config->save();
+                $result = $config->save();
                 if(!$result)
                 {
                     $this->getMessage()->addMessage('Unable to Save Record.',3);
+                    throw new Exception("Unable to Save Record.", 1);
                 }
                 $this->getMessage()->addMessage('Your Data save Successfully');  
             }
@@ -108,24 +115,21 @@ class Controller_Config extends Controller_Core_Action
                 if(!(int)$config->configId)
                 {
                     $this->getMessage()->addMessage('Invalid Request.',3);
+                    throw new Exception("Invalid Request.", 1);
                 }
-                $result=$config->save();
+                $result = $config->save();
                 if(!$result)
                 {
                     $this->getMessage()->addMessage('Unable to Update Record.',3);
+                    throw new Exception("Unable to Update Record.", 1);
                 }
                 $this->getMessage()->addMessage('Your Data Update Successfully');
             }
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+            $this->redirect('grid','config',[],true);
         } 
         catch (Exception $e) 
         {
-
-            $this->redirect($this->getView()->getUrl('grid','config',[],true));
+            $this->redirect('grid','config',[],true);
         }
     }
-
 }
-
-
-?>

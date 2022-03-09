@@ -1,14 +1,12 @@
-<?php Ccc::loadClass("Controller_Core_Action"); ?>
-<?php
+<?php Ccc::loadClass("Controller_Core_Action");
 
-class Controller_Salesman_Customer extends Controller_Core_Action{
-
+class Controller_Salesman_Customer extends Controller_Core_Action
+{
     public function gridAction()
     {
         $content = $this->getLayout()->getContent();
         $salesmanGrid = Ccc::getBlock("Salesman_Customer_Grid");
         $content->addChild($salesmanGrid);
-        
         $this->renderLayout();
     }
 
@@ -34,10 +32,7 @@ class Controller_Salesman_Customer extends Controller_Core_Action{
                     throw new Exception("Error Processing Request", 1);
                 }
             }
-            $this->redirect(Ccc::getBlock('Salesman_Customer_Grid')->getUrl('grid','Salesman_Customer'));
+            $this->redirect('grid','Salesman_Customer');
         }
     }
-
 }
-
-?>

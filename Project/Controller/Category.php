@@ -1,5 +1,4 @@
-<?php
-Ccc::loadClass('Controller_Core_Action');
+<?php Ccc::loadClass('Controller_Core_Action');
 
 class Controller_Category extends Controller_Core_Action{
 
@@ -27,34 +26,30 @@ class Controller_Category extends Controller_Core_Action{
             $categoryModel = Ccc::getModel('Category');
             $request = $this->getRequest();
             $id = $request->getRequest('id');
-
             if($request->isPost())
             {
                 $postData = $request->getPost('category');
                 $categoryData = $categoryModel->setData($postData);
-
                 if(!empty($id))
                 {
                     $categoryData->categoryId = $id;
                     $categoryData->updatedDate = date('y-m-d h:m:s');
-
                     if(!$postData['parentId'])
                     {
                         $categoryData->parentId = NULL;
                     }
-
                     $result = $categoryModel->save();
-
                     if(!$result)
                     {
-                        $this->getMessage()->addMessage('Sysetm is unable to save your data.',3);
+                        $this->getMessage()->addMessage('unable to update.',1);
+                        throw new Exception("Sysetm is unable to save your data", 1);   
                     }
                     
                     $allPath = $categoryModel->fetchAll("SELECT * FROM `category` WHERE `path` LIKE '%$id%' ");
-                    foreach ($allPath as $path)
+                    foreach ($allPath as $path) 
                     {
                         $finalPath = explode('/',$path->path);
-                        foreach ($finalPath as $subPath)
+                        foreach ($finalPath as $subPath) 
                         {
                             if($subPath == $id)
                             {
@@ -66,7 +61,6 @@ class Controller_Category extends Controller_Core_Action{
                             }
                             array_shift($finalPath);
                         }
-
                         if($path->parentId)
                         {
                             $parentPath = $categoryModel->load($path->parentId);
@@ -78,53 +72,51 @@ class Controller_Category extends Controller_Core_Action{
                         }
                         $result = $path->save();
                     }
-                    $this->getMessage()->addMessage('Your Data updated Successfully');
+                    $this->getMessage()->addMessage('Data Updated Successfully.',1);
                 }
                 else
                 {
                     $categoryData->createdDate = date('y-m-d h:m:s');
-
                     if(!$categoryData->parentId)
                     {
                         unset($categoryData->parentId);
-                        $insertId = $categoryModel->save();
-
-                        if(!$insertId)
+                        $insert = $categoryModel->save();
+                        if(!$insert->categoryId)
                         {
-                            $this->getMessage()->addMessage('Sysetm is unable to insert your data.',3);
+                            $this->getMessage()->addMessage('unable to Inser Data.',3);
+                            throw new Exception("system is unabel to insert your data", 1);
                         }
-
                         $categoryData->resetData();
-                        $categoryData->path = $insertId;
-                        $categoryData->categoryId = $insertId;
+                        $categoryData->path = $insert->categoryId;
+                        $categoryData->categoryId = $insert->categoryId;
                         $result = $categoryModel->save();
+                        $this->getMessage()->addMessage('data inserted successfully',1);
                     }
                     else
                     {
-                        $insertId = $categoryModel->save();
-
-                        if(!$insertId)
+                        $insert = $categoryModel->save();
+                        if(!$insert->categoryId)
                         {
-                            $this->getMessage()->addMessage('Sysetm is unable to insert your data.',3);
+                            throw new Exception("system is unabel to insert your data", 1);
                         }
-
-                        $categoryData->categoryId = $insertId;
+                        $categoryData->categoryId = $insert->categoryId;
                         $parentPath = $categoryModel->load($categoryData->parentId);
-                        $categoryData->path = $parentPath->path."/". $insertId;
+                        $categoryData->path = $parentPath->path."/". $insert->categoryId;
                         $result = $categoryData->save();
                     }
                     if(!$result)
                     {
-                        $this->getMessage()->addMessage('Sysetm is unable to insert your data.',3);
+                        $this->getMessage()->addMessage('unable to insert data.',3);
+                        throw new Exception("Sysetm is unable to save your data", 1);   
                     }
-                    $this->getMessage()->addMessage('Your Data save Successfully');
                 }
-                $this->redirect($this->getView()->getUrl('grid','category',[],true));
+                $this->getMessage()->addMessage('data inserted successfully',1);
+                $this->redirect('grid','category',[],true);
             }
         }
         catch (Exception $e) 
         {
-            $this->redirect($this->getView()->getUrl('category','grid'));
+            $this->redirect('grid','category',[],true);
         }
     }
 
@@ -141,11 +133,13 @@ class Controller_Category extends Controller_Core_Action{
             if(!$id)
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
 
             if(!(int)$id)
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
 
             $category = $categoryModel->load($id);
@@ -153,6 +147,7 @@ class Controller_Category extends Controller_Core_Action{
             if(!$category)
             {
                 $this->getMessage()->addMessage('System is unable to find record.',3); 
+                throw new Exception("System is unable to find record.", 1);
             }
 
             $content = $this->getLayout()->getContent();
@@ -162,7 +157,7 @@ class Controller_Category extends Controller_Core_Action{
         }
         catch (Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','category'));
+            $this->redirect('grid','category',[],true);
         }
     }
 
@@ -176,27 +171,28 @@ class Controller_Category extends Controller_Core_Action{
             if(!$request->getRequest('id'))
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
 
             $id = $request->getRequest('id');
             if(!$id)
             {
                 $this->getMessage()->addMessage('Unable to find data.',3);
+                throw new Exception("Unable to find data.", 1);
             }
             $result = $categoryModel->load($id)->delete();
 
             if(!$result)
             {
                 $this->getMessage()->addMessage('Unable to Delete Record.',3);
+                throw new Exception("Unable to Delete Record.", 1);
             }
             $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect($this->getView()->getUrl('grid','category',[],true));
+            $this->redirect('grid','category',[],true);
         }
         catch (Exception $e) 
         {
-            $this->redirect($this->getView()->getUrl('grid','category'));
+            $this->redirect('grid','category',[],true);
         }
     }
 }
-
-?>

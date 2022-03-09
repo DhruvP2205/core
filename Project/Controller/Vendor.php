@@ -1,8 +1,7 @@
-<?php Ccc::loadClass('Controller_Core_Action'); ?>
-<?php
+<?php Ccc::loadClass('Controller_Core_Action');
 
-class Controller_Vendor extends Controller_Core_Action{
-
+class Controller_Vendor extends Controller_Core_Action
+{
     public function gridAction()
     {
         $content = $this->getLayout()->getContent();
@@ -23,31 +22,40 @@ class Controller_Vendor extends Controller_Core_Action{
 
     public function editAction()
     {
-        $vendorModel = Ccc::getModel('Vendor');
-        $request = $this->getRequest();
-        $id = (int)$request->getRequest('id');
-        if(!$id)
+        try
         {
-            $this->getMessage()->addMessage('Request Invalid.',3);
-        }
-        
-        $vendor = $vendorModel->load($id);
-        
-        if(!$vendor)
-        {   
-            $this->getMessage()->addMessage('System is unable to find record.',3);
-        }
-        $addressModel = Ccc::getModel('Vendor_Address');
-        $address = $addressModel->load($id,'vendorId');
-        if(!$address)
-        {
-            $address = ['address' => null,'postalCode' => null,'city' => null, 'state' => null, 'country' => null, 'vendorId' => $vendor['vendorId']];    
-        }
+            $vendorModel = Ccc::getModel('Vendor');
+            $request = $this->getRequest();
+            $id = (int)$request->getRequest('id');
+            if(!$id)
+            {
+                $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
+            }
+            
+            $vendor = $vendorModel->load($id);
+            
+            if(!$vendor)
+            {   
+                $this->getMessage()->addMessage('System is unable to find record.',3);
+                throw new Exception("System is unable to find record.", 1);
+            }
+            $addressModel = Ccc::getModel('Vendor_Address');
+            $address = $addressModel->load($id,'vendorId');
+            if(!$address)
+            {
+                $address = Ccc::getModel('Vendor_Address');   
+            }
 
-        $content = $this->getLayout()->getContent();
-        $vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
-        $content->addChild($vendorEdit,'Edit');
-        $this->renderLayout();
+            $content = $this->getLayout()->getContent();
+            $vendorEdit = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
+            $content->addChild($vendorEdit,'Edit');
+            $this->renderLayout();
+        }
+        catch (Exception $e) 
+        {
+            $this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+        }
     }
 
     public function deleteAction()
@@ -59,24 +67,27 @@ class Controller_Vendor extends Controller_Core_Action{
             if(!$request->getRequest('id'))
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
             }
 
             $vendorId = $request->getRequest('id');
             if(!$vendorId)
             {
                 $this->getMessage()->addMessage('Unable to fetch ID.',3);
+                throw new Exception("Unable to fetch ID.", 1);
             }
             $result = $vendorModel->load($vendorId)->delete();
             if(!$result)
             {
                 $this->getMessage()->addMessage('Unable to Delete Record.',3);
+                throw new Exception("Unable to Delete Record.", 1);
             }
             $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+            $this->redirect('grid','vendor',[],true);
         } 
         catch (Exception $e) 
         {
-            $this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+            $this->redirect('grid','vendor',[],true);
         }       
     }
 
@@ -88,41 +99,47 @@ class Controller_Vendor extends Controller_Core_Action{
         if(!$request->getPost('vendor'))
         {
             $this->getMessage()->addMessage('Request Invalid.',3);
+            throw new Exception("Request Invalid.", 1);
         }
         $postData = $request->getPost('vendor');
         if(!$postData)
         {
             $this->getMessage()->addMessage('Invalid data Posted.',3);
+            throw new Exception("Invalid data Posted.", 1);
         }
 
         $vendor = $vendorModel;
         $vendor->setData($postData);
 
-        if($vendor->vendorId==null)
+        if(!$vendor->vendorId)
         {
             unset($vendor->vendorId);
             $vendor->createdDate = date('y-m-d h:m:s');
             $insert = $vendor->save();
-            if($insert==null)
+            if(!$insert->vendorId)
             {
                 $this->getMessage()->addMessage('Unable to Save Record.',3);
+                throw new Exception("Unable to Save Record.", 1);
             }
             $this->getMessage()->addMessage('Your Data save Successfully');
-            return $insert;
+            return $insert->vendorId;
         }
         else
         {
             if(!(int)$vendor->vendorId)
             {
                 $this->getMessage()->addMessage('Invalid Request.',3);
+                throw new Exception("Invalid Request.", 1);
             }
             $vendor->updatedDate = date('y-m-d h:i:s');
             $update = $vendor->save();
             if(!$update)
             {
                 $this->getMessage()->addMessage('Unable to Update Record.',3);
+                throw new Exception("Unable to Update Record.", 1);
             }
             $this->getMessage()->addMessage('Your Data Update Successfully');
+            return $update->vendorId;
         } 
     }
 
@@ -135,12 +152,14 @@ class Controller_Vendor extends Controller_Core_Action{
         if(!$request->getPost('address'))
         {
             $this->getMessage()->addMessage('Request Invalid.',3);
+            throw new Exception("Invalid Request.", 1);
         }  
 
         $postData = $request->getPost('address');
         if(!$postData)
         {
             $this->getMessage()->addMessage('Invalid data Posted.',3);
+            throw new Exception("Invalid data Posted.", 1);
         }
 
         $address = $addressModel;
@@ -154,6 +173,7 @@ class Controller_Vendor extends Controller_Core_Action{
             if(!$insert)
             {
                 $this->getMessage()->addMessage('Unable to Save Record.',3);
+                throw new Exception("Unable to Save Record.", 1);
             }
             $this->getMessage()->addMessage('Your Data save Successfully');
         }
@@ -163,6 +183,7 @@ class Controller_Vendor extends Controller_Core_Action{
             if(!$update)
             {
                 $this->getMessage()->addMessage('Unable to Update Record.',3);
+                throw new Exception("Unable to Update Record.", 1);
             }
             $this->getMessage()->addMessage('Your Data Update Successfully');
         }
@@ -175,20 +196,19 @@ class Controller_Vendor extends Controller_Core_Action{
         {
             $vendorId = $this->saveVendor();
             $request = $this->getRequest();
-            if(!$request->getPost('address'))
+            $postData = $request->getPost('address');
+            if(!$postData['zipCode'])
             {
-                $this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+                $this->redirect('grid','vendor',[],true);
             }
 
             $this->saveAddress($vendorId);
 
-            $this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+            $this->redirect('grid','vendor',[],true);
         }
         catch (Exception $e) 
         {
-            $this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+            $this->redirect('grid','vendor',[],true);
         }
     }
 }
-
-?>

@@ -69,5 +69,3 @@ class Model_Core_Request
         return $controllerName;
     }
 }
-
-?>

@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 class Model_Core_Row_Resource
 {
     protected $tableName = null;
@@ -59,14 +58,9 @@ class Model_Core_Row_Resource
         return $result;
     }
 
-    public function update(array $updateArray, array $updateWhere,$tableName = null)
+    public function update(array $updateArray, array $updateWhere)
     {
-        $date = date('Y-m-d H:i:s');
-
-        if(!$tableName)
-        {
-            $tableName = $this->getTableName();
-        }
+        $tableName = $this->getTableName();
         $valueArray = [];
         $nullValueArray = [];
         $key = key($updateWhere);
@@ -86,12 +80,12 @@ class Model_Core_Row_Resource
 
         foreach ($nullValueArray as $nullColumnName)
         {
-            $query2 = "UPDATE {$tableName} SET {$nullColumnName} = null WHERE $key = $value";
+            $query2 = "UPDATE {$tableName} SET {$nullColumnName} = null WHERE {$key} = {$value}";
             $result = $this->getAdapter()->update($query2);
         }
 
         $setString = implode(",", $valueArray);
-        $query = "UPDATE $tableName SET $setString WHERE $key = $value";
+        $query = "UPDATE {$tableName} SET {$setString} WHERE {$key} = {$value}";
         $result = $this->getAdapter()->update($query);
         return $result;
     }
@@ -101,7 +95,7 @@ class Model_Core_Row_Resource
         $tableName = $this->getTableName();
         $key = key($deleteArray);
         $value = $deleteArray[$key];
-        $query = "DELETE FROM $tableName WHERE $key = $value";
+        $query = "DELETE FROM {$tableName} WHERE {$key} = {$value}";
         $result = $this->getAdapter()->delete($query);
         return $result;
     }
@@ -118,4 +112,3 @@ class Model_Core_Row_Resource
         return $result;
     }
 }
-?>

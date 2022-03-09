@@ -1,8 +1,7 @@
-<?php Ccc::loadClass('Controller_Core_Action') ?>
-<?php
+<?php Ccc::loadClass('Controller_Core_Action');
 
-class Controller_Category_Media extends Controller_Core_Action{
-
+class Controller_Category_Media extends Controller_Core_Action
+{
     public function gridAction()
     {
         $content = $this->getLayout()->getContent();
@@ -20,16 +19,20 @@ class Controller_Category_Media extends Controller_Core_Action{
             $id = $request->getRequest('id');
             if($request->isPost())
             {
-                if(!$request->getPost()){
+                if(!$request->getPost())
+                {
                     $mediaData = $mediaModel;
                     $mediaData->categoryId = $id;
+
                     $file = $request->getFile();
                     $ext = explode('.',$file['name']['name']);
                     $fileExt = end($ext);
                     $fileName = prev($ext)."".date('Ymdhis').".".$fileExt;
                     $fileName = str_replace(" ","_",$fileName);
                     $mediaData->name = $fileName;
+
                     $extension = array('jpg','jpeg','png','Jpg','Jpeg','Png','JPEG','JPG','PNG');
+
                     if(in_array($fileExt, $extension))
                     {
                         $result = $mediaModel->save();
@@ -37,12 +40,15 @@ class Controller_Category_Media extends Controller_Core_Action{
                         {
                             $this->getMessage()->addMessage('System is unable to save your data.',3);
                         }   
-                        move_uploaded_file($file['name']['tmp_name'],$this->getView()->getBaseUrl("Media/category/").$fileName);
+                        move_uploaded_file($file['name']['tmp_name'],Ccc::getBlock('Product_Grid')->getBaseUrl("Media/category/").$fileName);
                     }
                 }
                 else
                 {
                     $mediaData = $mediaModel;
+                    $categoryModel = Ccc::getModel('category');
+                    $categoryData = $categoryModel;
+                    $categoryData->categoryId = $id;
                     $mediaData->categoryId = $id;
                     $postData = $request->getPost();
                     if(array_key_exists('remove',$postData['media']))
@@ -51,11 +57,13 @@ class Controller_Category_Media extends Controller_Core_Action{
                         {
                             $media = $mediaModel->load($remove);
                             $result = $media->delete();
+
                             if(!$result)
                             {
                                 $this->getMessage()->addMessage('Invalid request.',3);
+                                throw new Exception("Invalid request.", 1);
                             }
-                            unlink($this->getView()->getBaseUrl("Media/category/"). $media->name);
+                            unlink(Ccc::getBlock('Product_Grid')->getBaseUrl("Media/category/"). $media->name);
 
                             if($postData['media']['base'] == $remove)
                             {
@@ -83,7 +91,8 @@ class Controller_Category_Media extends Controller_Core_Action{
                             $result = $mediaModel->save();
                             if(!$result)
                             {
-                                $this->getMessage()->addMessage('Invalid request.',3);   
+                                $this->getMessage()->addMessage('Invalid request.',3);
+                                throw new Exception("Invalid request.", 1);   
                             }
                         }
                         unset($mediaData->mediaId);
@@ -97,46 +106,47 @@ class Controller_Category_Media extends Controller_Core_Action{
 
                     if(array_key_exists('base',$postData['media']))
                     {
-                        $mediaData->base = $postData['media']['base'];
-                        $result = $mediaModel->save('categoryId','category');
+                        $categoryData->base = $postData['media']['base'];
+                        $result = $categoryModel->save('categoryId');
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set base.',3);
+                            throw new Exception("System is unabel to set base.", 1);
                         }
-                        unset($mediaData->base);
+                        unset($categoryData->base);
                     }
 
                     if(array_key_exists('thumb',$postData['media']))
                     {
-                        $mediaData->thumb = $postData['media']['thumb'];
-                        $result = $mediaModel->save('categoryId','category');
+                        $categoryData->thumb = $postData['media']['thumb'];
+                        $result = $categoryModel->save('categoryId','category');
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set thumb.',3);
+                            throw new Exception("System is unabel to set thumb.", 1);
                         }
-                        unset($mediaData->thumb);
+                        unset($categoryData->thumb);
                     }
 
                     if(array_key_exists('small',$postData['media']))
                     {
-                        $mediaData->small = $postData['media']['small'];
-                        $result = $mediaModel->save('categoryId','category');
+                        $categoryData->small = $postData['media']['small'];
+                        $result = $categoryModel->save('categoryId','category');
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set small.',3);
+                            throw new Exception("System is unabel to set small.", 1);
                         }
-                        unset($mediaData->small);
+                        unset($categoryData->small);
                     }
                 }
             }
             $this->getMessage()->addMessage('Data saved.',1); 
-            $this->redirect($this->getView()->getUrl('grid','category_media',['id' => $id],true));  
+            $this->redirect('grid','category_media',['id' => $id],true);  
         }
         catch (Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','category_media'));
+            $this->redirect('grid','category_media');
         }
     }
 }
-
-?>

@@ -8,4 +8,3 @@ class Model_Customer_Price_Resource extends Model_Core_Row_Resource
         parent::__construct();
     }
 }
-?>

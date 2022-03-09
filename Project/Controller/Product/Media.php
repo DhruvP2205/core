@@ -1,6 +1,5 @@
-<?php Ccc::loadClass('Controller_Core_Action') ?>
+<?php Ccc::loadClass('Controller_Core_Action');
 
-<?php
 class Controller_Product_Media extends Controller_Core_Action
 {
     public function gridAction()
@@ -16,6 +15,7 @@ class Controller_Product_Media extends Controller_Core_Action
         try
         {
             $mediaModel = Ccc::getModel('Product_Media');
+            $productModel = Ccc::getModel('Product');
             $request = $this->getRequest();
             $productId = $request->getRequest('id');
 
@@ -25,14 +25,16 @@ class Controller_Product_Media extends Controller_Core_Action
                 {
                     $mediaData = $mediaModel;
                     $mediaData->productId = $productId;
+
                     $file = $request->getFile();
                     $ext = explode('.',$file['name']['name']);
                     $fileExt = end($ext);
                     $fileName = prev($ext)."".date('Ymdhis').".".$fileExt;
                     $fileName = str_replace(" ","_",$fileName);
                     $mediaData->name = $fileName;
+
                     $extension = array('jpg','jpeg','png','JPG','JPEG','PNG','Jpg','Jpeg','Png');
-                    
+
                     if(in_array($fileExt, $extension))
                     {
                         $result = $mediaModel->save();
@@ -40,13 +42,18 @@ class Controller_Product_Media extends Controller_Core_Action
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unable to save your data.',3);
+                            throw new Exception("System is unable to save your data.", 1); 
                         }   
-                        move_uploaded_file($file['name']['tmp_name'],$this->getView()->getBaseUrl("Media/Product/").$fileName);
+                        move_uploaded_file($file['name']['tmp_name'],Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/").$fileName);
+                        $this->getMessage()->addMessage('Media uploaded Successfully.');
                     }
                 }
                 else
                 {
                     $mediaData = $mediaModel;
+                    $productData = $productModel;
+
+                    $productData->productId = $productId;
                     $mediaData->productId = $productId;
                     $postData = $request->getPost();
 
@@ -60,8 +67,9 @@ class Controller_Product_Media extends Controller_Core_Action
                             if(!$result)
                             {
                                 $this->getMessage()->addMessage('Invalid request.',3);
+                                throw new Exception("Invalid request.", 1);
                             }
-                            unlink($this->getView()->getBaseUrl("Media/Product/"). $media->name);
+                            unlink(Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/"). $media->name);
                             
                             if($postData['media']['base'] == $remove)
                             {
@@ -77,6 +85,7 @@ class Controller_Product_Media extends Controller_Core_Action
                             {
                                 unset($postData['media']['small']);
                             }
+                            $this->getMessage()->addMessage('Media Deleted Succesfully.');
                         }
                     }
     
@@ -92,6 +101,7 @@ class Controller_Product_Media extends Controller_Core_Action
                             if(!$result)
                             {
                                 $this->getMessage()->addMessage('Invalid request.',3);
+                                throw new Exception("Invalid request.", 1);
                             }
                         }
                         unset($mediaData->mediaId);
@@ -100,53 +110,56 @@ class Controller_Product_Media extends Controller_Core_Action
                     {
                         $mediaData->gallery = 2;
                         $result = $mediaModel->save('productId');
+                        $this->getMessage()->addMessage('Data updated.',1);
                     }
                     unset($mediaData->gallery);
 
                     if(array_key_exists('base',$postData['media']))
                     {
-                        $mediaData->base = $postData['media']['base'];
-                        $result = $mediaModel->save('productId','product');
+                        $productData->base = $postData['media']['base'];
+                        $result = $productModel->save('productId');
 
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set base.',3);
+                            throw new Exception("System is unabel to set base.", 1);
                         }
-                        unset($mediaData->base);
+                        unset($productData->base);
                     }
 
                     if(array_key_exists('thumb',$postData['media']))
                     {
-                        $mediaData->thumb = $postData['media']['thumb'];
-                        $result = $mediaModel->save('productId','product');
+                        $productData->thumb = $postData['media']['thumb'];
+                        $result = $productModel->save('productId');
 
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set thumb.',3);
+                            throw new Exception("System is unabel to set thumb.", 1);
                         }
-                        unset($mediaData->thumb);
+                        unset($productData->thumb);
                     }
 
                     if(array_key_exists('small',$postData['media']))
                     {
-                        $mediaData->small = $postData['media']['small'];
-                        $result = $mediaModel->save('productId','product');
+                        $productData->small = $postData['media']['small'];
+                        $result = $productModel->save('productId','product');
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set small.',3);
+                            throw new Exception("System is unabel to set small.", 1);
                         }
-                        unset($mediaData->small);
+                        unset($productData->small);
                     }
+                    $this->getMessage()->addMessage('Media Updated.');
                 }
             }
             $this->getMessage()->addMessage('Data saved.',1);    
-            $this->redirect($this->getView()->getUrl('grid','product_media',['id' => $productId],true));    
+            $this->redirect('grid','product_media',['id' => $productId],true);    
         }
         catch (Exception $e)
         {
-            $this->redirect($this->getView()->getUrl('grid','product_media'));
+            $this->redirect('grid','product_media');
         } 
     }
 }
-
-?>
