@@ -5,13 +5,19 @@ class Controller_Salesman extends Controller_Core_Action
 {
     public function gridAction()
     {
-        Ccc::getBlock('Salesman_Grid')->toHtml();
+        $content = $this->getLayout()->getContent();
+        $salesmanGrid = Ccc::getBlock('Salesman_Grid');
+        $content->addChild($salesmanGrid,'Grid');
+        $this->renderLayout();
     }
 
     public function addAction()
     {
         $salesmanModel = Ccc::getModel('Salesman');
-        Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel])->toHtml();
+        $content = $this->getLayout()->getContent();
+        $salesmanAdd = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel]);
+        $content->addChild($salesmanAdd,'Add');
+        $this->renderLayout();
     }
 
     public function saveAction()
@@ -23,14 +29,16 @@ class Controller_Salesman extends Controller_Core_Action
 
             if(!$request->isPost())
             {
-                throw new Exception("Request Invalid.",1);
+                $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Error Processing Request", 1);
             }
 
-            $postData=$request->getPost('salesman');
+            $postData = $request->getPost('salesman');
 
             if(!$postData)
             {
-                throw new Exception("Invalid data Posted.", 1);
+                $this->getMessage()->addMessage('Invalid data Posted.',3);
+                throw new Exception("Error Processing Request", 1);
             }
 
             $salesman = $salesmanModel;
@@ -43,28 +51,31 @@ class Controller_Salesman extends Controller_Core_Action
                 $result=$salesman->save();
                 if(!$result)
                 {
-                    throw new Exception("unable to Save Record.", 1);        
-                }   
+                    $this->getMessage()->addMessage('Unable to Save Record.',3); 
+                    throw new Exception("Error Processing Request", 1);       
+                }
+                $this->getMessage()->addMessage('Your Data save Successfully');
             }
             else
             {
                 if(!(int)$salesman->salesmanId)
                 {
-                    throw new Exception("Invelid Request.",1);
+                    $this->getMessage()->addMessage('Invalid Request.',3);
+                    throw new Exception("Error Processing Request", 1);
                 }
                 $salesman->updatedDate = date('y-m-d h:m:s');
                 $result=$salesman->save();
                 if(!$result)
                 {
-                    throw new Exception("unable to uodate Record.", 1);
+                    $this->getMessage()->addMessage('Unable to Update Record.',3);
+                    throw new Exception("Error Processing Request", 1);
                 }
+                $this->getMessage()->addMessage('Your Data Update Successfully');
             }
             $this->redirect($this->getView()->getUrl('grid','Salesman',[],true));
         }
         catch (Exception $e)
         {
-            echo $e->getMessage();
-            exit();
             $this->redirect($this->getView()->getUrl('grid','Salesman',[],true));
         }
     }
@@ -79,21 +90,26 @@ class Controller_Salesman extends Controller_Core_Action
 
             if(!$id)
             {
-                throw new Exception("Invalid Request", 1);
+                $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Error Processing Request", 1);         
             }
             
             $salesman = $salesmanModel->load($id);
             
             if(!$salesman)
             {   
-                throw new Exception("System is unable to find record.", 1); 
+                $this->getMessage()->addMessage('System is unable to find record.',3); 
+                throw new Exception("Error Processing Request", 1);        
             }
-            Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesman])->toHtml();
+
+            $content = $this->getLayout()->getContent();
+            $salesmanEdit = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesman]);
+            $content->addChild($salesmanEdit,'Edit');
+            $this->renderLayout();
         }
         catch (Exception $e)
         {
-            echo $e->getMessage();
-            exit();
+            $this->redirect($this->getView()->getUrl('grid','salesman',[],true));
         }
     }
 
@@ -107,22 +123,24 @@ class Controller_Salesman extends Controller_Core_Action
 
             if(!$request->getRequest('id'))
             {
-                throw new Exception("Invalid Request.", 1);
+                $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Error Processing Request", 1);
             }
 
             $salesmanId = $request->getRequest('id');
 
             if(!$salesmanId)
             {
-                throw new Exception("Unable to fetch ID.", 1);
-                
+                $this->getMessage()->addMessage('Unable to fetch ID.',3);
+                throw new Exception("Error Processing Request", 1);
             }
             $result = $salesmanModel->load($salesmanId)->delete();
             if(!$result)
             {
-                throw new Exception("Unable to Delet Record.", 1);
-                
+                $this->getMessage()->addMessage('Unable to Delete Record.',3);
+                throw new Exception("Error Processing Request", 1);
             }
+            $this->getMessage()->addMessage('Data Deleted.');
             $this->redirect($this->getView()->getUrl('grid','salesman',[],true));
         } 
         catch (Exception $e)

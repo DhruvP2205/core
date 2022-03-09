@@ -1,13 +1,5 @@
 <?php $admins = $this->getAdmins(); ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Admin</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-<body>
+
     <a href="<?php echo $this->getUrl('add') ?>">Add Admin</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
@@ -48,5 +40,4 @@
                     ?>
         </tbody>
     </table>
-</body>
-</html>
+

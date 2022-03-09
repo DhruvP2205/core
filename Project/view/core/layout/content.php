@@ -1,1 +1,6 @@
-<h1>This Is Content</h1>
+<?php 
+    $childrens = $this->getChildren();
+    foreach ($childrens as $child) {
+        $child->toHtml();
+    }
+?>

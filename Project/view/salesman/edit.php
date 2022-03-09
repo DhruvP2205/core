@@ -2,14 +2,6 @@
     $salesman = $this->getSalesman();
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Salesman</title>
-</head>
-<body>
     <h2>Salesman</h2>
     <form action="<?php echo $this->getUrl('save','salesman',['id'=>$salesman->salesmanId],true) ?>" method="POST">
         <table border="1" cellspacing="4">
@@ -31,6 +23,10 @@
                 <td><input type="number" name="salesman[mobile]" value="<?php echo $salesman->mobile ?>"></td>
             </tr>
             <tr>
+                <td width="10%">Discount</td>
+                <td><input type="text" name="salesman[discount]" value=<?php echo $salesman->discount ?>></td>
+            </tr>
+            <tr>
                 <td width="10%">Status</td>
                 <td>
                     <select name="salesman[status]">
@@ -48,5 +44,3 @@
             </tr>
         </table>    
     </form>
-</body>
-</html>

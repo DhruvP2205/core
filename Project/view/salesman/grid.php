@@ -1,13 +1,5 @@
 <?php $salesmans = $this->getSalesmans(); ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Admin</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-<body>
+
     <a href="<?php echo $this->getUrl('add') ?>">Add Salesman</a>
             <h2>All Records</h2>
             <table cellpadding="7px">
@@ -17,6 +9,7 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
+                    <th>Discount</th>
                     <th>Status</th>
                     <th>Created Date</th>
                     <th>Upadated Date</th>
@@ -34,17 +27,17 @@
                         <td><?php echo($salesman->lastName); ?></td>
                         <td><?php echo($salesman->email); ?></td>
                         <td><?php echo($salesman->mobile); ?></td>
+                        <td><?php echo $salesman->discount; ?></td>
                         <td><?php echo($salesman->getStatus($salesman->status));?></td>
                         <td><?php echo($salesman->createdDate); ?></td>
                         <td><?php echo($salesman->updatedDate); ?></td>
                         <td>
                             <a href="<?php echo $this->getUrl('edit','salesman',['id'=>$salesman->salesmanId],true) ?>">Edit</a>
                             <a href="<?php echo $this->getUrl('delete','salesman',['id'=>$salesman->salesmanId],true) ?>">Delete</a>
+                            <a href="<?php echo $this->getUrl('grid','salesman_customer',['id'=>$salesman->salesmanId],true) ?>">Manage Customer</a>
                         </td>
                     </tr>
                     <?php endforeach;
                     endif; ?>
         </tbody>
     </table>
-</body>
-</html>

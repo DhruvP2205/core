@@ -1,19 +1,9 @@
 <?php $categories = $this->getCategories(); ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-<body>
     <a href="<?php echo $this->getUrl('add','category') ?>">Add Category</a>
     <h2>All Records</h2>
         <table cellpadding="7px">
-            <thead>
+            <tr>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Base Image</th>
@@ -23,8 +13,8 @@
                 <th>Created Date</th>
                 <th>Updated Date</th>
                 <th>Action</th>
-            </thead>
-
+            </tr>
+            
             <?php if(!$categories): ?>
             <tr><td colspan="7">No Recored Receive</td></tr>
             <?php else: ?>
@@ -59,12 +49,10 @@
                     <td>
                         <a href='<?php echo $this->getUrl('edit','category',['id'=>$category->categoryId],true) ?>'>Edit</a>
                         <a href='<?php echo $this->getUrl('delete','category',['id'=>$category->categoryId],true) ?>'>Delete</a>
-                        <a href="<?php echo $this->getUrl('grid','category_media',['id'=>$category->categoryId],true) ?>">Gallary</a>
+                        <a href="<?php echo $this->getUrl('grid','category_media',['id'=>$category->categoryId],true) ?>">Edit Gallary</a>
                     </td>
                 </tr>
-            <?php endforeach; ?>
-            <?php endif; ?>
+                <?php endforeach; ?>
+                <?php endif; ?>
+                
         </tabel>
-    </div>
-</body>
-</html>
