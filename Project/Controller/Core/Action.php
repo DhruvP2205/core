@@ -63,10 +63,10 @@ class Controller_Core_Action
         return $this;
     }
     
-    public function redirect($url)
+    public function redirect($a=null, $c=null, array $data = [], $reset = false)
     {
-        header("Location: $url");
-        exit();
+        $url = Ccc::getModel('Core_View')->getUrl($a, $c, $data, $reset);
+        header("location: $url");
     }
 
     public function getRequest()

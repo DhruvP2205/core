@@ -39,6 +39,32 @@
             </td>
         </tr>
         <tr>
+            <td><h3>Select Categories:</h3></td>
+            <td>
+                <table border="1" width="100%">
+                    <tr>
+                        <th>Select</th>
+                        <th>Category Id</th>
+                        <th>Category</th>
+                    </tr>
+                    <?php if(!$categories): ?>
+                    <tr>
+                        <td colspan="3">No category Found</td>
+                    </tr>
+                    <?php else: ?>
+                    <?php foreach($categories as $category): ?>
+                    <?php $tag = ($this->selected($category->categoryId)=='checked')?'exists':'new' ?>
+                    <tr>
+                        <td> <input type="checkbox" name="category[<?php echo $tag ?>][]" value="<?php echo $category->categoryId ?>" <?php echo $this->selected($category->categoryId); ?>> </td>
+                        <td><?php echo $category->categoryId; ?></td>
+                        <td><?php echo $this->getPath($category->categoryId,$category->path) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                    <?php endif; ?>
+                </table>
+            </td>
+        </tr>
+        <tr>
             <td>&nbsp;</td>
             <td>
                 <input type="submit" name="submit" value="Update">
@@ -46,30 +72,4 @@
             </td>
         </tr>
     </table>
-    <br>
-    <br>
-    <h3>Select Categories:</h3>
-    <table border="1" width="100%">
-            <tr>
-                <th>Select</th>
-                <th>Category Id</th>
-                <th>Category</th>
-            </tr>
-            <?php if(!$categories): ?>
-            <tr>
-                <td colspan="3">No category Found</td>
-            </tr>
-            <?php else: ?>
-            <?php foreach($categories as $category): ?>
-            
-            <tr>
-                <td> <input type="checkbox" name="category[]" value="<?php echo $category->categoryId ?>" <?php echo $this->selected($category->categoryId); ?>> </td>
-                <td><?php echo $category->categoryId; ?></td>
-                <td><?php echo $this->getPath($category->categoryId,$category->path) ?></td>
-            </tr>
-
-            <?php endforeach; ?>
-
-            <?php endif; ?>
-        </table>
 </form>

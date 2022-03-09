@@ -35,15 +35,7 @@ class Controller_Customer_Price extends Controller_Core_Action{
 
                 foreach($customerData as $customer)
                 {
-                    $minimunPrize = (float)$customer['mrp'] - (float)$customer['mrp']*(float)$customer['discount']/100;
-                    if($minimunPrize >= (float)$customer['msp'])
-                    {
-                        $customerPriceModel->discount = $customer['discount'];
-                    }
-                    else
-                    {
-                        $customerPriceModel->discount = 100 - (float)$customer['msp']*100/(float)$customer['mrp'];
-                    }
+                    $customerPriceModel->discount = $customer['discount'];
                     $customerPriceModel->productId = $customer['productId'];
                     $customerPriceModel->save();
                 }

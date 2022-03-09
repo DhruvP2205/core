@@ -29,14 +29,16 @@ class Controller_Product extends Controller_Core_Action
 
             if(!$id)
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
+                $this->getMessage()->addMessage('Invalid Request.',3);
+                throw new Exception("Invalid Request.", 1);
             }
 
             $product = $productModel->load($id);
 
             if(!$product)
             {
-                $this->getMessage()->addMessage('System is unable to find record.',3); 
+                $this->getMessage()->addMessage('System is unable to find record.',3);
+                throw new Exception("System is unable to find record.", 1); 
             }
             $content = $this->getLayout()->getContent();
             $productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$product]);
@@ -54,9 +56,8 @@ class Controller_Product extends Controller_Core_Action
         try 
         {
             $productModel = Ccc::getModel('Product');
-            $mediaModel = Ccc::getModel('Product_Media');
+            
             $request = $this->getRequest();
-
             if(!$request->getRequest('id'))
             {
                 $this->getMessage()->addMessage('Request Invalid.',3);
@@ -67,7 +68,7 @@ class Controller_Product extends Controller_Core_Action
             {
                 $this->getMessage()->addMessage('Unable to fetch ID.',3);
             }
-
+            
             $medias = $productModel->fetchAll("SELECT name FROM media WHERE  productId='$productId'");
             foreach ($medias as $media)
             {
@@ -80,11 +81,11 @@ class Controller_Product extends Controller_Core_Action
                 $this->getMessage()->addMessage('Unable to Delete Record.',3);
             }
             $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect($this->getView()->getUrl('grid','product',[],true));
+            $this->redirect('grid','product',[],true);
         } 
         catch (Exception $e) 
         {
-            $this->redirect($this->getView()->getUrl('grid','product',[],true));
+            $this->redirect('grid','product',[],true);
         }       
     }
 
@@ -93,8 +94,8 @@ class Controller_Product extends Controller_Core_Action
     {
         try
         {
-            $request = $this->getRequest();
             $productModel = Ccc::getModel('Product');
+            $request = $this->getRequest();
 
             if(!$request->isPost())
             {
@@ -102,14 +103,12 @@ class Controller_Product extends Controller_Core_Action
             }
 
             $postData = $request->getPost('product');
-            $categoryData = $request->getPost('category');
-            
-            
+            $categoryIds = $request->getPost('category');
             if(!$postData)
             {
                 $this->getMessage()->addMessage('Invalid data Posted.',3);
             }
-
+            
             $product = $productModel;
             $product->setData($postData);
 
@@ -117,22 +116,6 @@ class Controller_Product extends Controller_Core_Action
             {
                 unset($product->productId);
                 $product->createdDate = date('y-m-d h:m:s');
-                $result = $product->save();
-                if(!$result)
-                {
-                    $this->getMessage()->addMessage('Unable to Save Record.',3);
-                    throw new Exception("Error Processing Request", 1);
-                }
-
-                foreach($categoryData as $category)
-                {
-                    $productCategoryModel = Ccc::getModel('Product_Category');
-                    $productCategoryModel->productId = $result;
-                    $productCategoryModel->categoryId = $category;
-
-                    $productCategoryModel->save();
-                }
-                $this->getMessage()->addMessage('Your Data save Successfully');
             }
             else
             {
@@ -141,37 +124,28 @@ class Controller_Product extends Controller_Core_Action
                     $this->getMessage()->addMessage('Invalid Request.',3);
                     throw new Exception("Error Processing Request", 1);
                 }
-
                 $product->updatedDate = date('y-m-d h:m:s');
-                $result = $product->save();
-
-                if(!$result)
-                {
-                    $this->getMessage()->addMessage('Unable to Update Record.',3);
-                }
-
-                $productCategoryModel = Ccc::getModel('Product_Category');
-                $categoryProduct = $productCategoryModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = '$product->productId' ");
-
-                foreach($categoryProduct as $category)
-                {
-                    $productCategoryModel->load($category->entityId)->delete();
-                }
-
-                foreach($categoryData as $category)
-                {
-                    $productCategoryModel = Ccc::getModel('Product_Category');
-                    $productCategoryModel->productId = $product->productId;
-                    $productCategoryModel->categoryId = $category;
-                    $productCategoryModel->save();
-                }
-                $this->getMessage()->addMessage('Your Data Update Successfully');
             }
-            $this->redirect($this->getView()->getUrl('grid','product',[],true));
+
+            $result = $product->save();
+            if(!$result)
+            {
+                $this->getMessage()->addMessage('unable to inserted.',3);
+                throw new Exception("unable to Updated Record.", 1);
+            }
+
+            if(!$categoryIds)
+            {
+                $categoryIds['exists'] = []; 
+            }
+
+            $product->saveCategories($categoryIds);
+            $this->getMessage()->addMessage('Data inserted.');
+            $this->redirect('grid','product',[],true);
         } 
         catch (Exception $e) 
         {
-            $this->redirect($this->getView()->getUrl('grid','product',[],true));
+            $this->redirect('grid','product',[],true);
         }
     }
 }
