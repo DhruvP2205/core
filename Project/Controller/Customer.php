@@ -113,37 +113,25 @@ class Controller_Customer extends Controller_Core_Action
         {
             unset($customer->customerId);
             $customer->createdDate = date('y-m-d h:m:s');
-            $insert = $customer->save();
-            if(!$insert->customerId)
-            {
-                $this->getMessage()->addMessage('Unable to Save Record.',3);
-                throw new Exception("Unable to Save Record.", 1);
-            }
-            $this->getMessage()->addMessage('Your Data save Successfully');
-            return $insert->customerId;
         }
         else
         {
-            if(!(int)$customer->customerId)
-            {
-                $this->getMessage()->addMessage('Invalid Request.',3);
-                throw new Exception("Invalid Request.", 1);
-            }
             $customer->updatedDate = date('y-m-d h:i:s');
             $update = $customer->save();
-            if(!$update)
-            {
-                $this->getMessage()->addMessage('Unable to Update Record.',3);
-                throw new Exception("Unable to Update Record.", 1);
-            }
-            $this->getMessage()->addMessage('Your Data Update Successfully');
-            return $update->customerId;
         }
-         
+        $save = $customer->save();
+        if(!$save->customerId)
+        {
+            $this->getMessage()->addMessage('Unable to insert Customer.',3);
+            throw new Exception("Unable to insert Customer.", 1);
+        }
+        $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
+        return $save->customerId;
     }
+
+
     protected function saveAddress($customerId)
     {
-
         $addressModel = Ccc::getModel('Customer_Address');
         $request = $this->getRequest();
         if(!$request->getPost('address'))
@@ -159,30 +147,22 @@ class Controller_Customer extends Controller_Core_Action
         }
         $address = $addressModel;
         $address->setData($postData);
+        $address->customerId = $customerId;
 
         if(!$address->addressId)
         {   
-            $address->customerId = $customerId;
             unset($address->addressId);
-            $insert = $address->save();
-            if(!$insert)
-            {
-                $this->getMessage()->addMessage('Unable to Save Record.',3);
-                throw new Exception("Unable to Save Record.", 1);
-            }
-            $this->getMessage()->addMessage('Your Data save Successfully');
         }
         else
         {
             $address->billingAddress = (!array_key_exists('billingAddress',$postData))?2:1;
             $address->shipingAddress = (!array_key_exists('shipingAddress',$postData))?2:1;
-            $update = $address->save();
-            if(!$update)
-            {
-                $this->getMessage()->addMessage('Unable to Update Record.',3);
-                throw new Exception("Unable to Update Record.", 1);
-            }
-            $this->getMessage()->addMessage('Your Data Update Successfully');
+        }
+        $save = $address->save();
+        if(!$save)
+        {
+            $this->getMessage()->addMessage('Customer Details Not Saved.',3);
+            throw new Exception("Customer Details Not Saved.", 1);
         }
     }
 

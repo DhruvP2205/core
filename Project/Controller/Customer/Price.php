@@ -35,9 +35,18 @@ class Controller_Customer_Price extends Controller_Core_Action
 
                 foreach($customerData as $customer)
                 {
-                    $customerPriceModel->discount = $customer['discount'];
+                    if($customer['salesmanPrice'] <= $customer['price'])
+                    {
+                        $customerPriceModel->price = $customer['price'];
+                    }
+                    else
+                    {
+                        $customerPriceModel->price = $customer['salesmanPrice'];
+                    }
                     $customerPriceModel->productId = $customer['productId'];
+                
                     $customerPriceModel->save();
+                    unset($customerPriceModel->entityId);
                 }
             }
             $this->getMessage()->addMessage('Discount set successfully');

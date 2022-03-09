@@ -3,6 +3,23 @@
 class Model_Core_Message
 {
     protected $session = null;
+    protected $sessionClassName = null;
+
+    public function __construct()
+    {
+        
+    }
+
+    public function setSessionClassName($sessionClassName)
+    {
+        $this->sessionClassName = $sessionClassName;
+        return $this;
+    }
+
+    public function getSessionClassName()
+    {
+        return $this->sessionClassName();
+    }
 
     const MESSAGE_SUCCESS = 1;
     const MESSAGE_WARNING = 2;

@@ -23,55 +23,36 @@ class Controller_Salesman extends Controller_Core_Action
     {
         try
         {
-            $request=$this->getRequest();
-            $salesmanModel= Ccc::getModel('Salesman');
-
-            if(!$request->isPost())
-            {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Error Processing Request", 1);
-            }
-
+            $request = $this->getRequest();
             $postData = $request->getPost('salesman');
-
             if(!$postData)
             {
-                $this->getMessage()->addMessage('Invalid data Posted.',3);
-                throw new Exception("Error Processing Request", 1);
+                $this->getMessage()->addMessage('Invalid Request.',3);
+                throw new Exception("Invalid Request.", 1);
             }
 
-            $salesman = $salesmanModel;
-            $salesman->setData($postData);
+            $salesmenModel = Ccc::getModel('salesman');
+            $salesmen = $salesmenModel;
+            $salesmen->setData($postData);
 
-            if(!($salesman->salesmanId))
+            if(!$salesmen->salesmanId)
             {
-                unset($salesman->salesmanId);
-                $salesman->createdDate = date('y-m-d h:m:s');
-                $result=$salesman->save();
-                if(!$result)
-                {
-                    $this->getMessage()->addMessage('Unable to Save Record.',3); 
-                    throw new Exception("Error Processing Request", 1);       
-                }
-                $this->getMessage()->addMessage('Your Data save Successfully');
+                unset($salesmen->salesmanId);
+                $salesmen->createdDate = date("Y-m-d h:i:s");
             }
             else
             {
-                if(!(int)$salesman->salesmanId)
-                {
-                    $this->getMessage()->addMessage('Invalid Request.',3);
-                    throw new Exception("Error Processing Request", 1);
-                }
-                $salesman->updatedDate = date('y-m-d h:m:s');
-                $result=$salesman->save();
-                if(!$result)
-                {
-                    $this->getMessage()->addMessage('Unable to Update Record.',3);
-                    throw new Exception("Error Processing Request", 1);
-                }
-                $this->getMessage()->addMessage('Your Data Update Successfully');
+                $salesmen->updatedDate = date("Y-m-d h:i:s");
             }
-            $this->redirect('grid','Salesman',[],true);
+
+            $insert = $salesmen->save();
+            if(!$insert)
+            {
+                $this->getMessage()->addMessage('Unable to insert Salesman.',3);
+                throw new Exception("Unable to insert Salesman.", 1);
+            }
+            $this->getMessage()->addMessage('Salesman Inserted succesfully.',1); 
+            $this->redirect('grid','salesman',[],true);
         }
         catch (Exception $e)
         {

@@ -86,9 +86,10 @@ class Controller_Category extends Controller_Core_Action{
                             $this->getMessage()->addMessage('unable to Inser Data.',3);
                             throw new Exception("system is unabel to insert your data", 1);
                         }
+                        $categoryId = $insert->categoryId;
                         $categoryData->resetData();
-                        $categoryData->path = $insert->categoryId;
-                        $categoryData->categoryId = $insert->categoryId;
+                        $categoryData->path = $categoryId;
+                        $categoryData->categoryId = $categoryId;
                         $result = $categoryModel->save();
                         $this->getMessage()->addMessage('data inserted successfully',1);
                     }
