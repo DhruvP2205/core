@@ -2,6 +2,20 @@
 
 class Controller_Admin extends Controller_Core_Action
 {
+    /*public function testAction()
+    {
+        $adminSession = Ccc::getModel('Admin_Session');
+        $coreSession = Ccc::getModel('Core_Session');
+        $message = Ccc::getModel('Core_Message');
+        
+        $adminMessage = Ccc::getModel('Admin_Message');
+        $adminMessage->addMessage("Hello");
+        $adminSession->name = "Dhruv";
+        echo "<pre>";
+        print_r($_SESSION);
+        exit();
+    }*/
+
     public function gridAction()
     {
         $content = $this->getLayout()->getContent();
