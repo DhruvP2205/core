@@ -1,11 +1,12 @@
 <?php $products = $this->getProducts();    ?>
 
-<a href="<?php echo $this->getUrl('add','product') ?>">Add Product</a>
+<a href="<?php echo $this->getUrl('add','product',[],true) ?>">Add Product</a>
 <h2>All Records</h2>
 <table border="1" cellpadding="7px">
     <tr>
         <th>Product Id</th>
         <th>Name</th>
+        <th>Sku</th>
         <th>Base Image</th>
         <th>Thumb Image</th>
         <th>Image</th>
@@ -23,6 +24,7 @@
         <tr>
             <td><?php echo $product->productId ?></td>
             <td><?php echo $product->name ?></td>
+            <td><?php echo $product->sku ?></td>
             
             <?php if($product->base): ?>
             <td><img src="<?php echo "Media/Product/".$this->getMedia($product->base)['name']  ?>" alt="No Image Found" width="50" height="50"></td>

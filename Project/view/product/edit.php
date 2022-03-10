@@ -1,4 +1,4 @@
-<?php $product=$this->getProduct(); ?>
+<?php $product = $this->getProduct(); ?>
 <?php $categories = $this->getCategories(); ?>
 
 
@@ -11,6 +11,10 @@
         <tr>
             <td>Name</td>
             <td><input type="text" name="product[name]" value="<?php echo $product->name ?>"></td>
+        </tr>
+        <tr>
+            <td>Sku</td>
+            <td><input type="text" name="product[sku]" value="<?php echo $product->sku ?>"></td>
         </tr>
         
         <tr>
@@ -68,7 +72,7 @@
             <td>&nbsp;</td>
             <td>
                 <input type="submit" name="submit" value="Update">
-                <button type="button"><a href="<?php echo $this->getUrl('grid') ?>">Cancel</a></button>
+                <button type="button"><a href="<?php echo $this->getUrl('grid','product',[],true) ?>">Cancel</a></button>
             </td>
         </tr>
     </table>
