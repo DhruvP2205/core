@@ -19,27 +19,35 @@ class Controller_Admin_Login extends Controller_Admin_Action
 
             $request = $this->getRequest();
 
+
             if(!$request->isPost())
             {
                 $this->getMessage()->addMessage("Invalid request.",3);
                 throw new Exception("Invalid request.", 1);
             }
             
-            if(!$request->getPost())
+            if(!$request->getPost('admin'))
             {
                 $this->getMessage()->addMessage("Invalid request.",3);
                 throw new Exception("Invalid request.", 1);
             }
 
+
             $loginData = $request->getPost('admin');
+            if($loginData->email == "" || $loginData->password == "")
+            {
+                $this->getMessage()->addMessage("Enter login info..",3);
+                throw new Exception("Enter login info.", 1);
+            }
+            
             $password = md5($loginData['password']);
             
             $result = $adminModel->fetchAll("SELECT * FROM `admin` WHERE `email` = '{$loginData['email']}' AND `password` = '{$password}'");
             
             if(!$result)
             {
-                $this->getMessage()->addMessage("Login details incorect",Model_Core_Message::MESSAGE_ERROR);
-                throw new Exception("invalid request", 1);
+                $this->getMessage()->addMessage("Login details incorrect.",3);
+                throw new Exception("Invalid request.", 1);
             }
 
             $loginModel->login($result[0]->email);

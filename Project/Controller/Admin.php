@@ -40,7 +40,7 @@ class Controller_Admin extends Controller_Admin_Action
                 throw new Exception("Request Invalid.", 1);
             }
 
-            $postData=$request->getPost('admin');
+            $postData = $request->getPost('admin');
 
             if(!$postData)
             {
