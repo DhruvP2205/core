@@ -44,9 +44,7 @@ class Model_Core_Message
             $type = self::MESSAGE_DEFAULT;
         }
         $type = $types[$type];
-
         $messages[$type] = $message;
-
         $this->getSession()->messages = $messages;
         return $this;   
     }    
@@ -60,7 +58,7 @@ class Model_Core_Message
         return $this->getSession()->messages;
     }
 
-    public function unsetMessage()
+    public function unsetSession()
     {
         if(!$this->getSession()->messages)
         {
@@ -78,9 +76,24 @@ class Model_Core_Message
         return $this->session;
     }
 
-    public function setSession()
+    public function setSession($session = null)
     {
-        $this->session = Ccc::getModel('Core_Session');
+        if(!$session)
+        {
+            $session = 'Core_Session';
+        }
+        $this->session = Ccc::getModel($session);
         return $this->session;
+    }
+
+    public function unsetMessages()
+    {
+        $this->getSession()->start();
+        if(!$this->getSession()->messages)
+        {
+            return null;
+        }
+        unset($this->getSession()->messages);
+        return $this;
     }
 }

@@ -34,6 +34,11 @@ class Model_Product extends Model_Core_Row
 
     public function saveCategories(array $categoryIds)
     {
+        if(!$categoryIds || !array_key_exists('exists', $categoryIds))
+        {
+            $categoryIds['exists'] = [];
+        }
+
         $productCategoryModel = Ccc::getModel('Product_Category');
         $categoryProduct = $productCategoryModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = {$this->productId} ");
         

@@ -11,8 +11,7 @@ class Model_Admin_Message extends Model_Core_Message
     {
         if(!$this->session)
         {
-            $adminSession = Ccc::getModel('Admin_Session');
-            $this->setSession($adminSession);
+            $this->setSession('Admin_Session');
         }
         return $this->session;
     }

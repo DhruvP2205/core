@@ -3,6 +3,12 @@ class Model_Core_Session
 {
     protected $namespace = null;
 
+    public function __construct()
+    {
+        $this->setNamespace('core');
+        $this->start();
+    }
+    
     public function getNamespace()
     {
         return $this->namespace;
@@ -14,11 +20,6 @@ class Model_Core_Session
         return $this;
     }
 
-    public function __construct()
-    {
-        $this->setNamespace('core');
-        $this->start();
-    }
 
     public function isStarted()
     {
