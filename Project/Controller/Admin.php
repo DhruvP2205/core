@@ -2,6 +2,14 @@
 
 class Controller_Admin extends Controller_Admin_Action
 {
+    public function __construct()
+    {
+        if(!$this->authentication())
+        {
+            $this->redirect('login','admin_login');
+        }
+    }
+
     public function gridAction()
     {
         $content = $this->getLayout()->getContent();
@@ -47,6 +55,7 @@ class Controller_Admin extends Controller_Admin_Action
             {
                 unset($admin->adminId);
                 $admin->createdDate = date('y-m-d h:m:s');
+                $admin->password = md5($admin->password);
                 $result=$admin->save();
                 if(!$result)
                 {
@@ -63,6 +72,7 @@ class Controller_Admin extends Controller_Admin_Action
                     throw new Exception("Invalid Request.", 1);
                 }
                 $admin->updatedDate = date('y-m-d h:m:s');
+                $admin->password = md5($admin->password);
                 $result=$admin->save();
                 if(!$result)
                 {

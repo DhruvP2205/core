@@ -104,7 +104,7 @@ class Model_Core_View
     
     public function getBaseUrl($subUrl = null)
     {
-        $url = "C:/xampp/htdocs/phpwork/main-model-save/core/Project/";
+        $url = "C:/xampp/htdocs/phpwork/admin-login/core/Project/";
         if($subUrl)
         {
             $url = $url."/".$subUrl;

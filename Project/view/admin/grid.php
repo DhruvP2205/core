@@ -8,7 +8,6 @@
         <th>First Name</th>  
         <th>Last Name</th>
         <th>Email</th>
-        <th>Password</th>
         <th>Status</th>
         <th>Created Date</th>
         <th>Upadated Date</th>
@@ -25,7 +24,6 @@
             <td><?php echo($admin->firstName); ?></td>
             <td><?php echo($admin->lastName); ?></td>
             <td><?php echo($admin->email); ?></td>
-            <td><?php echo($admin->password); ?></td>
             <td><?php echo($admin->getStatus($admin->status));?></td>
             <td><?php echo($admin->createdDate); ?></td>
             <td><?php echo($admin->updatedDate); ?></td>

@@ -2,6 +2,14 @@
 
 class Controller_Salesman extends Controller_Admin_Action
 {
+    public function __construct()
+    {
+        if(!$this->authentication())
+        {
+            $this->redirect('login','admin_login');
+        }
+    }
+    
     public function gridAction()
     {
         $content = $this->getLayout()->getContent();
