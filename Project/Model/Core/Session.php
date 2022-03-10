@@ -78,6 +78,10 @@ class Model_Core_Session
         {
             $this->start();
         }
+        if(!array_key_exists($this->getNamespace(),$_SESSION))
+        {
+            $_SESSION[$this->getNamespace()] = [];
+        }
         if (!array_key_exists($key, $_SESSION[$this->getNamespace()])) 
         {
             return null;
