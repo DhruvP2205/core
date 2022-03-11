@@ -25,8 +25,7 @@ class Block_Page_Grid extends Block_Core_Template
         $page = (int)$request->getRequest('p', 1);
 
         $pagerModel = Ccc::getModel('Core_Pager');
-        $totalCount = $pagerModel->getAdapter()->fetchAssoc("SELECT count(pageId) AS `count` FROM `page`");
-        $totalCount = $totalCount['count'];
+        $totalCount = $pagerModel->getAdapter()->fetchOne("SELECT count(pageId) FROM `page`");
         
         $pagerModel->execute($totalCount, $page);
         $this->setPager($pagerModel);
