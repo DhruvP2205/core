@@ -86,7 +86,7 @@ class Model_Core_Adapter{
         return false;
     }
 
-    public function fetchAll($query,$mode=MYSQLI_ASSOC)
+    public function fetchAll($query, $mode = MYSQLI_ASSOC)
     {
         $result = $this->query($query);
         if($result->num_rows)
@@ -94,6 +94,17 @@ class Model_Core_Adapter{
             return $result->fetch_all($mode);
         }
         return false;
+    }
+
+    public function fetchOne($query)
+    {
+        $result = $this->fetchAll($query, MYSQLI_NUM);
+        if(!$result)
+        {
+            return false;
+        }
+        $key = $result['0']['0'];
+        return $key;
     }
 
     public function fetchPair($query)
