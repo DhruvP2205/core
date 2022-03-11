@@ -72,7 +72,7 @@ class Controller_Admin extends Controller_Admin_Action
                     throw new Exception("Invalid Request.", 1);
                 }
                 $admin->updatedDate = date('y-m-d h:m:s');
-                $admin->password = md5($admin->password);
+                /*$admin->password = md5($admin->password);*/
                 $result=$admin->save();
                 if(!$result)
                 {
