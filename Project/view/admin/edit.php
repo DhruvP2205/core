@@ -18,10 +18,13 @@
             <td width="10%">Email</td>
             <td><input type="text" name="admin[email]" value="<?php echo $admin->email ?>"></td>
         </tr>
-        <tr>
-            <td width="10%">Password</td>
-            <td><input type="password" name="admin[password]" value="<?php echo $admin->password ?>"></td>
-        </tr>
+        <?php if(!$admin->adminId):?>
+            <tr>
+                <td width="10%">Password</td>
+                <td><input type="password" name="admin[password]" value="<?php echo $admin->password ?>"></td>
+            </tr>
+        <?php endif; ?>
+        
         <tr>
             <td width="10%">Status</td>
             <td>
