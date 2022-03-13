@@ -1,5 +1,4 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
-<?php
+<?php Ccc::loadClass('Block_Core_Template');
 
 class Block_Customer_Price_Grid extends Block_Core_Template
 {
@@ -12,14 +11,23 @@ class Block_Customer_Price_Grid extends Block_Core_Template
     {
         $request = Ccc::getFront()->getRequest();
         $customerId = $request->getRequest('id');
+        $page = (int)$request->getRequest('p', 1);
+        $ppr = (int)$request->getRequest('ppr',20);
+
+        $pagerModel = Ccc::getModel('Core_Pager');
         $productModel = Ccc::getModel('product');
         $customerModel = Ccc::getModel('customer');
+
         $customer = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `customerId` = {$customerId} AND `salesmanId` IS NOT NULL");
         if(!$customer)
         {
             return $productModel->getData();
         }
-        $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `status` = '1' ");
+        $totalCount = $pagerModel->getAdapter()->fetchOne("SELECT count(productId) FROM `product` WHERE `status` = '1'");
+        $pagerModel->execute($totalCount, $page, $ppr);
+        $this->setPager($pagerModel);
+
+        $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `status` = '1' LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         return $products;
     }
 
@@ -27,9 +35,11 @@ class Block_Customer_Price_Grid extends Block_Core_Template
     {
         $request = Ccc::getFront()->getRequest();
         $customerId = $request->getRequest('id');
+
         $productModel = Ccc::getModel('product');
         $salesmanModel = Ccc::getModel('salesman');
         $customerModel = Ccc::getModel('customer');
+        
         $customer = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `customerId` = {$customerId}");
         if($customer)
         {

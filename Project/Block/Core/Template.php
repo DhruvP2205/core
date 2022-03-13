@@ -1,8 +1,19 @@
-<?php
-Ccc::loadClass('Model_Core_View');
+<?php Ccc::loadClass('Model_Core_View');
+
 class Block_Core_Template extends Model_Core_View   
 { 
     protected $children = [];
+    protected $pager = null;
+
+    public function getPager()
+    {
+        return $this->pager;
+    }
+    public function setPager($pager)
+    {
+        $this->pager=$pager;
+        return $this;
+    }
 
     public function getChildren()
     {
@@ -10,11 +21,11 @@ class Block_Core_Template extends Model_Core_View
     }
     public function setChildren($children)
     {
-        $this->children=$children;
+        $this->children = $children;
         return $this;
     }
 
-    public function addChild($object,$key=null)
+    public function addChild($object, $key = null)
     {
         if(!$key)
         {
@@ -42,7 +53,3 @@ class Block_Core_Template extends Model_Core_View
         return $this;
     }
 }
-
-
-
-

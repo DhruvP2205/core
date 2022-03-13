@@ -9,17 +9,26 @@ class Block_Product_Grid extends Block_Core_Template
 
    	public function getProducts()
 	{
-		$productModel = Ccc::getModel('Product');
-		$query = "SELECT * FROM `product`";
-		$products = $productModel->fetchAll($query);
+		$request = Ccc::getModel('Core_Request');
+        $page = (int)$request->getRequest('p', 1);
+        $ppr = (int)$request->getRequest('ppr',20);
+
+        $pagerModel = Ccc::getModel('Core_Pager');
+        $productModel = Ccc::getModel('Product');
+
+        $totalCount = $pagerModel->getAdapter()->fetchOne("SELECT count(productId) FROM `product`");
+        $pagerModel->execute($totalCount, $page, $ppr);
+        
+        $this->setPager($pagerModel);
+
+		$products = $productModel->fetchAll("SELECT * FROM `product` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
 		return $products;
 	}
 
 	public function getMedia($mediaId)
 	{
 		$mediaModel=Ccc::getModel('Product_Media');
-		$query = "SELECT * FROM `product_media` WHERE `mediaId` = {$mediaId}";
-		$media = $mediaModel->fetchAll($query);
+		$media = $mediaModel->fetchAll("SELECT * FROM `product_media` WHERE `mediaId` = {$mediaId}");
 		return $media[0]->getData();
 	}
 }

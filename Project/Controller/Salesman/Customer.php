@@ -12,6 +12,7 @@ class Controller_Salesman_Customer extends Controller_Admin_Action
     
     public function gridAction()
     {
+        $this->setTitle('Salesman Customer');
         $content = $this->getLayout()->getContent();
         $salesmanGrid = Ccc::getBlock("Salesman_Customer_Grid");
         $content->addChild($salesmanGrid);
@@ -36,10 +37,11 @@ class Controller_Salesman_Customer extends Controller_Admin_Action
 
                 if(!$result)
                 {
-                    $this->getMessage()->addMessage("Data not saved");
+                    $this->getMessage()->addMessage("Data not saved.");
                     throw new Exception("Error Processing Request", 1);
                 }
             }
+            $this->getMessage()->addMessage("Data saved.");
             $this->redirect('grid','Salesman_Customer');
         }
     }

@@ -12,6 +12,7 @@ class Controller_Customer extends Controller_Admin_Action
     
     public function gridAction()
     {
+        $this->setTitle('Customer');
         $content = $this->getLayout()->getContent();
         $customerGrid = Ccc::getBlock('Customer_Grid');
         $content->addChild($customerGrid,'Grid');
@@ -26,78 +27,6 @@ class Controller_Customer extends Controller_Admin_Action
         $customerAdd = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'address'=>$addressModel]);
         $content->addChild($customerAdd,'Add');
         $this->renderLayout();
-    }
-
-    public function editAction()
-    {
-        try
-        {
-            $customerModel = Ccc::getModel('Customer');
-            $request = $this->getRequest();
-            $id = (int)$request->getRequest('id');
-            if(!$id)
-            {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
-            }
-            
-            $customer = $customerModel->load($id);
-            
-            if(!$customer)
-            {   
-                $this->getMessage()->addMessage('System is unable to find record.',3);
-                throw new Exception("System is unable to find record.", 1);
-            }
-            $addressModel = Ccc::getModel('Customer_Address');
-            $address = $addressModel->load($id,'customerId');
-            if(!$address)
-            {
-                $address = Ccc::getModel('Customer_Address');
-            }
-
-            $content = $this->getLayout()->getContent();
-            $customerEdit = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customer,'address'=>$address]);
-            $content->addChild($customerEdit,'Edit');
-            $this->renderLayout();   
-        }
-        catch (Exception $e) 
-        {
-            $this->redirect('grid','customer',[],true);
-        }
-    }
-
-    public function deleteAction()
-    {
-        try 
-        {
-            $customerModel = Ccc::getModel('Customer');
-            $request = $this->getRequest();
-            if(!$request->getRequest('id'))
-            {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
-            }
-
-            $customerId = $request->getRequest('id');
-            if(!$customerId)
-            {
-                $this->getMessage()->addMessage('Unable to fetch ID.',3);
-                throw new Exception("Unable to fetch ID.", 1);
-            }
-
-            $result = $customerModel->load($customerId)->delete();
-            if(!$result)
-            {
-                $this->getMessage()->addMessage('Unable to Delete Record.',3);
-                throw new Exception("Unable to Delete Record.", 1);
-            }
-            $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect('grid','customer',[],true);
-        } 
-        catch (Exception $e) 
-        {
-            $this->redirect('grid','customer',[],true);
-        }       
     }
 
     protected function saveCustomer()
@@ -192,5 +121,79 @@ class Controller_Customer extends Controller_Admin_Action
         {
             $this->redirect('grid','customer',[],true);
         }
+    }
+
+    public function editAction()
+    {
+        try
+        {
+            $this->setTitle('Edit Customer');
+            $customerModel = Ccc::getModel('Customer');
+            $request = $this->getRequest();
+            $id = (int)$request->getRequest('id');
+            if(!$id)
+            {
+                $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
+            }
+            
+            $customer = $customerModel->load($id);
+            
+            if(!$customer)
+            {   
+                $this->getMessage()->addMessage('System is unable to find record.',3);
+                throw new Exception("System is unable to find record.", 1);
+            }
+            $addressModel = Ccc::getModel('Customer_Address');
+            $address = $addressModel->load($id,'customerId');
+            if(!$address)
+            {
+                $address = Ccc::getModel('Customer_Address');
+            }
+
+            $content = $this->getLayout()->getContent();
+            $customerEdit = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customer,'address'=>$address]);
+            $content->addChild($customerEdit,'Edit');
+            $this->renderLayout();   
+        }
+        catch (Exception $e) 
+        {
+            $this->redirect('grid','customer',[],true);
+        }
+    }
+
+    public function deleteAction()
+    {
+        try 
+        {
+            $customerModel = Ccc::getModel('Customer');
+            $request = $this->getRequest();
+            if(!$request->getRequest('id'))
+            {
+                $this->getMessage()->addMessage('Request Invalid.',3);
+                throw new Exception("Request Invalid.", 1);
+            }
+
+            $customerId = $request->getRequest('id');
+            if(!$customerId)
+            {
+                $this->getMessage()->addMessage('Unable to fetch ID.',3);
+                throw new Exception("Unable to fetch ID.", 1);
+            }
+
+            $result = $customerModel->load($customerId);
+            if(!$result)
+            {
+                $this->getMessage()->addMessage('Unable to Delete Record.',3);
+                throw new Exception("Unable to Delete Record.", 1);
+            }
+            $result->delete();
+            $this->getMessage()->addMessage('Data Deleted.');
+            $this->redirect('grid','customer',[],true);
+        } 
+        catch (Exception $e) 
+        {
+            $this->redirect('grid','customer',[],true);
+        }       
     }
 }

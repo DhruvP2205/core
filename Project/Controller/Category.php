@@ -12,6 +12,7 @@ class Controller_Category extends Controller_Admin_Action
     
     public function gridAction()
     {
+        $this->setTitle('Category');
         $content = $this->getLayout()->getContent();
         $categoryGrid = Ccc::getBlock('Category_Grid');
         $content->addChild($categoryGrid,'Grid');
@@ -20,6 +21,7 @@ class Controller_Category extends Controller_Admin_Action
 
     public function addAction()
     {
+        $this->setTitle('Add Category');
         $categoryModel = Ccc::getModel('Category');
         $content = $this->getLayout()->getContent();
         $categoryAdd = Ccc::getBlock('category_Edit')->setData(['category'=>$categoryModel]);
@@ -134,6 +136,7 @@ class Controller_Category extends Controller_Admin_Action
     {
         try
         {
+            $this->setTitle('Edit Category');
             $categoryModel = Ccc::getModel('Category');
             $request = $this->getRequest();
 
@@ -189,13 +192,14 @@ class Controller_Category extends Controller_Admin_Action
                 $this->getMessage()->addMessage('Unable to find data.',3);
                 throw new Exception("Unable to find data.", 1);
             }
-            $result = $categoryModel->load($id)->delete();
+            $result = $categoryModel->load($id);
 
             if(!$result)
             {
                 $this->getMessage()->addMessage('Unable to Delete Record.',3);
                 throw new Exception("Unable to Delete Record.", 1);
             }
+            $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
             $this->redirect('grid','category',[],true);
         }
