@@ -1,4 +1,6 @@
-<?php echo $this->getHead()->toHtml(); ?>
+<!DOCTYPE html>
+<html>
+    <?php echo $this->getHead()->toHtml(); ?>
 <body>
     <table border="1" width="100%">
         <tr>
@@ -12,3 +14,4 @@
         </tr>
     </table>
 </body>
+</html>

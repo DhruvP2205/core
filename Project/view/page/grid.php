@@ -8,12 +8,12 @@
         <script type="text/javascript">
             function pprFunction()
             {
-                const pprValue = document.getElementById('ppr').selectedOptions[0].value;
+                const pprValue = document.getElementById('pageSelect').selectedOptions[0].value;
                 let url = window.location.href;
                 
                 if(!url.includes('ppr'))
                 {
-                    url+='&ppr=20';
+                    url += '&ppr=20';
                 }
                 const urlArray = url.split("&");
 
@@ -33,14 +33,14 @@
             }
         </script>
         
-        <select id="ppr" onchange="pprFunction()">
+        <select id="pageSelect" onchange="pprFunction()" style="margin: 0px 20px 0px 35%; width: 70px;" >
             <option selected>select</option>
             <?php foreach ($this->pager->perPageCountOption as $pageCount):?>
                 <option value="<?php echo $pageCount?>"><?php echo $pageCount?></option>
             <?php endforeach; ?>
         </select>
         
-        <button style="margin: 0px 20px 0px 40%;"><a href="<?php echo ($this->pager->getStart()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getStart()]) ?>">Start</a></button>
+        <button style="margin: 0px 20px 0px 10px;"><a href="<?php echo ($this->pager->getStart()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getStart()]) ?>">Start</a></button>
 
         <button style="margin: 0px 20px 0px 10px;"><a href="<?php echo ($this->pager->getPrev()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getPrev()]) ?>">Prev</a></button>
 
@@ -86,18 +86,3 @@
         endif; ?>
     </tbody>
 </table>
-<br>
-<table>
-    <tr>
-        <button style="margin: 0px 20px 0px 40%;"><a href="<?php echo ($this->pager->getStart()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getStart()]) ?>">Start</a></button>
-
-        <button style="margin: 0px 20px 0px 10px;"><a href="<?php echo ($this->pager->getPrev()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getPrev()]) ?>">Prev</a></button>
-
-        <button style="margin: 0px 20px 0px 10px;" disabled="true"><?php echo $this->pager->getCurrent();?></button>
-
-        <button style="margin: 0px 20px 0px 10px;"><a href="<?php echo ($this->pager->getNext()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getNext()]) ?>">Next</a></button>
-
-        <button style="margin: 0px 20px 0px 10px;"><a href="<?php echo ($this->pager->getEnd()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getEnd()]) ?>">End</a></button>
-    </tr>
-</table>
-<br>
