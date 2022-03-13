@@ -12,6 +12,7 @@ class Controller_Salesman extends Controller_Admin_Action
     
     public function gridAction()
     {
+        $this->setTitle('Salesman');
         $content = $this->getLayout()->getContent();
         $salesmanGrid = Ccc::getBlock('Salesman_Grid');
         $content->addChild($salesmanGrid,'Grid');
@@ -20,6 +21,7 @@ class Controller_Salesman extends Controller_Admin_Action
 
     public function addAction()
     {
+        $this->setTitle('Add Salesman');
         $salesmanModel = Ccc::getModel('Salesman');
         $content = $this->getLayout()->getContent();
         $salesmanAdd = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel]);
@@ -72,6 +74,7 @@ class Controller_Salesman extends Controller_Admin_Action
     {
         try
         {
+            $this->setTitle('Edit Salesman');
             $salesmanModel = Ccc::getModel('Salesman');
             $request = $this->getRequest();
             $id = (int)$request->getRequest('id');
@@ -122,12 +125,13 @@ class Controller_Salesman extends Controller_Admin_Action
                 $this->getMessage()->addMessage('Unable to fetch ID.',3);
                 throw new Exception("Error Processing Request", 1);
             }
-            $result = $salesmanModel->load($salesmanId)->delete();
+            $result = $salesmanModel->load($salesmanId);
             if(!$result)
             {
                 $this->getMessage()->addMessage('Unable to Delete Record.',3);
                 throw new Exception("Error Processing Request", 1);
             }
+            $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
             $this->redirect('grid','salesman',[],true);
         } 

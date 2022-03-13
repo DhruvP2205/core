@@ -1,16 +1,30 @@
 <?php
 class Model_Core_Pager
 {
-    protected $perPageCount = 20;
+    public $perPageCountOption = [
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+    ];
+
+    protected $perPageCount = null;
     protected $totalCount = 0;
-    protected $pageCount = 20;
+    protected $pageCount = null;
     protected $start = 1;
-    protected $end = 20;
-    protected $prev = 20;
-    protected $next = 20;
-    protected $current = 20;
-    protected $startLimit = 20;
-    protected $endLimit = 20;
+    protected $end = null;
+    protected $prev = null;
+    protected $next = null;
+    protected $current = null;
+    protected $startLimit = null;
+    protected $endLimit = null;
+
+    public function getPerPageCountOption()
+    {
+        return $this->perPageCountOption;
+    }
+
+    public function setPerPageCountOption($perPageCountOption)
+    {
+        $this->perPageCountOption = $perPageCountOption;
+    }
 
     public function getPerPageCount()
     {
@@ -21,6 +35,7 @@ class Model_Core_Pager
     {
         $this->perPageCount = $perPageCount;
     }
+
 
     public function getTotalCount()
     {
@@ -112,9 +127,15 @@ class Model_Core_Pager
         $this->endLimit = $endLimit;
     }
     
-    public function execute($totalCount, $current)
+    public function execute($totalCount, $current, $perPageCountOption)
     {
+        $this->setPerPageCount($perPageCountOption);
+
+        $this->setStartLimit($perPageCountOption);
+        $this->setEndLimit(($totalCount == 0)?1:$perPageCountOption);
+
         $this->setTotalCount($totalCount);
+
         $this->setPageCount(ceil($this->getTotalCount() / $this->getPerPageCount()));
         $this->setCurrent(($current > $this->getPageCount()) ? $this->getPageCount() : $current);
         $this->setCurrent(($current < $this->getStart()) ? $this->getStart() : $this->getCurrent());
@@ -123,6 +144,7 @@ class Model_Core_Pager
         $this->setEnd(($this->getCurrent() == $this->getPageCount()) ? null : $this->getPageCount());
 
         $this->setStartLimit($this->getPerPageCount() * ($this->getCurrent() - 1));
+        $this->setStartLimit( ($totalCount == 0) ? 1 : ($this->getPerPageCount() * ($this->getCurrent() - 1)));
 
         $this->setPrev(($this->getCurrent() == 1) ? null : $this->getCurrent() - 1);
 

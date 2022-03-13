@@ -12,6 +12,7 @@ class Controller_Customer_Price extends Controller_Admin_Action
     
     public function gridAction()
     {
+        $this->setTitle('Customer Price');
         $content = $this->getLayout()->getContent();
         $customerPriceGrid = Ccc::getBlock('Customer_Price_Grid');
         $content->addChild($customerPriceGrid,'Grid');
@@ -59,7 +60,7 @@ class Controller_Customer_Price extends Controller_Admin_Action
                     }
                 }
             }
-            $this->getMessage()->addMessage('Discount set successfully');
+            $this->getMessage()->addMessage('Discount added.');
             $this->redirect('grid','customer_price',['id' => $customerId],true);
         }
         catch (Exception $e)

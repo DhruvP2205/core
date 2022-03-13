@@ -1,12 +1,15 @@
 <?php
-class Model_Core_Adapter{
-    public $config = [
-        "host" => "localhost:3308",
-        "userName" => "root",
-        "password" => "",
-        "dbName" => "project_dhruv"
-    ];
+date_default_timezone_set('Asia/Kolkata');
+
+class Model_Core_Adapter
+{
+    private $config = null;
     private $connect = null;
+
+    public function __construct()
+    {
+        $this->setConfig(Ccc::getConfig('connection'));
+    }
 
     public function setConfig($config)
     {

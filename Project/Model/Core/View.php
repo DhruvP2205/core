@@ -17,19 +17,27 @@ class Model_Core_View
 
     public function toHtml()
     {
-        $data = $this->data;
+        ob_start();
         require($this->getTemplate());
+        $html = ob_get_contents();
+        ob_end_flush();
+    }
+
+    public function addData($key, $value)
+    {
+        $this->data[$key] = $value;
+        return $this;
     }
 
     public function getData($key = null)
     {
-        if(!$key)
+        if(!$key) 
         {
-            return $this->data;
+            return $this->data; 
         }
-        if(array_key_exists($key,$this->data))
+        if(array_key_exists($key, $this->data)) 
         {
-            return $this->data[$key];
+            return $this->data[$key];   
         }
         return null;
     }
@@ -40,17 +48,11 @@ class Model_Core_View
         return $this;
     }
 
-    public function addData($key, $value)
-    {
-        $this->data[$key] = $value;
-        return $this;
-    }
-
     public function removeData($key)
     {
-        if(array_key_exists($key,$this->data))
+        if (array_key_exists($key, $this->data)) 
         {
-            unset($this->data[$key]);
+            unset($this->data[$key]);   
         }
         return $this;
     }
@@ -104,7 +106,7 @@ class Model_Core_View
     
     public function getBaseUrl($subUrl = null)
     {
-        $url = "C:/xampp/htdocs/phpwork/admin-login/core/Project/";
+        $url = "C:/xampp/htdocs/phpwork/mix-update/core/Project/";
         if($subUrl)
         {
             $url = $url."/".$subUrl;

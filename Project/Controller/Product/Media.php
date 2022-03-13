@@ -12,6 +12,7 @@ class Controller_Product_Media extends Controller_Admin_Action
     
     public function gridAction()
     {
+        $this->setTitle('Product Media');
         $content = $this->getLayout()->getContent();
         $mediaGrid = Ccc::getBlock('Product_Media_Grid');
         $content->addChild($mediaGrid,'Grid');

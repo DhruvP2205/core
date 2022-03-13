@@ -2,9 +2,13 @@
 
 class Controller_Core_Action
 {
-    protected $view = null;
     protected $layout = null;
     protected $message = null;
+
+    protected function setTitle($title)
+    {
+        $this->getLayout()->getHead()->setTitle($title);
+    }
     
     public function getLayout()
     {
@@ -23,7 +27,9 @@ class Controller_Core_Action
 
     public function renderLayout()
     {
-        return $this->getLayout()->toHtml();
+        $this->getResponse()
+            ->setHeader('Content-type', 'text/html')
+            ->render($this->getLayout()->toHtml());
     }
 
     public function getMessage()
@@ -38,21 +44,6 @@ class Controller_Core_Action
     public function setMessage($message)
     {
         $this->message = $message;
-        return $this;
-    }
-
-    public function getView()
-    {
-        if (!$this->view)
-        {
-            $this->setView(new Model_Core_View());
-        }
-        return $this->view;
-    }
-
-    public function setView($view)
-    {
-        $this->view = $view;
         return $this;
     }
 
@@ -71,5 +62,10 @@ class Controller_Core_Action
     public function getRequest()
     {
         return Ccc::getFront()->getRequest();
+    }
+
+    public function getResponse()
+    {
+        return Ccc::getFront()->getResponse();
     }
 }
