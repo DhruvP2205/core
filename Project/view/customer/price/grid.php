@@ -28,7 +28,9 @@
                 location.replace(finalUrl);
             }
         </script>
-        
+        <?php if(!$products): ?>
+            <h2>Salesman not selected</h2>
+        <?php else: ?>
         <select id="pageSelect" onchange="pprFunction()" style="margin: 0px 20px 0px 35%; width: 70px;" >
             <option selected>select</option>
             <?php foreach ($this->pager->perPageCountOption as $pageCount):?>
@@ -45,6 +47,7 @@
         <button style="margin: 0px 20px 0px 10px;"><a href="<?php echo ($this->pager->getNext()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getNext()]) ?>">Next</a></button>
 
         <button style="margin: 0px 20px 0px 10px;"><a href="<?php echo ($this->pager->getEnd()==NULL) ? '#' : $this->getUrl(null,null,['p' => $this->getPager()->getEnd()]) ?>">End</a></button>
+    <?php endif; ?>
     </tr>
 </table>
 <br>
@@ -64,7 +67,7 @@
         </tr>
         <?php if(!$products): ?>
             <tr>
-                <td colspacing = "6">No Product Found</td>
+                <td colspan = "6">No Product Found</td>
             </tr>
         <?php else: ?>
         <?php $i = 0; ?>
