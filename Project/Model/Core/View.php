@@ -106,7 +106,7 @@ class Model_Core_View
     
     public function getBaseUrl($subUrl = null)
     {
-        $url = "C:/xampp/htdocs/phpwork/mix-update/core/Project/";
+        $url = getcwd();
         if($subUrl)
         {
             $url = $url."/".$subUrl;
