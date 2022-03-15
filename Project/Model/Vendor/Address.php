@@ -30,4 +30,30 @@ class Model_Vendor_Address extends Model_Core_Row
         }
         return self::STATUS_DISABLED_DEFAULT;
     }
+
+    public function setVendor(Mode_Vendor $vendor)
+    {
+        $this->vendor = $vendor;
+        return $this;
+    }
+
+    public function getVendor($reload = false)
+    {
+        $vendorModal = Ccc::getModel('Vendor');
+        if(!$this->vendorId)
+        {
+            return null;
+        }
+        if($this->vendor && !$reload)
+        {
+            return $this->vendor;
+        }
+
+        $vendor = $vendorModal->fetchRow("SELECT * FROM `vendor` WHERE `vendorId` = {$this->vendorId}");
+        if(!$vendor){
+            return $vendorModal;
+        }
+        $this->setVendor($vendor);
+        return $this->vendor;
+    }
 }

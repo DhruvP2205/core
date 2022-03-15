@@ -30,4 +30,60 @@ class Model_Customer extends Model_Core_Row
         }
         return self::STATUS_DISABLED_DEFAULT;
     }
+
+    public function getBillingAddress($reload = false)
+    {
+        $addressModel = Ccc::getModel('Customer_Address');
+        if(!$this->customerId)
+        {
+            return $addressModel;
+        }
+        if($this->billingAddress && !$reload)
+        {
+            return $this->billingAddress;
+        }
+        $address=$addressModel->fetchRow("SELECT * FROM `customer_address` WHERE `customerId` = {$this->customerId} AND `billingAddress` = 1");
+        if(!$address)
+        {
+            return $addressModel;
+        }
+        $this->setBillingAddress($address);
+
+        return $address;
+    }
+
+    public function setBillingAddress(model_customer_address $address)
+    {
+        $this->billingAddress = $address;
+        return $this;
+    }
+
+    
+    public function getShippingAddress($reload = false)
+    {
+
+        $addressModel = Ccc::getModel('Customer_Address');
+        if(!$this->customerId)
+        {
+            return $addressModel;
+        }
+        if($this->shippingAddress && !$reload)
+        {
+            return $this->shippingAddress;
+        }
+        $address=$addressModel->fetchRow("SELECT * FROM `customer_address` WHERE `customerId` = {$this->customerId} AND `shipingAddress` = 1");
+        if(!$address)
+        {
+            return $addressModel;
+        }
+        $this->setShippingAddress($address);
+
+        return $address;
+    }
+
+    public function setShippingAddress(model_customer_address $address)
+    {
+        $this->shippingAddress = $address;
+        return $this;
+    }
 }

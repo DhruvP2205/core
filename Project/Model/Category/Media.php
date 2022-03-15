@@ -31,4 +31,30 @@ class Model_Category_Media extends Model_Core_Row
         }
         return $statuses[self::STATUS_DEFAULT];
     }
+
+    public function setCategory(Model_Category $category)
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function getCategory($reload = false)
+    {
+        $categoryModal = Ccc::getModel('Category');
+        if(!$this->categoryId)
+        {
+            return null;
+        }
+        if($this->category && !$reload)
+        {
+            return $this->category;
+        }
+        $category = $categoryModal->fetchRow("SELECT * FROM `category` WHERE `categoryId` = {$this->categoryId}");
+        if(!$category)
+        {
+            return $categoryModal;
+        }
+        $this->setCategory($category);
+        return $this->category;
+    }
 }

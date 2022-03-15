@@ -76,7 +76,7 @@
             <td><?php echo $product->sku ?></td>
             
             <?php if($product->base): ?>
-            <td><img src="<?php echo "Media/Product/".$this->getMedia($product->base)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+            <td><img src="<?php echo "Media/Product/".$product->getBase();  ?>" alt="No Image Found" width="50" height="50"></td>
             <?php else: ?>
             <td>No Base Image</td>
             <?php endif; ?> 

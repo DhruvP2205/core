@@ -122,7 +122,6 @@ class Controller_Vendor extends Controller_Admin_Action
             }
 
             $this->saveAddress($vendorId);
-
             $this->redirect('grid','vendor',[],true);
         }
         catch (Exception $e) 
@@ -137,6 +136,8 @@ class Controller_Vendor extends Controller_Admin_Action
         {
             $this->setTitle('Edit Vendor');
             $vendorModel = Ccc::getModel('Vendor');
+            $addressModel = Ccc::getModel('vendor_address');
+
             $request = $this->getRequest();
             $id = (int)$request->getRequest('id');
             if(!$id)
@@ -152,7 +153,7 @@ class Controller_Vendor extends Controller_Admin_Action
                 $this->getMessage()->addMessage('System is unable to find record.',3);
                 throw new Exception("System is unable to find record.", 1);
             }
-            $addressModel = Ccc::getModel('Vendor_Address');
+
             $address = $addressModel->load($id,'vendorId');
             if(!$address)
             {

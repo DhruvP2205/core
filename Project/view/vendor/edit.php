@@ -5,7 +5,7 @@
 <form action="<?php echo $this->getUrl('save','vendor',['id'=>$vendor->vendorId],true) ?>" method="POST">
     <table border="1" cellspacing="7">
         <tr>
-            <td colspan="2">Personal Information:</td>
+            <td colspan="2"><h3>Personal Information:</h3></td>
             <input type="text" name="vendor[vendorId]" value="<?php echo $vendor->vendorId ?>" hidden>
         </tr>
         <tr>
@@ -34,7 +34,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">Address Information:</td>
+            <td colspan="2"><h3>Address Information:</h3></td>
         </tr>
         <tr>
             <input type="text" name="address[vendorId]" value="<?php echo $address->vendorId ?>" hidden>

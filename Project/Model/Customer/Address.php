@@ -30,4 +30,31 @@ class Model_Customer_Address extends Model_Core_Row
         }
         return self::STATUS_DISABLED_DEFAULT;
     }
+
+    public function setCustomer(Mode_Customer $customer)
+    {
+        $this->customer = $customer;
+        return $this;
+    }
+
+    public function getCustomer($reload = false)
+    {
+        $customerModal = Ccc::getModel('Customer');
+        if(!$this->customerId)
+        {
+            return null;
+        }
+        if($this->customer && !$reload)
+        {
+            return $this->customer;
+        }
+
+        $customer = $customerModal->fetchRow("SELECT * FROM `customer` WHERE `customerId` = {$this->customerId}");
+        if(!$customer)
+        {
+            return $customerModal;
+        }
+        $this->setCustomer($customer);
+        return $this->customer;
+    }
 }

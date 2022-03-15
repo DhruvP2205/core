@@ -52,8 +52,21 @@
     </tr>
 </table>
 <br>
+<form action="<?php echo $this->getUrl('deleteData','page',['id'=>$page->pageId],true) ?>" method="POST">
+    <table style="margin-bottom:20px;">
+        <tbody>
+            <tr>
+                <td><h3>Manage Pages</h3></td>
+                <td><input type="submit" value="Add New"></td>
+                <td><input type="submit" value="select delete"></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+</form>
 <table cellpadding="7px">
     <thead>
+        <th>Select</th>
         <th>Page ID</th>
         <th>Name</th>  
         <th>Code</th>
@@ -70,6 +83,7 @@
             foreach ($pages as $page):
         ?>
     <tr>
+        <td align="center"><input type="checkbox" name="select"></td>
         <td><?php echo($page->pageId); ?></td>
         <td><?php echo($page->name); ?></td>
         <td><?php echo($page->code); ?></td>

@@ -110,6 +110,8 @@ class Controller_Salesman extends Controller_Admin_Action
         try 
         {
             $salesmanModel = Ccc::getModel('Salesman');
+            $customerModel = Ccc::getModel('Customer');
+            $customerPriceModel = Ccc::getModel('Customer_Price');
             $request = $this->getRequest();
 
             if(!$request->getRequest('id'))
@@ -118,13 +120,18 @@ class Controller_Salesman extends Controller_Admin_Action
                 throw new Exception("Error Processing Request", 1);
             }
 
-            $salesmanId = $request->getRequest('id');
+            $salesmanId = (int)$request->getRequest('id');
 
-            if(!$salesmanId)
+            $customers = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `salesmanId` = {$salesmanId}");
+            foreach($customers as $customer)
             {
-                $this->getMessage()->addMessage('Unable to fetch ID.',3);
-                throw new Exception("Error Processing Request", 1);
+                $customerPrices = $customerPriceModel->fetchAll("SELECT `entityId` FROM `customer_price` WHERE `customerId` = {$customer->customerId}");
+                foreach ($customerPrices as $customerPrice) 
+                {
+                    $customerPriceModel->load($customerPrice->entityId)->delete();
+                }
             }
+
             $result = $salesmanModel->load($salesmanId);
             if(!$result)
             {
