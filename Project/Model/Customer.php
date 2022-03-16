@@ -7,6 +7,9 @@ class Model_Customer extends Model_Core_Row
     const STATUS_DISABLED_DEFAULT = 1;
     const STATUS_ENABLED_LBL = 'Active';
     const STATUS_DISABLED_LBL = 'Inactive';
+
+    protected $billingAddress;
+    protected $shippingAddress;
     
     public function __construct()
     {
@@ -42,17 +45,16 @@ class Model_Customer extends Model_Core_Row
         {
             return $this->billingAddress;
         }
-        $address=$addressModel->fetchRow("SELECT * FROM `customer_address` WHERE `customerId` = {$this->customerId} AND `billingAddress` = 1");
+        $address = $addressModel->fetchRow("SELECT * FROM `customer_address` WHERE `customerId` = {$this->customerId} AND `billingAddress` = 1");
         if(!$address)
         {
             return $addressModel;
         }
         $this->setBillingAddress($address);
-
         return $address;
     }
 
-    public function setBillingAddress(model_customer_address $address)
+    public function setBillingAddress($address)
     {
         $this->billingAddress = $address;
         return $this;
@@ -61,7 +63,6 @@ class Model_Customer extends Model_Core_Row
     
     public function getShippingAddress($reload = false)
     {
-
         $addressModel = Ccc::getModel('Customer_Address');
         if(!$this->customerId)
         {
@@ -71,17 +72,16 @@ class Model_Customer extends Model_Core_Row
         {
             return $this->shippingAddress;
         }
-        $address=$addressModel->fetchRow("SELECT * FROM `customer_address` WHERE `customerId` = {$this->customerId} AND `shipingAddress` = 1");
+        $address = $addressModel->fetchRow("SELECT * FROM `customer_address` WHERE `customerId` = {$this->customerId} AND `shipingAddress` = 1");
         if(!$address)
         {
             return $addressModel;
         }
         $this->setShippingAddress($address);
-
         return $address;
     }
 
-    public function setShippingAddress(model_customer_address $address)
+    public function setShippingAddress($address)
     {
         $this->shippingAddress = $address;
         return $this;

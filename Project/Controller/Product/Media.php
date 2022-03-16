@@ -126,7 +126,7 @@ class Controller_Product_Media extends Controller_Admin_Action
                     if(array_key_exists('base',$postData['media']))
                     {
                         $productData->base = $postData['media']['base'];
-                        $result = $productModel->save('productId');
+                        $result = $productModel->save();
 
                         if(!$result)
                         {
@@ -139,7 +139,7 @@ class Controller_Product_Media extends Controller_Admin_Action
                     if(array_key_exists('thumb',$postData['media']))
                     {
                         $productData->thumb = $postData['media']['thumb'];
-                        $result = $productModel->save('productId');
+                        $result = $productModel->save();
 
                         if(!$result)
                         {
@@ -152,7 +152,7 @@ class Controller_Product_Media extends Controller_Admin_Action
                     if(array_key_exists('small',$postData['media']))
                     {
                         $productData->small = $postData['media']['small'];
-                        $result = $productModel->save('productId','product');
+                        $result = $productModel->save();
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set small.',3);

@@ -8,7 +8,7 @@ class Model_Product_Media extends Model_Core_Row
         parent::__construct();
     }
 
-    public function setProduct(Mode_Product $product)
+    public function setProduct($product)
     {
         $this->product = $product;
         return $this;
@@ -16,20 +16,20 @@ class Model_Product_Media extends Model_Core_Row
 
     public function getProduct($reload = false)
     {
-        $productModal = Ccc::getModel('Product');
+        $productModel = Ccc::getModel('Product');
         if(!$this->productId)
         {
-            return null;
+            return $productModel;
         }
         if($this->product && !$reload)
         {
             return $this->product;
         }
 
-        $product = $productModal->fetchRow("SELECT * FROM `product` WHERE `productId` = {$this->productId}");
+        $product = $productModel->fetchRow("SELECT * FROM `product` WHERE `productId` = {$this->productId}");
         if(!$product)
         {
-            return $productModal;
+            return $productModel;
         }
         $this->setProduct($product);
         return $this->product;

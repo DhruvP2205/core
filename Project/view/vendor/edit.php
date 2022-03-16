@@ -37,8 +37,6 @@
             <td colspan="2"><h3>Address Information:</h3></td>
         </tr>
         <tr>
-            <input type="text" name="address[vendorId]" value="<?php echo $address->vendorId ?>" hidden>
-            <input type="text" name="address[addressId]" value="<?php echo $address->addressId ?>" hidden>
             <td>Address</td>
             <td><textarea name="address[address]" rows="4" cols="50"><?php echo $address->address; ?></textarea></td>
         </tr>

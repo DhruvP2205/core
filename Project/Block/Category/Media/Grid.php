@@ -10,18 +10,9 @@ class Block_Category_Media_Grid extends Block_Core_Template
     public function getMedias()
     {
         $request = Ccc::getFront()->getRequest();
-        $page = (int)$request->getRequest('p', 1);
-        $ppr = (int)$request->getRequest('ppr',20);
         $categoryId = $request->getRequest('id');
-
-        $pagerModel = Ccc::getModel('Core_Pager');
         $mediaModel = Ccc::getModel('Category_Media');
-
-        $totalCount = $pagerModel->getAdapter()->fetchOne("SELECT count(mediaId) FROM `category_media` WHERE `categoryId` = {$categoryId} ");
-        $pagerModel->execute($totalCount,$page,$ppr);
-
-        $this->setPager($pagerModel);
-        $category = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `categoryId` = {$categoryId} LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
+        $category = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `categoryId` = {$categoryId}");
         return $category;
     } 
 
@@ -35,24 +26,5 @@ class Block_Category_Media_Grid extends Block_Core_Template
         {
             return 'checked';
         }
-    }
-
-    public function getCategoryId()
-    {
-        $request = Ccc::getModel('Core_Request');
-        return $request->getRequest('id');
-    }
-    public function setPager($pager)
-    {
-        $this->pager = $pager;
-        return $this;
-    }
-
-    public function getPager()
-    {
-        if(!$this->pager){
-            $this->setPager(Ccc::getModel('Core_Pager'));
-        }
-        return $this->pager;
     }
 }

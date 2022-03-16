@@ -2,10 +2,6 @@
 
 class Model_Category extends Model_Core_Row
 {
-    protected $media = null;
-    protected $thumbName = null;
-    protected $smallName = null;
-    protected $baseName = null;
     const STATUS_ENABLED = 1;
     const STATUS_DISABLED = 2;
     const STATUS_DISABLED_DEFAULT = 1;
@@ -44,108 +40,66 @@ class Model_Category extends Model_Core_Row
 
     public function getMedia($reload = false)
     {
-        $mediaModel = Ccc::getModel('Category_Media');
-        if(!$this->categoryId)
+        $mediaModel = Ccc::getModel('Category_Media'); 
+        if(!$this->media)
         {
-            return $mediaModel;
+            return null;
         }
         if($this->media && !$reload)
         {
             return $this->media;
         }
-
         $media = $mediaModel->fetchRow("SELECT * FROM `category_media` WHERE `categoryId` = {$this->categoryId}");
         if(!$media)
         {
-            return $mediaModel;
+            return null;
         }
-
         $this->setMedia($media);
         return $this->media;
     }
-
-    public function setBase($baseName)
-    {
-        $this->baseName = $baseName;
-        return $this;
-    }
-
-
-    public function getBase($reload = false)
+    
+    public function getBase()
     {
         $mediaModel = Ccc::getModel('Category_Media'); 
         if(!$this->base)
         {
             return null;
         }
-        if($this->baseName && !$reload)
-        {
-            return $this->baseName;
-        }
         $base = $mediaModel->fetchRow("SELECT * FROM `category_media` WHERE `mediaId` = {$this->base}");
-        $baseName = $base->name;
-        if(!$baseName)
+        if(!$base)
         {
-            return null;
+            return $mediaModel;
         }
-        $this->setBase($baseName);
-
-        return $this->baseName;
+        return $base;
     }
     
-    public function setSmall($smallName)
-    {
-        $this->smallName =$smallName;
-        return $this;
-    }
-
-    public function getSmall($reload = false)
+    public function getSmall()
     {
         $mediaModel = Ccc::getModel('Category_Media'); 
         if(!$this->small)
         {
             return null;
         }
-        if($this->smallName && !$reload)
-        {
-            return $this->smallName;
-        }
         $small = $mediaModel->fetchRow("SELECT * FROM `category_media` WHERE `mediaId` = {$this->small}");
-        $smallName = $small->name;
-        if(!$smallName)
+        if(!$small)
         {
-            return null;
+            return $mediaModel;
         }
-        $this->setSmall($smallName);
-
-        return $this->smallName;
+        return $small;
     }
 
-    public function setThumb($thumbName)
-    {
-        $this->thumbName =$thumbName;
-        return $this;
-    }
-
-    public function getThumb($reload = false)
+    public function getThumb()
     {
         $mediaModel = Ccc::getModel('Category_Media'); 
         if(!$this->thumb)
         {
             return null;
         }
-        if($this->thumbName && !$reload)
-        {
-            return $this->thumbName;
-        }
         $thumb = $mediaModel->fetchRow("SELECT * FROM `category_media` WHERE `mediaId` = {$this->thumb}");
-        $thumbName = $thumb->name;
-        if(!$thumbName)
+        if(!$thumb)
         {
-            return null;
+            return $mediaModel;
         }
-        $this->setThumb($thumbName);
-
-        return $this->thumbName;
+        return $thumb;
     }
 }

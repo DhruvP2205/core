@@ -38,8 +38,6 @@ $shippingAddress = $customer->getShippingAddress(); ?>
             <td colspan="2"><h3>Billing Address:</h3></td>
         </tr>
         <tr>
-            <input type="text" name="billingAddress[customerId]" value="<?php echo $billingAddress->customerId ?>" hidden>
-            <input type="text" name="billingAddress[addressId]" value="<?php echo $billingAddress->addressId ?>" hidden>
             <td>Address</td>
             <td><textarea name="billingAddress[address]" id="billingAddress[address]" rows="4" cols="50"><?php echo $billingAddress->address; ?></textarea></td>
         </tr>
@@ -66,8 +64,6 @@ $shippingAddress = $customer->getShippingAddress(); ?>
         </tr>
         <tr><td colspan="2"><input type="checkbox" name="copyAddress" id="copyAddress" onchange="sameAddress()" /> Same as Billing Address</td></tr>
         <tr>
-            <input type="text" name="shippingAddress[customerId]" value="<?php echo $shippingAddress->customerId ?>" hidden>
-            <input type="text" name="shippingAddress[addressId]" value="<?php echo $shippingAddress->addressId ?>" hidden>
             <td>Address</td>
             <td><textarea name="shippingAddress[address]" id="shippingAddress[address]" rows="4" cols="50"><?php echo $shippingAddress->address; ?></textarea></td>
         </tr>

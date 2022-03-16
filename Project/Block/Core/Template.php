@@ -9,20 +9,22 @@ class Block_Core_Template extends Model_Core_View
     {
         return $this->pager;
     }
+    
     public function setPager($pager)
     {
         $this->pager=$pager;
         return $this;
     }
 
-    public function getChildren()
-    {
-        return $this->children;
-    }
     public function setChildren($children)
     {
         $this->children = $children;
         return $this;
+    }
+
+    public function getChildren()
+    {
+        return $this->children;
     }
 
     public function addChild($object, $key = null)

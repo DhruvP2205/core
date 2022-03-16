@@ -31,7 +31,7 @@ class Model_Vendor_Address extends Model_Core_Row
         return self::STATUS_DISABLED_DEFAULT;
     }
 
-    public function setVendor(Mode_Vendor $vendor)
+    public function setVendor($vendor)
     {
         $this->vendor = $vendor;
         return $this;
@@ -39,19 +39,20 @@ class Model_Vendor_Address extends Model_Core_Row
 
     public function getVendor($reload = false)
     {
-        $vendorModal = Ccc::getModel('Vendor');
+        $vendorModel = Ccc::getModel('Vendor');
         if(!$this->vendorId)
         {
-            return null;
+            return $vendorModel;
         }
         if($this->vendor && !$reload)
         {
             return $this->vendor;
         }
 
-        $vendor = $vendorModal->fetchRow("SELECT * FROM `vendor` WHERE `vendorId` = {$this->vendorId}");
-        if(!$vendor){
-            return $vendorModal;
+        $vendor = $vendorModel->fetchRow("SELECT * FROM `vendor` WHERE `vendorId` = {$this->vendorId}");
+        if(!$vendor)
+        {
+            return $vendorModel;
         }
         $this->setVendor($vendor);
         return $this->vendor;

@@ -7,6 +7,8 @@ class Model_Vendor extends Model_Core_Row
     const STATUS_DISABLED_DEFAULT = 1;
     const STATUS_ENABLED_LBL = 'Active';
     const STATUS_DISABLED_LBL = 'Inactive';
+
+    protected $address;
     
     public function __construct()
     {
@@ -48,7 +50,6 @@ class Model_Vendor extends Model_Core_Row
             return $addressModel;
         }
         $this->setAddress($address);
-
         return $this->address;
     }
     

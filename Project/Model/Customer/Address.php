@@ -8,6 +8,8 @@ class Model_Customer_Address extends Model_Core_Row
     const STATUS_ENABLED_LBL = 'Active';
     const STATUS_DISABLED_LBL = 'Inactive';
 
+    protected $customer;
+
     public function __construct()
     {
         $this->setResourceClassName('Customer_Address_Resource');
@@ -31,7 +33,7 @@ class Model_Customer_Address extends Model_Core_Row
         return self::STATUS_DISABLED_DEFAULT;
     }
 
-    public function setCustomer(Mode_Customer $customer)
+    public function setCustomer($customer)
     {
         $this->customer = $customer;
         return $this;
@@ -39,20 +41,20 @@ class Model_Customer_Address extends Model_Core_Row
 
     public function getCustomer($reload = false)
     {
-        $customerModal = Ccc::getModel('Customer');
+        $customerModel = Ccc::getModel('Customer');
         if(!$this->customerId)
         {
-            return null;
+            return $customerModel;
         }
         if($this->customer && !$reload)
         {
             return $this->customer;
         }
 
-        $customer = $customerModal->fetchRow("SELECT * FROM `customer` WHERE `customerId` = {$this->customerId}");
+        $customer = $customerModel->fetchRow("SELECT * FROM `customer` WHERE `customerId` = {$this->customerId}");
         if(!$customer)
         {
-            return $customerModal;
+            return $customerModel;
         }
         $this->setCustomer($customer);
         return $this->customer;

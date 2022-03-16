@@ -56,7 +56,6 @@ class Controller_Customer extends Controller_Admin_Action
         else
         {
             $customer->updatedDate = date('y-m-d h:i:s');
-            $update = $customer->save();
         }
         $save = $customer->save();
         if(!$save->customerId)
@@ -65,34 +64,45 @@ class Controller_Customer extends Controller_Admin_Action
             throw new Exception("Unable to insert Customer.", 1);
         }
         $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
-        return $save->customerId;
+        return $save;
     }
 
 
-    protected function saveAddress($customerId, $type)
+    protected function saveAddress($customer)
     {
-        $addressModel = Ccc::getModel('Customer_Address');
         $request = $this->getRequest();
-        if(!$request->getPost($type))
+        if(!$request->getPost())
         {
             $this->getMessage()->addMessage('Request Invalid.',3);
             throw new Exception("Invalid Request.", 1);
-        }   
-        $postData = $request->getPost($type);
-        if(!$postData)
-        {
-            $this->getMessage()->addMessage('Invalid data Posted.',3);
-            throw new Exception("Invalid data Posted.", 1);
         }
-        $address = $addressModel;
-        $address->setData($postData);
-        $address->customerId = $customerId;
+        $postBilling = $request->getPost('billingAddress');
+        $postShipping = $request->getPost('shippingAddress');
 
-        if(!$address->addressId)
-        {   
-            unset($address->addressId);
+        $billing = $customer->getBillingAddress();
+        $shipping = $customer->getShippingAddress();
+
+        if(!$billing->addressId)
+        {
+            unset($billing->addressId);
         }
-        $save = $address->save();
+        if(!$shipping->addressId)
+        {
+            unset($shipping->addressId);
+        }
+        $billing->setData($postBilling);
+        $billing->customerId = $customer->customerId;
+        $shipping->setData($postShipping);  
+        $shipping->customerId = $customer->customerId;
+        
+        $save = $billing->save();
+
+        if(!$save)
+        {
+            $this->getMessage()->addMessage('Customer Details Not Saved.',3);
+            throw new Exception("Customer Details Not Saved.", 1);
+        }
+        $save = $shipping->save();
         if(!$save)
         {
             $this->getMessage()->addMessage('Customer Details Not Saved.',3);
@@ -105,11 +115,7 @@ class Controller_Customer extends Controller_Admin_Action
         try
         {
             $customerId = $this->saveCustomer();
-            if($customerId)
-            {
-                $this->saveAddress($customerId,'billingAddress');
-                $this->saveAddress($customerId,'shippingAddress');
-            }
+            $this->saveAddress($customerId);
             $this->redirect('grid','customer',[],true);
         }
         catch (Exception $e)

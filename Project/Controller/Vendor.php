@@ -71,12 +71,12 @@ class Controller_Vendor extends Controller_Admin_Action
             throw new Exception("Unable to Save Record.", 1);
         }
         $this->getMessage()->addMessage('Your Data saved Successfully');
-        return $result->vendorId;
+        return $result;
     }
 
-    protected function saveAddress($vendorId)
+    protected function saveAddress($vendor)
     {
-        $addressModel = Ccc::getModel('Vendor_Address');
+        $address = $vendor->getAddress();
         $request = $this->getRequest();
         if(!$request->getPost('address'))
         {
@@ -91,14 +91,15 @@ class Controller_Vendor extends Controller_Admin_Action
             throw new Exception("Invalid data Posted.", 1);
         }
 
-        $address = $addressModel;
-        $address->setData($postData);
-        
         if(!$address->addressId)
-        {   
-            $address->vendorId = $vendorId;
+        {
             unset($address->addressId);
         }
+
+        $address->setData($postData);
+        
+        $address->vendorId = $vendor->vendorId;
+        
         $result = $address->save();
         if(!$result->addressId)
         {
@@ -113,15 +114,8 @@ class Controller_Vendor extends Controller_Admin_Action
     {
         try
         {
-            $vendorId = $this->saveVendor();
-            $request = $this->getRequest();
-            $postData = $request->getPost('address');
-            if(!$postData['zipCode'])
-            {
-                $this->redirect('grid','vendor',[],true);
-            }
-
-            $this->saveAddress($vendorId);
+            $vendor = $this->saveVendor();
+            $this->saveAddress($vendor);
             $this->redirect('grid','vendor',[],true);
         }
         catch (Exception $e) 

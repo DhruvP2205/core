@@ -4,34 +4,6 @@
 <h2>All Records</h2>
 <table>
     <tr>
-        <script type="text/javascript">
-            function pprFunction()
-            {
-                const pprValue = document.getElementById('pageSelect').selectedOptions[0].value;
-                let url = window.location.href;
-                
-                if(!url.includes('ppr'))
-                {
-                    url += '&ppr=20';
-                }
-                const urlArray = url.split("&");
-
-                for (i = 0; i < urlArray.length; i++)
-                {
-                    if(urlArray[i].includes('p='))
-                    {
-                        urlArray[i] = 'p=1';
-                    }
-                    if(urlArray[i].includes('ppr='))
-                    {
-                        urlArray[i] = 'ppr=' + pprValue;
-                    }
-                }
-                const finalUrl = urlArray.join("&");  
-                location.replace(finalUrl);
-            }
-        </script>
-        
         <select id="pageSelect" onchange="pprFunction()" style="margin: 0px 20px 0px 35%; width: 70px;" >
             <option selected>select</option>
             <?php foreach ($this->pager->perPageCountOption as $pageCount):?>
@@ -76,19 +48,19 @@
             <td><?php echo $product->sku ?></td>
             
             <?php if($product->base): ?>
-            <td><img src="<?php echo "Media/Product/".$product->getBase();  ?>" alt="No Image Found" width="50" height="50"></td>
+            <td><img src="<?php echo "Media/Product/".$product->getBase()->name;  ?>" alt="No Image Found" width="50" height="50"></td>
             <?php else: ?>
             <td>No Base Image</td>
             <?php endif; ?> 
             
             <?php if($product->thumb): ?>
-            <td><img src="<?php echo "Media/Product/".$this->getMedia($product->thumb)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+            <td><img src="<?php echo "Media/Product/".$product->getThumb()->name;  ?>" alt="No Image Found" width="50" height="50"></td>
             <?php else: ?>
             <td>No Thumb Image</td>
             <?php endif; ?> 
             
             <?php if($product->small): ?>
-            <td><img src="<?php echo "Media/Product/".$this->getMedia($product->small)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+            <td><img src="<?php echo "Media/Product/".$product->getSmall()->name;  ?>" alt="No Image Found" width="50" height="50"></td>
             <?php else: ?>
             <td>No Small Image</td>
             <?php endif; ?> 
@@ -111,5 +83,33 @@
         </tr>
         <?php endforeach;   ?>
     <?php endif;  ?>
-    
 </table>
+
+<script type="text/javascript">
+    function pprFunction()
+    {
+        const pprValue = document.getElementById('pageSelect').selectedOptions[0].value;
+        let url = window.location.href;
+        
+        if(!url.includes('ppr'))
+        {
+            url += '&ppr=20';
+        }
+        const urlArray = url.split("&");
+
+        for (i = 0; i < urlArray.length; i++)
+        {
+            if(urlArray[i].includes('p='))
+            {
+                urlArray[i] = 'p=1';
+            }
+            if(urlArray[i].includes('ppr='))
+            {
+                urlArray[i] = 'ppr=' + pprValue;
+            }
+        }
+        const finalUrl = urlArray.join("&");  
+        location.replace(finalUrl);
+    }
+</script>
+        

@@ -33,6 +33,7 @@ class Controller_Salesman extends Controller_Admin_Action
     {
         try
         {
+            $salesmenModel = Ccc::getModel('salesman');
             $request = $this->getRequest();
             $postData = $request->getPost('salesman');
             if(!$postData)
@@ -41,7 +42,6 @@ class Controller_Salesman extends Controller_Admin_Action
                 throw new Exception("Invalid Request.", 1);
             }
 
-            $salesmenModel = Ccc::getModel('salesman');
             $salesmen = $salesmenModel;
             $salesmen->setData($postData);
 
