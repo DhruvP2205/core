@@ -2,11 +2,7 @@
 
 class Model_Category_Media extends Model_Core_Row
 {
-    const STATUS_ENABLED = 1;
-    const STATUS_DISABLED = 2;
-    const STATUS_DEFAULT = 1;
-    const STATUS_ENABLED_LBL = 'Active';
-    const STATUS_DISABLED_LBL = 'Inactive';
+    protected $category;
     
     public function __construct()
     {
@@ -14,21 +10,29 @@ class Model_Category_Media extends Model_Core_Row
         parent::__construct();
     }
 
-    public function getStatus($key = null)
+    public function setCategory($category)
     {
-        $statuses = [
-            self::STATUS_ENABLED => self::STATUS_ENABLED_LBL,
-            self::STATUS_DISABLED => self::STATUS_DISABLED_LBL
-        ];
-        if(!$key)
-        {
-            return $statuses;
-        }
+        $this->category = $category;
+        return $this;
+    }
 
-        if(array_key_exists($key, $statuses))
+    public function getCategory($reload = false)
+    {
+        $categoryModel = Ccc::getModel('Category');
+        if(!$this->categoryId)
         {
-            return $statuses[$key];
+            return $categoryModel;
         }
-        return $statuses[self::STATUS_DEFAULT];
+        if($this->category && !$reload)
+        {
+            return $this->category;
+        }
+        $category = $categoryModel->fetchRow("SELECT * FROM `category` WHERE `categoryId` = {$this->categoryId}");
+        if(!$category)
+        {
+            return $categoryModel;
+        }
+        $this->setCategory($category);
+        return $this->category;
     }
 }

@@ -33,8 +33,8 @@ class Controller_Admin extends Controller_Admin_Action
     {
         try
         {
-            $request=$this->getRequest();
             $adminModel = Ccc::getModel('Admin');
+            $request = $this->getRequest();
 
             if(!$request->isPost())
             {

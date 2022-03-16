@@ -11,8 +11,4 @@ class Block_Customer_Edit extends Block_Core_Template
     {
         return $this->getData('customer');
     }
-    public function getAddress()
-    {
-        return $this->getData('address');
-    }
 }

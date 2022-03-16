@@ -55,7 +55,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                 else
                 {
                     $mediaData = $mediaModel;
-                    $categoryModel = Ccc::getModel('category');
+                    $categoryModel = $mediaModel->getCategory();
                     $categoryData = $categoryModel;
                     $categoryData->categoryId = $id;
                     $mediaData->categoryId = $id;
@@ -116,7 +116,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                     if(array_key_exists('base',$postData['media']))
                     {
                         $categoryData->base = $postData['media']['base'];
-                        $result = $categoryModel->save('categoryId');
+                        $result = $categoryModel->save();
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set base.',3);
@@ -128,7 +128,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                     if(array_key_exists('thumb',$postData['media']))
                     {
                         $categoryData->thumb = $postData['media']['thumb'];
-                        $result = $categoryModel->save('categoryId','category');
+                        $result = $categoryModel->save();
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set thumb.',3);
@@ -140,7 +140,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                     if(array_key_exists('small',$postData['media']))
                     {
                         $categoryData->small = $postData['media']['small'];
-                        $result = $categoryModel->save('categoryId','category');
+                        $result = $categoryModel->save();
                         if(!$result)
                         {
                             $this->getMessage()->addMessage('System is unabel to set small.',3);

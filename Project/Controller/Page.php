@@ -90,6 +90,7 @@ class Controller_Page extends Controller_Admin_Action
             $this->setTitle('Edit Page');
             $pageModel = Ccc::getModel('Page');
             $request = $this->getRequest();
+            
             $id = (int)$request->getRequest('id');
             if(!$id)
             {
@@ -120,7 +121,24 @@ class Controller_Page extends Controller_Admin_Action
         try
         {
             $pageModel = Ccc::getModel('Page');
-            $request=$this->getRequest();
+            $request = $this->getRequest();
+
+            $deleteId = $request->getPost('page');
+            if($deleteId)
+            {
+                foreach ($deleteId as $id)
+                {
+                    $result = $pageModel->load($id);
+                    if(!$result)
+                    {
+                        $this->getMessage()->addMessage('unable to delete.',3);
+                        throw new Exception("Unable to Save", 1);
+                    }
+                    $result->delete();
+                }
+                $this->getMessage()->addMessage('Data deleted.');
+                $this->redirect('grid','page',[],true);
+            }
 
             if(!$request->getRequest('id'))
             {

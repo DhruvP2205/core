@@ -4,34 +4,6 @@
 <h2>All Records</h2>
 <table>
     <tr>
-        <script type="text/javascript">
-            function pprFunction()
-            {
-                const pprValue = document.getElementById('pageSelect').selectedOptions[0].value;
-                let url = window.location.href;
-                
-                if(!url.includes('ppr'))
-                {
-                    url += '&ppr=20';
-                }
-                const urlArray = url.split("&");
-
-                for (i = 0; i < urlArray.length; i++)
-                {
-                    if(urlArray[i].includes('p='))
-                    {
-                        urlArray[i] = 'p=1';
-                    }
-                    if(urlArray[i].includes('ppr='))
-                    {
-                        urlArray[i] = 'ppr=' + pprValue;
-                    }
-                }
-                const finalUrl = urlArray.join("&");  
-                location.replace(finalUrl);
-            }
-        </script>
-        
         <select id="pageSelect" onchange="pprFunction()" style="margin: 0px 20px 0px 35%; width: 70px;" >
             <option selected>select</option>
             <?php foreach ($this->pager->perPageCountOption as $pageCount):?>
@@ -90,3 +62,30 @@
         endif; ?>
 </tbody>
 </table>
+<script type="text/javascript">
+    function pprFunction()
+    {
+        const pprValue = document.getElementById('pageSelect').selectedOptions[0].value;
+        let url = window.location.href;
+        
+        if(!url.includes('ppr'))
+        {
+            url += '&ppr=20';
+        }
+        const urlArray = url.split("&");
+
+        for (i = 0; i < urlArray.length; i++)
+        {
+            if(urlArray[i].includes('p='))
+            {
+                urlArray[i] = 'p=1';
+            }
+            if(urlArray[i].includes('ppr='))
+            {
+                urlArray[i] = 'ppr=' + pprValue;
+            }
+        }
+        const finalUrl = urlArray.join("&");  
+        location.replace(finalUrl);
+    }
+</script>

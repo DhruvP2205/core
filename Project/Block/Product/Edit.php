@@ -45,9 +45,9 @@ class Block_Product_Edit extends Block_Core_Template
 
     public function selected($categoryId)
     {
+        $categoryProductModel = Ccc::getModel('Product_Category');
         $request = Ccc::getFront()->getRequest();
         $productId = $request->getRequest('id');
-        $categoryProductModel = Ccc::getModel('Product_Category');
         
         $select = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = '{$productId}' AND `categoryId` = '{$categoryId}'");
         
