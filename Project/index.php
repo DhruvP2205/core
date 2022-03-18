@@ -60,7 +60,7 @@ class Ccc
 
     public static function loadFile($path)
     {
-        return require_once(getcwd()."/".$path);
+        return require_once(self::getPath($path));
     }
 
     public static function loadClass($className)
@@ -68,7 +68,6 @@ class Ccc
         $path = str_replace("_", "/", $className).'.php';
         Ccc::loadFile($path);
     }
-
 
     public static function getModel($className)
     {
@@ -82,6 +81,28 @@ class Ccc
         $className='Block_'.$className;
         self::loadClass($className);
         return new $className();
+    }
+
+    public static function getPath($subPath = null)
+    {
+        if($subPath)
+        {
+            if(!defined('DS'))
+            {
+                define('DS', DIRECTORY_SEPARATOR);
+            }
+            return getcwd().DS.$subPath;
+        }
+        return getcwd();
+    }
+
+    public static function getBaseUrl($subUrl = null)
+    {
+        if($subUrl)
+        {
+            return self::getConfig('baseUrl').$subUrl;
+        }
+        return self::getConfig('baseUrl');
     }
 
     public static function init()

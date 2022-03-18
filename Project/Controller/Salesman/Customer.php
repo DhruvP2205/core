@@ -21,28 +21,36 @@ class Controller_Salesman_Customer extends Controller_Admin_Action
 
     public function saveAction()
     {
-        $customerModel = Ccc::getModel('Customer');
-        $request = $this->getRequest();
-        $salesmanId = $request->getRequest('id');
-
-        if($request->isPost())
+        try
         {
-            $customerData = $request->getPost('customer');
-            $customerModel->salesmanId = $salesmanId;
+            $customerModel = Ccc::getModel('Customer');
+            $request = $this->getRequest();
+            $salesmanId = $request->getRequest('id');
 
-            foreach($customerData as $customer)
+            if($request->isPost())
             {
-                $customerModel->customerId = $customer;
-                $result = $customerModel->save(); 
+                $customerData = $request->getPost('customer');
+                $customerModel->salesmanId = $salesmanId;
 
-                if(!$result)
+                foreach($customerData as $customer)
                 {
-                    $this->getMessage()->addMessage("Data not saved.");
-                    throw new Exception("Error Processing Request", 1);
+                    $customerModel->customerId = $customer;
+                    $result = $customerModel->save(); 
+
+                    if(!$result)
+                    {
+                        throw new Exception("Data not saved.");
+                    }
                 }
+                $this->getMessage()->addMessage("Data saved.");
+                $this->redirect('grid','Salesman_Customer');
             }
-            $this->getMessage()->addMessage("Data saved.");
+        }
+        catch (Exception $e)
+        {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','Salesman_Customer');
         }
+        
     }
 }

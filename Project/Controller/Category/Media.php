@@ -47,7 +47,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                         $result = $mediaModel->save();
                         if(!$result)
                         {
-                            $this->getMessage()->addMessage('System is unable to save your data.',3);
+                            throw new Exception("System is unable to save your data.");
                         }   
                         move_uploaded_file($file['name']['tmp_name'],Ccc::getBlock('Product_Grid')->getBaseUrl("Media/category/").$fileName);
                     }
@@ -69,10 +69,9 @@ class Controller_Category_Media extends Controller_Admin_Action
 
                             if(!$result)
                             {
-                                $this->getMessage()->addMessage('Invalid request.',3);
-                                throw new Exception("Invalid request.", 1);
+                                throw new Exception("Invalid request.");
                             }
-                            unlink(Ccc::getBlock('Product_Grid')->getBaseUrl("Media/category/"). $media->name);
+                            unlink(Ccc::getBlock('Category_Grid')->getBaseUrl("Media/category/"). $media->name);
 
                             if($postData['media']['base'] == $remove)
                             {
@@ -100,8 +99,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                             $result = $mediaModel->save();
                             if(!$result)
                             {
-                                $this->getMessage()->addMessage('Invalid request.',3);
-                                throw new Exception("Invalid request.", 1);   
+                                throw new Exception("Invalid request.");
                             }
                         }
                         unset($mediaData->mediaId);
@@ -119,8 +117,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                         $result = $categoryModel->save();
                         if(!$result)
                         {
-                            $this->getMessage()->addMessage('System is unabel to set base.',3);
-                            throw new Exception("System is unabel to set base.", 1);
+                            throw new Exception("System is unabel to set base.");
                         }
                         unset($categoryData->base);
                     }
@@ -131,8 +128,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                         $result = $categoryModel->save();
                         if(!$result)
                         {
-                            $this->getMessage()->addMessage('System is unabel to set thumb.',3);
-                            throw new Exception("System is unabel to set thumb.", 1);
+                            throw new Exception("System is unabel to set thumb.");
                         }
                         unset($categoryData->thumb);
                     }
@@ -143,8 +139,7 @@ class Controller_Category_Media extends Controller_Admin_Action
                         $result = $categoryModel->save();
                         if(!$result)
                         {
-                            $this->getMessage()->addMessage('System is unabel to set small.',3);
-                            throw new Exception("System is unabel to set small.", 1);
+                            throw new Exception("System is unabel to set small.");
                         }
                         unset($categoryData->small);
                     }
@@ -155,6 +150,7 @@ class Controller_Category_Media extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','category_media');
         }
     }

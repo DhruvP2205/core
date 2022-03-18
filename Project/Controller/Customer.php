@@ -37,14 +37,12 @@ class Controller_Customer extends Controller_Admin_Action
         $request = $this->getRequest();
         if(!$request->getPost('customer'))
         {
-            $this->getMessage()->addMessage('Request Invalid.',3);
-            throw new Exception("Request Invalid.", 1);
+            throw new Exception("Request Invalid.");
         }   
         $postData = $request->getPost('customer');
         if(!$postData)
         {
-            $this->getMessage()->addMessage('Invalid data Posted.',3);
-            throw new Exception("Invalid data Posted.", 1);
+            throw new Exception("Invalid data Posted.");
         }
         $customer = $customerModel;
         $customer->setData($postData);
@@ -60,8 +58,7 @@ class Controller_Customer extends Controller_Admin_Action
         $save = $customer->save();
         if(!$save->customerId)
         {
-            $this->getMessage()->addMessage('Unable to insert Customer.',3);
-            throw new Exception("Unable to insert Customer.", 1);
+            throw new Exception("Unable to insert Customer.");
         }
         $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
         return $save;
@@ -73,8 +70,7 @@ class Controller_Customer extends Controller_Admin_Action
         $request = $this->getRequest();
         if(!$request->getPost())
         {
-            $this->getMessage()->addMessage('Request Invalid.',3);
-            throw new Exception("Invalid Request.", 1);
+            throw new Exception("Invalid Request.");
         }
         $postBilling = $request->getPost('billingAddress');
         $postShipping = $request->getPost('shippingAddress');
@@ -99,14 +95,12 @@ class Controller_Customer extends Controller_Admin_Action
 
         if(!$save)
         {
-            $this->getMessage()->addMessage('Customer Details Not Saved.',3);
-            throw new Exception("Customer Details Not Saved.", 1);
+            throw new Exception("Customer Details Not Saved.");
         }
         $save = $shipping->save();
         if(!$save)
         {
-            $this->getMessage()->addMessage('Customer Details Not Saved.',3);
-            throw new Exception("Customer Details Not Saved.", 1);
+            throw new Exception("Customer Details Not Saved.");
         }
     }
 
@@ -120,6 +114,7 @@ class Controller_Customer extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','customer',[],true);
         }
     }
@@ -134,16 +129,14 @@ class Controller_Customer extends Controller_Admin_Action
             $id = (int)$request->getRequest('id');
             if(!$id)
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
             
             $customer = $customerModel->load($id);
             
             if(!$customer)
             {   
-                $this->getMessage()->addMessage('System is unable to find record.',3);
-                throw new Exception("System is unable to find record.", 1);
+                throw new Exception("System is unable to find record.");
             }
 
             $content = $this->getLayout()->getContent();
@@ -153,6 +146,7 @@ class Controller_Customer extends Controller_Admin_Action
         }
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','customer',[],true);
         }
     }
@@ -165,22 +159,19 @@ class Controller_Customer extends Controller_Admin_Action
             $request = $this->getRequest();
             if(!$request->getRequest('id'))
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $customerId = $request->getRequest('id');
             if(!$customerId)
             {
-                $this->getMessage()->addMessage('Unable to fetch ID.',3);
-                throw new Exception("Unable to fetch ID.", 1);
+                throw new Exception("Unable to fetch ID.");
             }
 
             $result = $customerModel->load($customerId);
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Delete Record.',3);
-                throw new Exception("Unable to Delete Record.", 1);
+                throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
@@ -188,6 +179,7 @@ class Controller_Customer extends Controller_Admin_Action
         } 
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','customer',[],true);
         }       
     }

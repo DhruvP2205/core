@@ -6,5 +6,6 @@
             "userName" => "root",
             "password" => "",
             "dbName" => "project_dhruv"
-        ]
+        ],
+        'baseUrl' => "http://localhost:8080/phpwork/cart/core/Project/",
     ];

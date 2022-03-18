@@ -38,16 +38,14 @@ class Controller_Page extends Controller_Admin_Action
 
             if(!$request->isPost())
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $postData = $request->getPost('page');
 
             if(!$postData)
             {
-                $this->getMessage()->addMessage('Invalid data Posted.',3);
-                throw new Exception("Invalid data Posted.", 1);
+                throw new Exception("Invalid data Posted.");
             }
 
             $page = $pageModel;
@@ -62,8 +60,7 @@ class Controller_Page extends Controller_Admin_Action
             {
                 if(!(int)$page->pageId)
                 {
-                    $this->getMessage()->addMessage('Invalid Request.',3);
-                    throw new Exception("Invalid Request.", 1);
+                    throw new Exception("Invalid Request.");
                 }
                 $page->updatedDate = date('y-m-d h:m:s');
             }
@@ -71,14 +68,14 @@ class Controller_Page extends Controller_Admin_Action
 
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Save Record.',3);
-                throw new Exception("Unable to Save Record.", 1);
+                throw new Exception("Unable to Save Record.");
             } 
             $this->getMessage()->addMessage('Your Data saved Successfully.');
             $this->redirect('grid','page',[],true);
         } 
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','page',[],true);
         }
     }
@@ -94,15 +91,13 @@ class Controller_Page extends Controller_Admin_Action
             $id = (int)$request->getRequest('id');
             if(!$id)
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
             
             $page = $pageModel->load($id);
             if(!$page)
             {
-                $this->getMessage()->addMessage('System is unable to find record.',3);
-                throw new Exception("System is unable to find record.", 1);
+                throw new Exception("System is unable to find record.");
             }
 
             $content = $this->getLayout()->getContent();
@@ -112,6 +107,7 @@ class Controller_Page extends Controller_Admin_Action
         }    
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','page',[],true);
         }
     }
@@ -131,8 +127,7 @@ class Controller_Page extends Controller_Admin_Action
                     $result = $pageModel->load($id);
                     if(!$result)
                     {
-                        $this->getMessage()->addMessage('unable to delete.',3);
-                        throw new Exception("Unable to Save", 1);
+                        throw new Exception("Unable to Save");
                     }
                     $result->delete();
                 }
@@ -142,22 +137,19 @@ class Controller_Page extends Controller_Admin_Action
 
             if(!$request->getRequest('id'))
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $id = $request->getRequest('id');
             if(!$id)
             {
-                $this->getMessage()->addMessage('Unable to fetch ID.',3);
-                throw new Exception("Unable to fetch ID.", 1);
+                throw new Exception("Unable to fetch ID.");
             }
 
             $result = $pageModel->load($id);
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Delete Record.',3);
-                throw new Exception("Unable to Delete Record.", 1);
+                throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
@@ -165,6 +157,7 @@ class Controller_Page extends Controller_Admin_Action
         }
         catch(Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','page',[],true);
         }
     }

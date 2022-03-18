@@ -53,9 +53,9 @@ class Model_Customer_Price extends Model_Core_Row
             return $this->salesman;
         }
         $customer = $this->getCustomer($reload);
-        if(!($salesmanId == $customer->salesmanId))
+        if(!$customer->salesmanId)
         {
-            return null;
+            return $this->salsesmanModel;
         }
         $salesman = $customer->fetchRow("SELECT * FROM `salesman` WHERE `salesmanId` = {$this->customer->salesmanId}");
         if(!$salesman)
