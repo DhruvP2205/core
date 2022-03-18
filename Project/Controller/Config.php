@@ -37,14 +37,12 @@ class Controller_Config extends Controller_Admin_Action
             $configModel = Ccc::getModel('Config');
             if(!$request->isPost())
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
             $postData = $request->getPost('config');
             if(!$postData)
             {
-                $this->getMessage()->addMessage('Invalid data Posted.',3);
-                throw new Exception("Invalid data Posted.", 1);
+                throw new Exception("Invalid data Posted.");
             }
             $config = $configModel;
             $config->setData($postData);
@@ -58,21 +56,20 @@ class Controller_Config extends Controller_Admin_Action
             {
                 if(!(int)$config->configId)
                 {
-                    $this->getMessage()->addMessage('Invalid Request.',3);
-                    throw new Exception("Invalid Request.", 1);
+                    throw new Exception("Invalid Request.");
                 }
             }
             $result = $config->save();
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Save Record.',3);
-                throw new Exception("Unable to Save Record.", 1);
+                throw new Exception("Unable to Save Record.");
             }
             $this->getMessage()->addMessage('Your Data saveed Successfully.');
             $this->redirect('grid','config',[],true);
         } 
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','config',[],true);
         }
     }
@@ -87,14 +84,12 @@ class Controller_Config extends Controller_Admin_Action
             $id = (int)$request->getRequest('id');
             if(!$id)
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
             $config = $configModel->load($id);
             if(!$config)
             {
-                $this->getMessage()->addMessage('System is unable to find record.',3);
-                throw new Exception("System is unable to find record.", 1); 
+                throw new Exception("System is unable to find record."); 
             }
             $content = $this->getLayout()->getContent();
             $configEdit = Ccc::getBlock('Config_Edit')->setData(['config'=>$config]);
@@ -103,6 +98,7 @@ class Controller_Config extends Controller_Admin_Action
         }    
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','config',[],true);
         }
     }
@@ -116,16 +112,14 @@ class Controller_Config extends Controller_Admin_Action
             $request = $this->getRequest();
             if(!$request->getRequest('id'))
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
             
             $id = $request->getRequest('id');
             $result = $configModel->load($id);
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Delete Record.',3);
-                throw new Exception("Unable to Delete Record.", 1);
+                throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
@@ -133,6 +127,7 @@ class Controller_Config extends Controller_Admin_Action
         }
         catch(Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','config',[],true);
         }
     }

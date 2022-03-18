@@ -65,6 +65,7 @@ class Controller_Customer_Price extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','customer_price',['id' => $customerId],true);
         }
     }

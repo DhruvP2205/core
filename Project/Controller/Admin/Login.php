@@ -22,14 +22,12 @@ class Controller_Admin_Login extends Controller_Admin_Action
 
             if(!$request->isPost())
             {
-                $this->getMessage()->addMessage("Invalid request.",3);
-                throw new Exception("Invalid request.", 1);
+                throw new Exception("Invalid request.");
             }
             
             if(!$request->getPost())
             {
-                $this->getMessage()->addMessage("Invalid request.",3);
-                throw new Exception("Invalid request.", 1);
+                throw new Exception("Invalid request.");
             }
 
             $loginData = $request->getPost('admin');
@@ -39,8 +37,7 @@ class Controller_Admin_Login extends Controller_Admin_Action
             
             if(!$result)
             {
-                $this->getMessage()->addMessage("Login details incorect",Model_Core_Message::MESSAGE_ERROR);
-                throw new Exception("invalid request", 1);
+                throw new Exception("invalid request.");
             }
 
             $loginModel->login($result[0]->email);
@@ -49,6 +46,7 @@ class Controller_Admin_Login extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('login','admin_login',[],true);
         }
     }

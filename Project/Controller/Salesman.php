@@ -38,8 +38,7 @@ class Controller_Salesman extends Controller_Admin_Action
             $postData = $request->getPost('salesman');
             if(!$postData)
             {
-                $this->getMessage()->addMessage('Invalid Request.',3);
-                throw new Exception("Invalid Request.", 1);
+                throw new Exception("Invalid Request.");
             }
 
             $salesmen = $salesmenModel;
@@ -58,14 +57,14 @@ class Controller_Salesman extends Controller_Admin_Action
             $insert = $salesmen->save();
             if(!$insert)
             {
-                $this->getMessage()->addMessage('Unable to insert Salesman.',3);
-                throw new Exception("Unable to insert Salesman.", 1);
+                throw new Exception("Unable to insert Salesman.");
             }
             $this->getMessage()->addMessage('Salesman Inserted succesfully.',1); 
             $this->redirect('grid','salesman',[],true);
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','Salesman',[],true);
         }
     }
@@ -81,16 +80,14 @@ class Controller_Salesman extends Controller_Admin_Action
 
             if(!$id)
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Error Processing Request", 1);         
+                throw new Exception("Error Processing Request");         
             }
             
             $salesman = $salesmanModel->load($id);
             
             if(!$salesman)
             {   
-                $this->getMessage()->addMessage('System is unable to find record.',3); 
-                throw new Exception("Error Processing Request", 1);        
+                throw new Exception("Error Processing Request");        
             }
 
             $content = $this->getLayout()->getContent();
@@ -100,6 +97,7 @@ class Controller_Salesman extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','salesman',[],true);
         }
     }
@@ -116,8 +114,7 @@ class Controller_Salesman extends Controller_Admin_Action
 
             if(!$request->getRequest('id'))
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Error Processing Request", 1);
+                throw new Exception("Error Processing Request");
             }
 
             $salesmanId = (int)$request->getRequest('id');
@@ -135,8 +132,7 @@ class Controller_Salesman extends Controller_Admin_Action
             $result = $salesmanModel->load($salesmanId);
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Delete Record.',3);
-                throw new Exception("Error Processing Request", 1);
+                throw new Exception("Error Processing Request");
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
@@ -144,6 +140,7 @@ class Controller_Salesman extends Controller_Admin_Action
         } 
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','salesman',[],true);
         }
     }

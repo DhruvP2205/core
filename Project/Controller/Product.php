@@ -38,16 +38,14 @@ class Controller_Product extends Controller_Admin_Action
 
             if(!$request->isPost())
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $postData = $request->getPost('product');
             $categoryIds = $request->getPost('category');
             if(!$postData)
             {
-                $this->getMessage()->addMessage('Invalid data Posted.',3);
-                throw new Exception("Invalid data Posted.", 1);
+                throw new Exception("Invalid data Posted.");
             }
             
             $product = $productModel;
@@ -62,8 +60,7 @@ class Controller_Product extends Controller_Admin_Action
             {
                 if(!(int)$product->productId)
                 {
-                    $this->getMessage()->addMessage('Invalid Request.',3);
-                    throw new Exception("Error Processing Request", 1);
+                    throw new Exception("Error Processing Request");
                 }
                 $product->updatedDate = date('y-m-d h:m:s');
             }
@@ -71,8 +68,7 @@ class Controller_Product extends Controller_Admin_Action
             $result = $product->save();
             if(!$result)
             {
-                $this->getMessage()->addMessage('unable to inserted.',3);
-                throw new Exception("unable to Updated Record.", 1);
+                throw new Exception("unable to Updated Record.");
             }
 
             if(!$categoryIds)
@@ -86,6 +82,7 @@ class Controller_Product extends Controller_Admin_Action
         } 
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','product',[],true);
         }
     }
@@ -101,16 +98,14 @@ class Controller_Product extends Controller_Admin_Action
 
             if(!$id)
             {
-                $this->getMessage()->addMessage('Invalid Request.',3);
-                throw new Exception("Invalid Request.", 1);
+                throw new Exception("Invalid Request.");
             }
 
             $product = $productModel->load($id);
 
             if(!$product)
             {
-                $this->getMessage()->addMessage('System is unable to find record.',3);
-                throw new Exception("System is unable to find record.", 1); 
+                throw new Exception("System is unable to find record."); 
             }
             $content = $this->getLayout()->getContent();
             $productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$product]);
@@ -119,7 +114,7 @@ class Controller_Product extends Controller_Admin_Action
         } 
         catch (Exception $e) 
         {
-            throw new Exception("System is unable to find record.", 1);
+            throw new Exception("System is unable to find record.");
         }
     }
 
@@ -132,28 +127,25 @@ class Controller_Product extends Controller_Admin_Action
             $request = $this->getRequest();
             if(!$request->getRequest('id'))
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $productId = $request->getRequest('id');
             if(!$productId)
             {
-                $this->getMessage()->addMessage('Unable to fetch ID.',3);
-                throw new Exception("Unable to fetch ID.", 1);
+                throw new Exception("Unable to fetch ID.");
             }
             
-            $medias = $productModel->fetchAll("SELECT `name` FROM `media` WHERE  `productId` = {$productId}");
+            $medias = $productModel->fetchAll("SELECT `name` FROM `product_media` WHERE  `productId` = {$productId}");
             foreach ($medias as $media)
             {
-                unlink($this->getView()->getBaseUrl("Media/Product/"). $media->name);
+                unlink(Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/"). $media->name);
             }
 
             $result = $productModel->load($productId);
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Delete Record.',3);
-                throw new Exception("Unable to Delete Record.", 1);
+                throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
@@ -161,6 +153,7 @@ class Controller_Product extends Controller_Admin_Action
         } 
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','product',[],true);
         }       
     }

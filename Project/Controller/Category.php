@@ -51,8 +51,7 @@ class Controller_Category extends Controller_Admin_Action
                     $result = $categoryModel->save();
                     if(!$result)
                     {
-                        $this->getMessage()->addMessage('unable to update.',1);
-                        throw new Exception("Sysetm is unable to save your data", 1);   
+                        throw new Exception("Sysetm is unable to save your data");   
                     }
                     
                     $allPath = $categoryModel->fetchAll("SELECT * FROM `category` WHERE `path` LIKE '%$id%' ");
@@ -93,8 +92,7 @@ class Controller_Category extends Controller_Admin_Action
                         $insert = $categoryModel->save();
                         if(!$insert->categoryId)
                         {
-                            $this->getMessage()->addMessage('unable to Inser Data.',3);
-                            throw new Exception("system is unabel to insert your data", 1);
+                            throw new Exception("system is unabel to insert your data");
                         }
                         $categoryId = $insert->categoryId;
                         $categoryData->resetData();
@@ -108,7 +106,7 @@ class Controller_Category extends Controller_Admin_Action
                         $insert = $categoryModel->save();
                         if(!$insert->categoryId)
                         {
-                            throw new Exception("system is unabel to insert your data", 1);
+                            throw new Exception("system is unabel to insert your data");
                         }
                         $categoryData->categoryId = $insert->categoryId;
                         $parentPath = $categoryModel->load($categoryData->parentId);
@@ -117,8 +115,7 @@ class Controller_Category extends Controller_Admin_Action
                     }
                     if(!$result)
                     {
-                        $this->getMessage()->addMessage('unable to insert data.',3);
-                        throw new Exception("Sysetm is unable to save your data", 1);   
+                        throw new Exception("Sysetm is unable to save your data");   
                     }
                 }
                 $this->getMessage()->addMessage('data inserted successfully',1);
@@ -127,6 +124,7 @@ class Controller_Category extends Controller_Admin_Action
         }
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','category',[],true);
         }
     }
@@ -144,22 +142,19 @@ class Controller_Category extends Controller_Admin_Action
             
             if(!$id)
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             if(!(int)$id)
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $category = $categoryModel->load($id);
 
             if(!$category)
             {
-                $this->getMessage()->addMessage('System is unable to find record.',3); 
-                throw new Exception("System is unable to find record.", 1);
+                throw new Exception("System is unable to find record.");
             }
 
             $content = $this->getLayout()->getContent();
@@ -169,6 +164,7 @@ class Controller_Category extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','category',[],true);
         }
     }
@@ -182,22 +178,27 @@ class Controller_Category extends Controller_Admin_Action
 
             if(!$request->getRequest('id'))
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $id = $request->getRequest('id');
+
             if(!$id)
             {
-                $this->getMessage()->addMessage('Unable to find data.',3);
-                throw new Exception("Unable to find data.", 1);
+                throw new Exception("Unable to find data.");
             }
+
+            $mediaData = $categoryModel->fetchAll("SELECT `name` FROM `category_media` WHERE  `categoryId` = {$id}");
+            foreach ($mediaData as $data)
+            {
+                unlink(Ccc::getBlock('Category_Grid')->getBaseUrl("Media/category/"). $data->name);
+            }
+
             $result = $categoryModel->load($id);
 
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Delete Record.',3);
-                throw new Exception("Unable to Delete Record.", 1);
+                throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
@@ -205,6 +206,7 @@ class Controller_Category extends Controller_Admin_Action
         }
         catch (Exception $e) 
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','category',[],true);
         }
     }

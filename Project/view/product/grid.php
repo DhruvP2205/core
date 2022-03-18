@@ -48,19 +48,19 @@
             <td><?php echo $product->sku ?></td>
             
             <?php if($product->base): ?>
-            <td><img src="<?php echo "Media/Product/".$product->getBase()->name;  ?>" alt="No Image Found" width="50" height="50"></td>
+            <td><img src="<?php  echo $product->getBase()->getImgPath();?>" alt="No Image Found" width="50" height="50"></td>
             <?php else: ?>
             <td>No Base Image</td>
             <?php endif; ?> 
             
             <?php if($product->thumb): ?>
-            <td><img src="<?php echo "Media/Product/".$product->getThumb()->name;  ?>" alt="No Image Found" width="50" height="50"></td>
+            <td><img src="<?php  echo $product->getThumb()->getImgPath();?>" alt="No Image Found" width="50" height="50"></td>
             <?php else: ?>
             <td>No Thumb Image</td>
             <?php endif; ?> 
             
             <?php if($product->small): ?>
-            <td><img src="<?php echo "Media/Product/".$product->getSmall()->name;  ?>" alt="No Image Found" width="50" height="50"></td>
+            <td><img src="<?php  echo $product->getSmall()->getImgPath();?>" alt="No Image Found" width="50" height="50"></td>
             <?php else: ?>
             <td>No Small Image</td>
             <?php endif; ?> 

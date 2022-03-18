@@ -24,7 +24,7 @@
         <tr>
             <td><?php echo $media->mediaId ?></td>
             <td><?php echo $media->productId ?></td>
-            <td><img src="<?php echo 'Media/Product/'.$media->name; ?>" alt="No Image found" width=50 height=50></td>
+            <td><img src="<?php  echo $media->getImgPath();?>" alt="No Image found" width=50 height=50></td>
             
             <td>
                 <input type="radio" name="media[base]" value = "<?php echo $media->mediaId ?>" <?php echo $this->selected($media->mediaId,'base'); ?> >

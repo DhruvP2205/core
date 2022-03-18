@@ -38,16 +38,14 @@ class Controller_Admin extends Controller_Admin_Action
 
             if(!$request->isPost())
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $postData = $request->getPost('admin');
 
             if(!$postData)
             {
-                $this->getMessage()->addMessage('Invalid data Posted.',3);
-                throw new Exception("Invalid data Posted.", 1);
+                throw new Exception("Invalid data Posted.");
             }
 
             $admin = $adminModel;
@@ -63,22 +61,21 @@ class Controller_Admin extends Controller_Admin_Action
             {
                 if(!(int)$admin->adminId)
                 {
-                    $this->getMessage()->addMessage('Invalid Request.',3);
-                    throw new Exception("Invalid Request.", 1);
+                    throw new Exception("Invalid Request.");
                 }
                 $admin->updatedDate = date('y-m-d h:m:s');
             }
             $result = $admin->save();
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Save Record.',3);
-                throw new Exception("Unable to Save Record.", 1);
+                throw new Exception("Unable to Save Record.");
             }
             $this->getMessage()->addMessage('Your Data save Successfully');
             $this->redirect('grid','admin',[],true);
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','admin',[],true);
         }
     }
@@ -94,16 +91,14 @@ class Controller_Admin extends Controller_Admin_Action
 
             if(!$id)
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
             
             $admin = $adminModel->load($id);
             
             if(!$admin)
             {   
-                $this->getMessage()->addMessage('System is unable to find record.',3);
-                throw new Exception("System is unable to find record.", 1);
+                throw new Exception("System is unable to find record.");
             }
 
             $content = $this->getLayout()->getContent();
@@ -113,6 +108,7 @@ class Controller_Admin extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','admin',[],true);
         }
     }
@@ -127,22 +123,19 @@ class Controller_Admin extends Controller_Admin_Action
 
             if(!$request->getRequest('id'))
             {
-                $this->getMessage()->addMessage('Request Invalid.',3);
-                throw new Exception("Request Invalid.", 1);
+                throw new Exception("Request Invalid.");
             }
 
             $adminId = $request->getRequest('id');
 
             if(!$adminId)
             {
-                $this->getMessage()->addMessage('Unable to fetch ID.',3);
-                throw new Exception("Unable to fetch ID.", 1);
+                throw new Exception("Unable to fetch ID.");
             }
             $result = $adminModel->load($adminId);
             if(!$result)
             {
-                $this->getMessage()->addMessage('Unable to Delete Record.',3);
-                throw new Exception("Unable to Delete Record.", 1);
+                throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
@@ -150,6 +143,7 @@ class Controller_Admin extends Controller_Admin_Action
         } 
         catch (Exception $e)
         {
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->redirect('grid','admin',[],true);
         }
     }
