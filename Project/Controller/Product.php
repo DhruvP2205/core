@@ -43,6 +43,7 @@ class Controller_Product extends Controller_Admin_Action
 
             $postData = $request->getPost('product');
             $categoryIds = $request->getPost('category');
+            $type = $request->getPost('discountType');
             if(!$postData)
             {
                 throw new Exception("Invalid data Posted.");
@@ -64,7 +65,15 @@ class Controller_Product extends Controller_Admin_Action
                 }
                 $product->updatedDate = date('y-m-d h:m:s');
             }
-
+            if($type == 2)
+            {
+                $product->discount = $product->price * $product->discount / 100 ;
+            }
+            if(!($product->costPrice <= ($product->price - $product->discount) && $product->price - $product->discount <= $product->price) || $product->discount<0)
+            {
+                throw new Exception("Invalid Discount.");
+            }
+            
             $result = $product->save();
             if(!$result)
             {

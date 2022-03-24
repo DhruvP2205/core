@@ -94,7 +94,6 @@ class Model_Product extends Model_Core_Row
         return $this;
     }
 
-
     public function getBase()
     {
         $mediaModel = Ccc::getModel('Product_Media'); 
