@@ -114,6 +114,6 @@ $shippingAddress = $customer->getShippingAddress(); ?>
                     document.getElementById("shippingAddress[state]").value = null; 
                     document.getElementById("shippingAddress[country]").value = null; 
             }
-    }
+        }
     </script>
 </form>

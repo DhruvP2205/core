@@ -33,6 +33,8 @@
         <th>Image</th>
         <th>Price</th>
         <th>Quantity</th>
+        <th>Tax</th>
+        <th>Discount</th>
         <th>Status</th>
         <th>Created Date</th>
         <th>Updated Date</th>
@@ -68,6 +70,8 @@
             <td><?php echo $product->price ?></td>
             
             <td><?php echo $product->quantity ?></td>
+            <td><?php echo $product->tax ?></td>
+            <td><?php echo $product->discount ?></td>
             
             <td><?php echo $product->getStatus($product->status)?></td>
             

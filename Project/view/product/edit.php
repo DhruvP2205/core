@@ -30,6 +30,24 @@
             <td><input type="text" name="product[costPrice]" value="<?php echo $product->costPrice ?>"></td>
         </tr>
         <tr>
+            <td>Tax</td>
+            <td><input type="text" name="product[tax]" value="<?php echo $product->tax ?>"></td>
+        </tr>
+        <tr>
+            <td>Discount</td>
+            <td>
+                <table>
+                <tr><input type="text" name="product[discount]" value="<?php echo $product->discount ?>"></tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="discountType" value="1" checked>Rupees
+                        <input type="radio" name="discountType" value="2">Percentage
+                    </td>
+                </tr>
+            </table>
+            </td>
+        </tr>
+        <tr>
             <td>Quantity</td>
             <td><input type="text" name="product[quantity]" value="<?php echo $product->quantity ?>"></td>
         </tr>

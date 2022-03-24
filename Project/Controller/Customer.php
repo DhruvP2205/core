@@ -26,7 +26,10 @@ class Controller_Customer extends Controller_Admin_Action
         $billingAddress = $customerModel->getBillingAddress();
         $shippingAddress = $customerModel->getShippingAddress();
         $content = $this->getLayout()->getContent();
-        $customerAdd = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel, 'billingAddress'=>$billingAddress, 'shippingAddress'=>$shippingAddress]);
+        $customerAdd = Ccc::getBlock('Customer_Edit');
+        $customerAdd->customer = $customerModel;
+        $customerAdd->billingAddress = $billingAddress;
+        $customerAdd->shippingAddress = $shippingAddress;
         $content->addChild($customerAdd,'Add');
         $this->renderLayout();
     }
@@ -140,7 +143,8 @@ class Controller_Customer extends Controller_Admin_Action
             }
 
             $content = $this->getLayout()->getContent();
-            $customerEdit = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customer]);
+            $customerEdit = Ccc::getBlock('Customer_Edit');
+            $customerEdit->customer = $customer;
             $content->addChild($customerEdit,'Edit');
             $this->renderLayout();   
         }
