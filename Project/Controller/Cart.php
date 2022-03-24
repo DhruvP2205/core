@@ -86,6 +86,9 @@ class Controller_cart extends Controller_Admin_Action
             else
             {
                 $cartModel->customerId = $customerId;
+                $cartModel->paymentMethod = 4;
+                $cartModel->shippingMethod = 3;
+                $cartModel->shippingCharge = 50;
                 $cart = $cartModel->save();
                 if(!$cart)
                 {
@@ -224,7 +227,7 @@ class Controller_cart extends Controller_Admin_Action
             }
             else if($shippingMethod == 2)
             {
-                $shippingCharge = '75';
+                $shippingCharge = '70';
             }
             else
             {
@@ -321,8 +324,8 @@ class Controller_cart extends Controller_Admin_Action
             }
             $subTotal = $item->fetchRow("SELECT sum(`itemTotal`) as subTotal FROM `cart_item`");
             $cart->subTotal = $subTotal->subTotal;
-            $cart->taxAmount = $taxAmount;
-            $cart->discount = $discount;
+            $cart->taxAmount += $taxAmount;
+            $cart->discount += $discount;
             $result = $cart->save();
             if(!$result)
             {
