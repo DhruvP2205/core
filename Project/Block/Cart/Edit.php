@@ -16,14 +16,19 @@ class Block_Cart_Edit extends Block_Core_Template
 
     public function getCart()
     {
-        $cart = $this->cart;
-        return $cart;
+        if(!Ccc::getModel('Admin_Cart')->getCart())
+        {
+            return Ccc::getModel('Cart');
+        }
+        $cartId = Ccc::getModel('Admin_Cart')->getCart();
+        $cartModel = Ccc::getModel('Cart')->load($cartId);
+        return $cartModel;
     }
 
     public function getProducts()
     {
         $productModel = Ccc::getModel('Product');
-        $cartId = !($this->cart->item->cartId) ? null : $this->cart->item->cartId;
+        $cartId = Ccc::getModel('Admin_Cart')->getCart();
         if($cartId)
         {
             $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `productId` NOT IN (SELECT `productId` FROM `cart_item` WHERE `cartId` = $cartId)");
@@ -39,7 +44,7 @@ class Block_Cart_Edit extends Block_Core_Template
     public function getItems()
     {
         $itemModel = Ccc::getModel('Cart_Item');
-        $cartId = !($this->cart->item->cartId) ? null : $this->cart->item->cartId;
+        $cartId = Ccc::getModel('Admin_Cart')->getCart();
         if($cartId)
         {
             $items = $itemModel->fetchAll("SELECT * FROM `cart_item` WHERE `cartId` = {$cartId} ");
@@ -51,7 +56,7 @@ class Block_Cart_Edit extends Block_Core_Template
     public function getTotal()
     {
         $itemModel = Ccc::getModel('Cart_Item');
-        $cartId = !($this->cart->item->cartId) ? null : $this->cart->item->cartId;
+        $cartId = Ccc::getModel('Admin_Cart')->getCart();
         if($cartId)
         {
             $items = $itemModel->getResource()->getAdapter()->fetchOne("SELECT sum(`itemTotal`) FROM `cart_item` WHERE `cartId` = {$cartId} ");
@@ -69,5 +74,19 @@ class Block_Cart_Edit extends Block_Core_Template
             return $tax;    
         }
         return null;
+    }
+
+    public function getShippingMethod()
+    {
+        $cartModel = Ccc::getModel('Cart');
+        $shippingMethods = $cartModel->fetchAll("SELECT * FROM `shipping_method`");
+        return $shippingMethods;
+    }
+
+    public function getPaymentMethod()
+    {
+        $cartModel = Ccc::getModel('Cart');
+        $paymentMethods = $cartModel->fetchAll("SELECT * FROM `payment_method`");
+        return $paymentMethods;
     }
 }
