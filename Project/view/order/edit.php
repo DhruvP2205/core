@@ -130,8 +130,7 @@ $items = $order->getItems();
     <?php endforeach; ?>
     <?php endif;?>
     <tr>
-        <td colspan="8"></td>
         <td>Grand Total</td>
-        <td><?php echo $order->grandTotal; ?></td>
+        <td align="right" colspan="9"><?php echo $order->grandTotal; ?></td>
     </tr>
 </table>

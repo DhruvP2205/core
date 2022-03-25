@@ -16,19 +16,14 @@ class Block_Cart_Edit extends Block_Core_Template
 
     public function getCart()
     {
-        if(!Ccc::getModel('Admin_Cart')->getCart())
-        {
-            return Ccc::getModel('Cart');
-        }
-        $cartId = Ccc::getModel('Admin_Cart')->getCart();
-        $cartModel = Ccc::getModel('Cart')->load($cartId);
-        return $cartModel;
+        $cart = $this->cart;
+        return $cart;
     }
 
     public function getProducts()
     {
         $productModel = Ccc::getModel('Product');
-        $cartId = Ccc::getModel('Admin_Cart')->getCart();
+        $cartId = !($this->cart->item->cartId) ? null : $this->cart->item->cartId;
         if($cartId)
         {
             $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `productId` NOT IN (SELECT `productId` FROM `cart_item` WHERE `cartId` = $cartId)");
@@ -44,7 +39,7 @@ class Block_Cart_Edit extends Block_Core_Template
     public function getItems()
     {
         $itemModel = Ccc::getModel('Cart_Item');
-        $cartId = Ccc::getModel('Admin_Cart')->getCart();
+        $cartId = !($this->cart->item->cartId) ? null : $this->cart->item->cartId;
         if($cartId)
         {
             $items = $itemModel->fetchAll("SELECT * FROM `cart_item` WHERE `cartId` = {$cartId} ");
@@ -56,7 +51,7 @@ class Block_Cart_Edit extends Block_Core_Template
     public function getTotal()
     {
         $itemModel = Ccc::getModel('Cart_Item');
-        $cartId = Ccc::getModel('Admin_Cart')->getCart();
+        $cartId = !($this->cart->item->cartId) ? null : $this->cart->item->cartId;
         if($cartId)
         {
             $items = $itemModel->getResource()->getAdapter()->fetchOne("SELECT sum(`itemTotal`) FROM `cart_item` WHERE `cartId` = {$cartId} ");

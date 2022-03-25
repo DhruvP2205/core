@@ -4,7 +4,6 @@ class Controller_Core_Action
 {
     protected $layout = null;
     protected $message = null;
-    protected $cart = null;
 
     protected function setTitle($title)
     {
@@ -45,21 +44,6 @@ class Controller_Core_Action
     public function setMessage($message)
     {
         $this->message = $message;
-        return $this;
-    }
-
-    public function getCart()
-    {
-        if(!$this->cart)
-        {
-            $this->setCart(Ccc::getModel('Admin_Cart'));
-        }
-        return $this->cart;
-    }
-
-    public function setCart($cart)
-    {
-        $this->cart = $cart;
         return $this;
     }
 

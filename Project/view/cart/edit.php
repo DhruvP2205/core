@@ -1,11 +1,11 @@
 <?php 
 $customers = $this->getCustomers();
 $cart = $this->getCart();
-$customer = $cart->getCustomer();
-$billingAddress = $cart->getBillingAddress();
-$shippingAddress = $cart->getShippingAddress();
+$customer = $cart->customer;
+$billingAddress = $cart->billingAddress;
+$shippingAddress = $cart->shippingAddress;
 $products = $this->getProducts();
-$item = $cart->getItem();
+$item = $cart->item;
 $items = $this->getItems();
 $shippingMethods = $this->getShippingMethod();
 $paymentMethods = $this->getPaymentMethod();
@@ -15,7 +15,7 @@ $disabled = (!$items) ? 'disabled' : "";
     <option value="none">Select</option>
     <?php foreach($customers as $cust): 
         print_r($cust->customerId); ?>
-    <option value="<?php echo $cust->customerId ?>">Id: <?php echo $cust->customerId ?> Name: <?php echo $cust->firstName?> Email: <?php $cust->email; ?></option>
+    <option value="<?php echo $cust->customerId ?>">Name: <?php echo $cust->firstName." Email: ".$cust->email; ?></option>
     <?php endforeach; ?>
 </select>
 <h3>Customer Data</h3>
@@ -128,7 +128,7 @@ $disabled = (!$items) ? 'disabled' : "";
                 <form action="<?php echo $this->getUrl('savePaymentMethod');?>" method="POST">
                     <?php foreach($paymentMethods as $paymentMethod): ?>
                     <tr>
-                        <td><input type="radio" name="paymentMethod" value="<?php echo $paymentMethod->methodId ?>" <?php echo ($cart->paymentMethod == $paymentMethod->methodId) ? 'checked': ''; ?>><?php echo $paymentMethod->name?></td>
+                        <td><input type="radio" name="paymentMethod" value="<?php echo $paymentMethod->methodId ?>" <?php echo ($cart->cart->paymentMethod == $paymentMethod->methodId) ? 'checked': ''; ?>><?php echo $paymentMethod->name?></td>
                     </tr>
                     <?php endforeach;?>
                     <tr>
@@ -142,7 +142,7 @@ $disabled = (!$items) ? 'disabled' : "";
                 <form action="<?php echo $this->getUrl('saveShipingMethod');?>" method="POST">
                     <?php foreach($shippingMethods as $shippingMethod): ?>
                     <tr>
-                        <td><input type="radio" name="shippingMethod" value="<?php echo $shippingMethod->methodId ?>" <?php echo ($cart->shippingMethod == $shippingMethod->methodId) ? 'checked': ''; ?>><?php echo $shippingMethod->name?></td>
+                        <td><input type="radio" name="shippingMethod" value="<?php echo $shippingMethod->methodId ?>" <?php echo ($cart->cart->shippingMethod == $shippingMethod->methodId) ? 'checked': ''; ?>><?php echo $shippingMethod->name?></td>
                         <td><?php echo $shippingMethod->charge ?></td>
                     </tr>
                     <?php endforeach;?>
@@ -246,22 +246,22 @@ $disabled = (!$items) ? 'disabled' : "";
         </tr>
         <tr>
             <td width="70%" align="right">Shipping</td>
-            <td><?php echo (!$cart->shippingCharge) ? '0' : $cart->shippingCharge;?></td>
+            <td><?php echo (!$cart->cart->shippingCharge) ? '0' : $cart->cart->shippingCharge;?></td>
         </tr>
         <tr>
             <td width="70%" align="right">Tax</td>
-            <td><?php echo (!$this->getTax($cart->cartId)) ? '0' : $this->getTax($cart->cartId); ?></td>
+            <td><?php echo (!$this->getTax($cart->cart->cartId)) ? '0' : $this->getTax($cart->cart->cartId); ?></td>
         </tr>
         <tr>
             <td width="70%" align="right">Discount</td>
-            <td><?php echo $cart->discount; ?></td>
+            <td><?php echo $cart->cart->discount; ?></td>
         </tr>
         <tr>
             <td width="70%" align="right">Grand Total</td>
-            <input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + ($cart->shippingCharge) + $this->getTax($cart->cartId) - ($cart->discount); ?>">
-            <input type="hidden" name="discount" value="<?php echo $cart->discount;?>">
-            <input type="hidden" name="taxAmount" value="<?php echo $this->getTax($cart->cartId); ?>">
-            <td><?php echo $this->getTotal() + ($cart->shippingCharge) + $this->getTax($cart->cartId) - ($cart->discount); ?></td>
+            <input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + ($cart->cart->shippingCharge) + $this->getTax($cart->cart->cartId) - ($cart->cart->discount); ?>">
+            <input type="hidden" name="discount" value="<?php echo $cart->cart->discount;?>">
+            <input type="hidden" name="taxAmount" value="<?php echo $this->getTax($cart->cart->cartId); ?>">
+            <td><?php echo $this->getTotal() + ($cart->cart->shippingCharge) + $this->getTax($cart->cart->cartId) - ($cart->cart->discount); ?></td>
         </tr>
         <tr>
             <td width="70%" align="right"></td>
