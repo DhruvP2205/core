@@ -24,7 +24,8 @@ class Controller_Admin extends Controller_Admin_Action
         $this->setTitle('Add Admin');
         $adminModel = Ccc::getModel('Admin');
         $content = $this->getLayout()->getContent();
-        $adminAdd = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel]);
+        $adminAdd = Ccc::getBlock('Admin_Edit');
+        Ccc::register('admin',$adminModel);
         $content->addChild($adminAdd,'Add');
         $this->renderLayout();
     }
@@ -100,9 +101,9 @@ class Controller_Admin extends Controller_Admin_Action
             {   
                 throw new Exception("System is unable to find record.");
             }
-
+            Ccc::register('admin',$admin);
             $content = $this->getLayout()->getContent();
-            $adminEdit = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin]);
+            $adminEdit = Ccc::getBlock('Admin_Edit');
             $content->addChild($adminEdit,'Edit');
             $this->renderLayout();
         }

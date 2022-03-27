@@ -1,25 +1,17 @@
-<?php Ccc::loadClass('Block_Core_Template');
+<?php Ccc::loadClass('Block_Core_Edit');
+Ccc::loadClass('Block_Customer_Edit_Tab');
 
-class Block_Customer_Edit extends Block_Core_Template   
-{ 
+class Block_Customer_Edit extends Block_Core_Edit   
+{
+    protected $tab = null;
+    
     public function __construct()
     {
-        $this->setTemplate('view/customer/edit.php');
+        parent::__construct();
     }
     
-    public function getCustomer()
+    public function getEditUrl()
     {
-        $customer = $this->customer;
-        return $customer;
-    }
-
-    public function getAddress()
-    {
-        $address = $this->address;
-        if($address == null)
-        {
-            return Ccc::getModel('Customer_Address');
-        }
-        return $address;
+        return $this->getUrl('save','customer');
     }
 }
