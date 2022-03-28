@@ -53,6 +53,5 @@ class Block_Admin_Grid_Collection extends Block_Core_Grid_Collection
         $admins = $adminModel->fetchAll("SELECT `adminId`,`firstName`,`lastName`,`email`,`status`,`createdDate`,`updatedDate` FROM `admin` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         $this->setPagerModel($pagerModel);
         return $admins;
-
     }
 }

@@ -123,8 +123,8 @@ class Block_Core_Grid_Collection extends Block_Core_Template
         if(!$this->actions)
         {
             $actions = [
-                        'edit'=>['title'=> 'edit', 'method'=>'$this->getEditUrl()'],
-                        'delete'=>['title'=> 'delete', 'method'=>'$this->getDeleteUrl()']
+                        'Edit'=>['title'=> 'edit', 'method'=>'$this->getEditUrl()'],
+                        'Delete'=>['title'=> 'delete', 'method'=>'$this->getDeleteUrl()']
                         ];
             $this->setActions($actions);
         }

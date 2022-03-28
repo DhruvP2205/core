@@ -24,7 +24,8 @@ class Controller_Config extends Controller_Admin_Action
         $this->setTitle('Add Config');
         $configModel = Ccc::getModel('Config');
         $content = $this->getLayout()->getContent();
-        $configAdd = Ccc::getBlock('Config_Edit')->setData(['config'=>$configModel]);
+        $configAdd = Ccc::getBlock('Config_Edit');
+        Ccc::register('config',$configModel);
         $content->addChild($configAdd,'Add');
         $this->renderLayout();
     }
@@ -92,7 +93,8 @@ class Controller_Config extends Controller_Admin_Action
                 throw new Exception("System is unable to find record."); 
             }
             $content = $this->getLayout()->getContent();
-            $configEdit = Ccc::getBlock('Config_Edit')->setData(['config'=>$config]);
+            $configEdit = Ccc::getBlock('Config_Edit');
+            Ccc::register('config',$config);
             $content->addChild($configEdit,'Edit');
             $this->renderLayout();
         }    

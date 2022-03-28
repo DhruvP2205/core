@@ -9,6 +9,7 @@ class Block_Admin_Edit extends Block_Core_Edit
 	{
 		parent::__construct();
 	}
+	
 	public function getEditUrl()
     {
         return $this->getUrl('save','admin');
