@@ -90,7 +90,7 @@ class Controller_Customer extends Controller_Admin_Action
         }
         $postBilling = $request->getPost('billingAddress');
         $postShipping = $request->getPost('shippingAddress');
-
+        
         $billing = $customer->getBillingAddress();
         $shipping = $customer->getShippingAddress();
 

@@ -41,7 +41,7 @@ class Block_Customer_Grid_Collection extends Block_Core_Grid_Collection
                     {   
                         if($k != 'billingAddress' && $k != 'shipingAddress' && $k != 'addressId' && $k != 'customerId')
                         {
-                            $address .= $k." => ".$data."<br>";
+                            $address .= $k." : ".$data."<br>";
                         }
                     }
                     array_push($tempArray,$address);
