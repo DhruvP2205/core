@@ -71,13 +71,13 @@ class Controller_Admin extends Controller_Admin_Action
             {
                 throw new Exception("Unable to Save Record.");
             }
-            $this->getMessage()->addMessage('Your Data save Successfully');
-            $this->redirect('grid','admin',[],true);
+            $message = $this->getMessage()->addMessage('Your Data save Successfully');
+            echo $message->getMessages()['success'];
         }
         catch (Exception $e)
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','admin',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['error'];
         }
     }
 
@@ -109,8 +109,8 @@ class Controller_Admin extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','admin',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['error'];
         }
     }
 
@@ -139,13 +139,13 @@ class Controller_Admin extends Controller_Admin_Action
                 throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
-            $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect('grid','admin',[],true);
+            $message = $this->getMessage()->addMessage('Data Deleted.');
+            echo $message->getMessages()['success'];
         } 
         catch (Exception $e)
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','admin',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['error'];
         }
     }
 }

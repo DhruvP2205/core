@@ -67,7 +67,7 @@ class Controller_Customer extends Controller_Admin_Action
         {
             throw new Exception("Unable to insert Customer.");
         }
-        $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
+        $message = $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
         return $save;
     }
 
@@ -137,6 +137,7 @@ class Controller_Customer extends Controller_Admin_Action
         {
             throw new Exception("Customer Details Not Saved.");
         }
+        $message = $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
     }
 
     public function saveAction()
@@ -157,12 +158,13 @@ class Controller_Customer extends Controller_Admin_Action
             {
                 $this->saveAddress();           
             }
-            $this->redirect('grid','customer',[],true);
+            $message = $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
+            echo $message->getMessages()['success'];
         }
         catch (Exception $e)
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','customer',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['error'];
         }
     }
 
@@ -197,8 +199,8 @@ class Controller_Customer extends Controller_Admin_Action
         }
         catch (Exception $e) 
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','customer',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['error'];
         }
     }
 
@@ -225,13 +227,13 @@ class Controller_Customer extends Controller_Admin_Action
                 throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
-            $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect('grid','customer',[],true);
+            $message = $this->getMessage()->addMessage('Data deleted.');
+            echo $message->getMessages()['success'];
         } 
         catch (Exception $e) 
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','customer',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['error'];
         }       
     }
 }

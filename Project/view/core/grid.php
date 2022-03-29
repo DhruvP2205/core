@@ -1,7 +1,7 @@
 <?php $collections = $this->getCollection();
-    $columns = $this->getColumns();
-    $actions =  $this->getActions();
-    $pager = $this->getPager(); ?>
+$columns = $this->getColumns();
+$actions =  $this->getActions();
+$pager = $this->getPager(); ?>
 
 <h2>All Records</h2>
 
@@ -46,36 +46,26 @@
             <td><?php echo $this->getColumnData($column,$collection); ?></td>
         <?php endforeach; ?>
         <?php foreach ($actions as $action) : ?>
-            <td><a href="<?php echo $collection->getActionUrl($action) ?>"><?php echo $action['title'] ?></td>
+        <?php if($action['title'] == 'delete'): ?>
+            <?php $key = $columns['id']['key']; ?>
+            <td><button type="button" class="delete" value="<?php echo $collection->$key; ?>"><?php echo $action['title']; ?></button></td>
+        <?php else: ?>
+            <?php $method = $action['method']; ?>
+            <td><a href="<?php echo $collection->$method(); ?>"><button><?php echo $action['title'] ?></button></a></td>
+        <?php endif; ?>
         <?php endforeach; ?>
     </tr>
     <?php endforeach; ?>
 </table>
 
-<script type="text/javascript">
-    function pprFunction()
-    {
-        const pprValue = document.getElementById('pageSelect').selectedOptions[0].value;
-        let url = window.location.href;
-        
-        if(!url.includes('ppr'))
-        {
-            url += '&ppr=20';
-        }
-        const urlArray = url.split("&");
 
-        for (i = 0; i < urlArray.length; i++)
-        {
-            if(urlArray[i].includes('p='))
-            {
-                urlArray[i] = 'p=1';
-            }
-            if(urlArray[i].includes('ppr='))
-            {
-                urlArray[i] = 'ppr=' + pprValue;
-            }
-        }
-        const finalUrl = urlArray.join("&");  
-        location.replace(finalUrl);
-    }
+<script type="text/javascript">
+    admin.setForm('form-customer');
+    $(document).ready(function(){
+        $(".delete").click(function(){
+            var data = $(this).val();
+            admin.setData({'id' : data});
+            admin.callDeleteAjax();
+        });
+    });
 </script>

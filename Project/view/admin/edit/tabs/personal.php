@@ -1,5 +1,4 @@
 <?php $admin = $this->getAdmin();?>
-
 <h2>Admin</h2>
 <table border="1" cellspacing="4">
     <input type="text" name="admin[adminId]" value="<?php echo $admin->adminId ?>" hidden>
@@ -34,7 +33,7 @@
     <tr>
         <td width="10%">&nbsp;</td>
         <td>
-            <input type="submit" name="submit" value="Save">
+            <input type="button" id="submit" name="submit" value="Save">
             <button type="button"><a href="<?php echo $this->getUrl('grid','admin',[],true) ?>">Cancel</a></button>
         </td>
     </tr>
