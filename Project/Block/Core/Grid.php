@@ -1,51 +1,95 @@
 <?php Ccc::loadClass('Block_Core_Template');
-Ccc::loadClass('Block_Core_Grid_Collection');
 
 class Block_Core_Grid extends Block_Core_Template  
 {
-    protected $collection = []; 
+    protected $actions = [];
+    protected $collection = [];
+    protected $columns = [];
     
     public function __construct()
     {
         parent::__construct();
         $this->setTemplate('view/core/grid.php');
-    }
-
-    public function getEditUrl()
-    {
-        return $this->getUrl('save');
+        $this->prepareCollections();
     }
 
     public function getCollection()
     {
-        if($this->collection)
-        {
-            return $this->collection;
-        }
-
-        $className =  get_class($this).'_Collection';
-        $object = new $className();
-        $object->setGrid($this);
-        $this->setCollection($object);
-
-        return $object;
+        return $this->collection;
     }
 
     public function setCollection($collection)
     {
         $this->collection = $collection;
+        return $this; 
+    }
+
+    public function getColumns()
+    {
+        return $this->columns;
+    }
+
+    public function addColumn(array $column, $key)
+    {
+        if(!$key)
+        {
+            return null;
+        }
+        $this->columns[$key] = $column;
         return $this;
     }
 
-    public function getCollectionContent()
+    public function getColumn($key)
     {
-        $collections = $this->getCollection()->getCollections()[$this->getCollection()->getCurrentCollection()];
-        $object = Ccc::getBlock($collections['block']);
-        return $object;
+        if(!array_key_exists($key,$this->columns))
+        {
+            return null;
+        }
+        return $this->columns[$key];
     }
 
-    public function getActionUrl($title, $id = null)
+    public function setColumn($column,$key)
     {
-        return $this->getUrl($title, null, ['id'=> $id], true);
+        $this->columns[$key] = $column;
+    }
+
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
+    public function setActions(array $actions)
+    {
+        $this->actions = $actions;
+        return $this;
+    }
+    public function addAction(array $action,$key)
+    {
+        $this->actions[$key] = $action ;
+        return $this;
+    }
+    public function getAction($key)
+    {
+        if(!array_key_exists($key,$this->actions))
+        {
+            return null;
+        }
+        return $this->actions[$key];
+    }
+
+    public function setAction(array $action,$key)
+    {
+        $this->actions[$key] = $action;
+        return $this;
+    }
+
+    public function getColumnData($column,$collection)
+    {
+        $key = $column['key'];
+        if($key == 'status')
+        {
+            return $collection->getStatus($collection->status);
+        }
+        return $collection->$key;
     }
 }

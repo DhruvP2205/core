@@ -31,4 +31,9 @@ class Model_Admin extends Model_Core_Row
         }
         return $statuses[self::STATUS_DEFAULT];
     }
+
+    public function getActionUrl($action)
+    {
+        return Ccc::getModel('Core_View')->getUrl($action['title'], $action['class'], ['id'=>$this->adminId], true);
+    }
 }

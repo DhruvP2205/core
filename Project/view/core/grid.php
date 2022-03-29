@@ -1,8 +1,10 @@
-<?php $headers = $this->getCollection()->getHeaders(); ?>
-<?php $columns = $this->getCollection()->getColumns(); ?>
-<?php $actions = $this->getCollection()->getActions(); ?>
-<?php $pager = $this->getCollection()->getPagerModel(); ?>
+<?php $collections = $this->getCollection();
+    $columns = $this->getColumns();
+    $actions =  $this->getActions();
+    $pager = $this->getPager(); ?>
+
 <h2>All Records</h2>
+
 <table>
     <tr>
         <select id="pageSelect" onchange="pprFunction()" style="margin: 0px 20px 0px 35%; width: 70px;" >
@@ -25,28 +27,26 @@
 </table>
 <br>
 <br>
-<a href="<?php echo $this->getActionUrl('add'); ?>">Add</a>
+<a href="<?php echo $this->getUrl('add'); ?>">Add</a>
 <br>
 <br>
 <table>
     <tr>
-        <?php foreach ($headers as $header) :?>
-            <th><?php echo $header ?></th>
+        <?php foreach ($columns as $key => $column) :?>
+            <th><?php echo $column['title'] ?></th>
         <?php endforeach; ?>
-
-        <?php foreach ($actions as $title => $action) :?>
-            <th><?php echo $title ?></th>
+        <?php foreach ($actions as $key => $action) :?>
+            <th><?php echo $key ?></th>
         <?php endforeach; ?>
     </tr>
 
-    <?php foreach ($columns as $columnData) :?>
+    <?php foreach ($collections as $collection) :?>
     <tr>
-        <?php foreach ($columnData as $column):?>
-            <td><?php echo $column ?></td>
+        <?php foreach ($columns as $key => $column):?>
+            <td><?php echo $this->getColumnData($column,$collection); ?></td>
         <?php endforeach; ?>
-
-        <?php foreach ($actions as $action) :?>
-            <td><a href="<?php echo $this->getActionUrl($action['title'],$columnData[0]); ?>"><?php echo $action['title'] ?> </a></td>
+        <?php foreach ($actions as $action) : ?>
+            <td><a href="<?php echo $collection->getActionUrl($action) ?>"><?php echo $action['title'] ?></td>
         <?php endforeach; ?>
     </tr>
     <?php endforeach; ?>

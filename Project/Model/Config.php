@@ -30,4 +30,9 @@ class Model_Config extends Model_Core_Row
         }
         return self::STATUS_DISABLED_DEFAULT;
     }
+
+    public function getActionUrl($action)
+    {
+        return Ccc::getModel('Core_View')->getUrl($action['title'], $action['class'], ['id'=>$this->configId], true);
+    }
 }
