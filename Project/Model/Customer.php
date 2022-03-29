@@ -86,4 +86,13 @@ class Model_Customer extends Model_Core_Row
         $this->shippingAddress = $address;
         return $this;
     }
+
+    public function getActionUrl($action)
+    {
+        if($action['method']=='getPriceUrl')
+        {
+            return Ccc::getModel('Core_View')->getUrl('grid', $action['class'], ['id'=>$this->customerId], true);
+        }
+        return Ccc::getModel('Core_View')->getUrl($action['title'], $action['class'], ['id'=>$this->customerId], true);
+    }
 }
