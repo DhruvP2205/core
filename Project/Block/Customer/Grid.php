@@ -14,7 +14,7 @@ class Block_Customer_Grid extends Block_Core_Grid
         'title' => 'Customer Id',
         'type' => 'int',
         'key' =>'customerId'
-        ],'Customer Id');
+        ],'id');
 
         $this->addColumn([
         'title' => 'First Name',
@@ -70,8 +70,8 @@ class Block_Customer_Grid extends Block_Core_Grid
         'key' =>'updatedDate'
         ],'Updated Date');
 
-        $this->addAction(['title' => 'delete','method' => 'getDeleteUrl','class' => 'customer' ],'Delete');
         $this->addAction(['title' => 'edit','method' => 'getEditUrl','class' => 'customer' ],'Edit');
+        $this->addAction(['title' => 'delete','method' => 'getDeleteUrl','class' => 'customer' ],'Delete');
         $this->addAction(['title' => 'price','method' => 'getPriceUrl','class' => 'customer_price' ],'Price');
         $this->prepareCollectionContent();       
     }

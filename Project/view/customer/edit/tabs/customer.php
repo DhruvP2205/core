@@ -1,5 +1,4 @@
 <?php $customer = $this->getCustomer(); ?>
-
 <table border="1" cellspacing="7">
     <tr>
         <td colspan="2"><h3>Personal Information:</h3></td>
@@ -33,8 +32,9 @@
     <tr>
         <td>&nbsp;</td>
         <td>
-            <input type="submit" name="submit" value="Save">
+            <input type="button" id="submit" name="submit" value="Save">
             <button type="button"><a href="<?php echo $this->getUrl('grid','customer',[],true) ?>">Cancel</a></button>
         </td>
     </tr>
 </table>
+

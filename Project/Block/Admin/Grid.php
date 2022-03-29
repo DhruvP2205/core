@@ -14,7 +14,7 @@ class Block_Admin_Grid extends Block_Core_Grid
 		'title' => 'Admin Id',
 		'type' => 'int',
 		'key' =>'adminId'
-		],'Admin Id');
+		],'id');
 
 		$this->addColumn([
 		'title' => 'First Name',
