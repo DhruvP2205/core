@@ -7,5 +7,5 @@
             "password" => "",
             "dbName" => "project_dhruv"
         ],
-        'baseUrl' => "http://localhost:8080/phpwork/core-tab-grid/core/Project/",
+        'baseUrl' => "http://localhost:8080/phpwork/new-branch/core/Project/",
     ];

@@ -33,6 +33,20 @@ class Controller_Core_Action
             ->render($this->getLayout()->toHtml());
     }
 
+    public function renderContent()
+    {
+        $this->getResponse()
+            ->setHeader('Content-type', 'text/html')
+            ->render($this->getLayout()->getContent()->toHtml());
+    }
+
+    public function renderJson($content)
+    {
+        $this->getResponse()
+            ->setHeader('Content-type', 'application/json')
+            ->render(json_encode($content));
+    }
+
     public function getMessage()
     {
         if(!$this->message)

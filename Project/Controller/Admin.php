@@ -10,6 +10,33 @@ class Controller_Admin extends Controller_Admin_Action
         }
     }
 
+    public function indexAction()
+    {
+        $this->setTitle('Admin');
+        $adminGrid = Ccc::getBlock('Admin_Index');
+        $content = $this->getLayout()->getContent();
+        $content->addChild($adminGrid,'Grid');
+        $this->renderContent();
+    }
+
+    public function grid1Action()
+    {
+        $this->renderJson(['status' => 'Success']);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function gridAction()
     {
         $this->setTitle('Admin');

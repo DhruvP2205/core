@@ -19,6 +19,15 @@ class Controller_Config extends Controller_Admin_Action
         $this->renderLayout();
     }
 
+    public function grid1Action()
+    {
+        $this->setTitle('Config');
+        $content = $this->getLayout()->getContent();
+        $configGrid = Ccc::getBlock('Config_Grid');
+        $content->addChild($configGrid,'Grid');
+        $this->renderContent();
+    }
+
     public function addAction()
     {
         $this->setTitle('Add Config');
@@ -27,7 +36,7 @@ class Controller_Config extends Controller_Admin_Action
         $configAdd = Ccc::getBlock('Config_Edit');
         Ccc::register('config',$configModel);
         $content->addChild($configAdd,'Add');
-        $this->renderLayout();
+        $this->renderContent();
     }
 
     public function saveAction()
@@ -65,13 +74,13 @@ class Controller_Config extends Controller_Admin_Action
             {
                 throw new Exception("Unable to Save Record.");
             }
-            $this->getMessage()->addMessage('Your Data saveed Successfully.');
-            $this->redirect('grid','config',[],true);
+            $message = $this->getMessage()->addMessage('Your Data saveed Successfully.');
+            echo $message->getMessages()['success'];
         } 
         catch (Exception $e) 
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','config',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['success'];
         }
     }
 
@@ -96,12 +105,12 @@ class Controller_Config extends Controller_Admin_Action
             $configEdit = Ccc::getBlock('Config_Edit');
             Ccc::register('config',$config);
             $content->addChild($configEdit,'Edit');
-            $this->renderLayout();
+            $this->renderContent();
         }    
         catch (Exception $e) 
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','config',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['success'];
         }
     }
 
@@ -124,13 +133,13 @@ class Controller_Config extends Controller_Admin_Action
                 throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
-            $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect('grid','config',[],true);
+            $message = $this->getMessage()->addMessage('Data Deleted.');
+            echo $message->getMessages()['success'];
         }
         catch(Exception $e)
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','config',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            echo $message->getMessages()['success'];
         }
     }
 }

@@ -27,7 +27,7 @@ $pager = $this->getPager(); ?>
 </table>
 <br>
 <br>
-<a href="<?php echo $this->getUrl('add'); ?>">Add</a>
+<button id="addNew">Add</button>
 <br>
 <br>
 <table>
@@ -46,26 +46,39 @@ $pager = $this->getPager(); ?>
             <td><?php echo $this->getColumnData($column,$collection); ?></td>
         <?php endforeach; ?>
         <?php foreach ($actions as $action) : ?>
-        <?php if($action['title'] == 'delete'): ?>
             <?php $key = $columns['id']['key']; ?>
-            <td><button type="button" class="delete" value="<?php echo $collection->$key; ?>"><?php echo $action['title']; ?></button></td>
-        <?php else: ?>
-            <?php $method = $action['method']; ?>
-            <td><a href="<?php echo $collection->$method(); ?>"><button><?php echo $action['title'] ?></button></a></td>
-        <?php endif; ?>
+            <td><button type="button" class="<?php echo $action['title'] ?>" value="<?php echo $collection->$key; ?>"><?php echo $action['title']; ?></button></td>
         <?php endforeach; ?>
     </tr>
     <?php endforeach; ?>
 </table>
 
 
-<script type="text/javascript">
-    admin.setForm('form-customer');
-    $(document).ready(function(){
-        $(".delete").click(function(){
-            var data = $(this).val();
-            admin.setData({'id' : data});
-            admin.callDeleteAjax();
-        });
+<script>
+    $("#addNew").click(function(){
+        var url = "<?php echo $this->getUrl('add'); ?>";
+        admin.setUrl(url);
+        admin.setType('POST');
+        admin.setData($(this).val());
+        admin.load();
     });
+
+    $(".delete").click(function(){
+        var data = $(this).val();
+        admin.setData({'id' : data});
+        admin.setUrl("<?php echo $this->getUrl('delete'); ?>");
+        admin.callDeleteAjax();
+        admin.setUrl("<?php echo $this->getUrl('grid1'); ?>");
+        admin.setData({});
+        admin.load();
+    });
+
+    $(".edit").click(function(){
+        var data = $(this).val();
+        admin.setData({'id' : data});
+        admin.setUrl("<?php echo $this->getUrl('edit'); ?>");
+        admin.setType('GET');
+        admin.load();
+    });
+
 </script>
