@@ -19,6 +19,26 @@ class Controller_Customer_Price extends Controller_Admin_Action
         $this->renderLayout();
     }
 
+    public function gridBlockAction()
+    {
+        $customerPriceGrid = Ccc::getBlock('Customer_Price_Grid')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $customerPriceGrid
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
+    }
+
     public function saveAction()
     {
         try 
@@ -61,12 +81,12 @@ class Controller_Customer_Price extends Controller_Admin_Action
                 }
             }
             $this->getMessage()->addMessage('Discount added.');
-            $this->redirect('grid','customer_price',['id' => $customerId],true);
+            $this->gridBlockAction();
         }
         catch (Exception $e)
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','customer_price',['id' => $customerId],true);
+            $this->gridBlockAction();
         }
     }
 }

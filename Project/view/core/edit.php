@@ -1,7 +1,4 @@
-<p id="message"></p>
-<form action="" id="form-admin" method="POST">
 <?php
-    $this->getTab()->toHtml();
-    $this->getTabContent()->toHtml();
+    echo $this->getTab()->toHtml();
+    echo $this->getTabContent()->toHtml();
 ?>
-</form>

@@ -1,11 +1,11 @@
-var admin1 = {
+var admin = {
     url : null,
     type : 'POST',
     data : {},
     dataType : 'json',
     form : null,
 
-    setUrl : function(url) {
+    setUrl : function(url){
         this.url = url;
         return this;
     },
@@ -14,7 +14,7 @@ var admin1 = {
         return this.url;
     },
 
-    setType : function(type) {
+    setType : function(type){
         this.type = type;
         return this;
     },
@@ -23,7 +23,7 @@ var admin1 = {
         return this.type;
     },
 
-    setData : function(data) {
+    setData : function(data){
         this.data = data;
         return this;
     },
@@ -32,7 +32,24 @@ var admin1 = {
         return this.data;
     },
 
-    setDataType : function(dataType) {
+    setForm : function(form){
+        this.form = form;
+        this.prepareFormParams();
+        return this;
+    },
+
+    getForm : function(){
+        return this.form;
+    },
+
+    prepareFormParams : function(){
+        this.setUrl(this.getForm().attr('action'));
+        this.setType(this.getForm().attr('method'));
+        this.setData(this.getForm().serializeArray());
+        return this;
+    },
+
+    setDataType : function(dataType){
         this.dataType = dataType;
         return this;
     },
@@ -41,34 +58,24 @@ var admin1 = {
         return this.dataType;
     },
 
-    setForm : function(form) {
-        this.form = form;
-        this.prepareFormParam();
-        return this;
-    },
-
-    getForm : function(){
-        return this.form;
-    },
-
-    prepareFormParam : function(){
-        this.setUrl(this.getForm().attr('action'));
-        this.setType(this.getForm().attr('method'));
-        this.setData(this.getForm().serializeArray());
-        return this;
-    },
-
-
     load : function(){
+        const self = this;
         $.ajax({
             url: this.getUrl(),
             type: this.getType(),
             data: this.getData(),
-            dataType : this.getDataType(),
-            form : this.getForm(),
             success: function(data){
-                console.log(data);
-            }
+                self.manageElemants(data.elements);
+            }             
         });
     },
-}
+
+    manageElemants : function(elements){
+        jQuery(elements).each(function(index,element) {
+            jQuery(element.element).html(element.content);
+            if(element.classAdd != undefined){
+                jQuery(element.element).addClass(element.classAdd);
+            }
+        });
+    }
+};

@@ -1,4 +1,8 @@
 <?php Ccc::loadClass('Block_Core_Template');
+Ccc::loadClass('Block_Customer_Edit_Tab');
+/*Ccc::loadClass('Block_Admin_Edit_Tab');
+Ccc::loadClass('Block_Category_Edit_Tab');
+Ccc::loadClass('Block_Config_Edit_Tab');*/
 
 class Block_Core_Edit extends Block_Core_Template  
 {
@@ -37,6 +41,7 @@ class Block_Core_Edit extends Block_Core_Template
     {
         $tabs = $this->getTab()->getSelectedTab();
         $object = Ccc::getBlock($tabs['block']);
+        $object->setEdit($this);
         return $object;
     }
 }

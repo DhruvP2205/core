@@ -52,8 +52,8 @@
     <tr>
         <td>&nbsp;</td>
         <td>
-            <input type="button" id="submit" name="submit" value="Save">
-            <button type="button"><a href="<?php echo $this->getUrl('grid','customer',[],true) ?>">Cancel</a></button>
+            <input type="button" id="customerSubmitBtn" name="submit" value="Save">
+            <button type="button" id="customerCancelBtn">Cancel</button>
         </td>
     </tr>
 </table> 
@@ -79,4 +79,16 @@
                 document.getElementById("shippingAddress[country]").value = null; 
         }
     }
+</script>
+<script>
+    $("#customerSubmitBtn").click(function(){
+        admin.setForm($("#indexForm"));
+        admin.setUrl("<?php echo $this->getEdit()->getSaveUrl(); ?>");
+        admin.load();
+    });
+
+    $("#customerCancelBtn").click(function(){
+        admin.setUrl("<?php echo $this->getUrl('gridBlock','customer'); ?>");
+        admin.load();
+    });
 </script>

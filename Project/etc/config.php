@@ -7,5 +7,5 @@
             "password" => "",
             "dbName" => "project_dhruv"
         ],
-        'baseUrl' => "http://localhost:8080/phpwork/new-branch/core/Project/",
+        'baseUrl' => "http://localhost:8080/phpwork/ajax/core/Project/",
     ];
