@@ -31,8 +31,13 @@ class Model_Config extends Model_Core_Row
         return self::STATUS_DISABLED_DEFAULT;
     }
 
-    public function getActionUrl($action)
+    public function getEditUrl()
     {
-        return Ccc::getModel('Core_View')->getUrl($action['title'], $action['class'], ['id'=>$this->configId], true);
+        return Ccc::getModel('Core_View')->getUrl('edit','config',['id'=>$this->configId]);
+    }
+
+    public function getDeleteUrl()
+    {
+        return Ccc::getModel('Core_View')->getUrl('delete','config',['id'=>$this->configId]);
     }
 }

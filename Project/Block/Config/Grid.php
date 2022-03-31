@@ -14,7 +14,7 @@ class Block_Config_Grid extends Block_Core_Grid
         'title' => 'Config Id',
         'type' => 'int',
         'key' =>'configId'
-        ],'Config Id');
+        ],'id');
 
         $this->addColumn([
         'title' => 'Name',

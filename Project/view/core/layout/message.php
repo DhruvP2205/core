@@ -1,3 +1,7 @@
+<div id="adminMessage">
+    
+</div>
+
 <?php $messages = $this->getMessages();
 
 if($messages)
@@ -6,5 +10,5 @@ if($messages)
     {
         echo($type." : ".$message);
     }   
-}
+}   
 ?>

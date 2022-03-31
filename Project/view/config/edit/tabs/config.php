@@ -28,8 +28,29 @@
     <tr>
         <td>&nbsp;</td>
         <td>
-            <input type="submit" name="submit" value="Save">
-            <button type="button"><a href="<?php echo $this->getUrl('grid','config',[],true) ?>">Cancel</a></button>
+            <input type="button" name="submit" id="submit" value="Save">
+            <button type="button" id="cancel">Cancel</button>
         </td>
     </tr>
 </table>
+
+
+<script type="text/javascript">
+    $("#submit").click(function(){
+        admin.setForm($("#form-admin"));
+        admin.callSaveAjax();
+        admin.setUrl("<?php echo $this->getUrl('grid1'); ?>");
+        admin.load();
+    });
+    $(document).on('click','#cancel',function () {
+        event.preventDefault();
+        $.ajax({
+            type: 'GET',
+            url: "<?php echo $this->getUrl('grid1'); ?>",
+            success: function(data) {
+                $('#content').html(data);
+            },
+            dataType : 'html'
+        });
+    });
+</script>

@@ -1,7 +1,6 @@
 <?php $products = $this->getProducts(); ?>
-<form action="<?php echo $this->getUrl('save','customer_price') ?>" method="post">
-    <input type="submit" value="save">
-    <button><a href="<?php echo $this->getUrl('grid','Customer'); ?>">Cancel</a></button>
+    <button type="button" id="customerPriceSubmitBtn">Save</button>
+    <button type="button" id="customerPriceCancelBtn">Cancel</button>
     <br>
     <br>
     <table border="1" width="100%">
@@ -34,4 +33,15 @@
         <?php endforeach; ?>
         <?php endif; ?>
     </table>
-</form>
+<script>
+    $("#customerPriceSubmitBtn").click(function(){
+        admin.setForm($("#indexForm"));
+        admin.setUrl("<?php echo $this->getUrl('save','customer_price'); ?>");
+        admin.load();
+    });
+
+    $("#customerPriceCancelBtn").click(function(){
+        admin.setUrl("<?php echo $this->getUrl('gridBlock','customer'); ?>");
+        admin.load();
+    });
+</script>

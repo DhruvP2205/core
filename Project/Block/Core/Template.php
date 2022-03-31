@@ -51,7 +51,7 @@ class Block_Core_Template extends Model_Core_View
             $key = get_class($object);
         }
         $this->children[$key] = $object;
-        $this->setLayout($this->getLayout());
+        $object->setLayout($this->getLayout());
         return $this;
     }
 
@@ -71,5 +71,21 @@ class Block_Core_Template extends Model_Core_View
             unset($this->children[$key]);
         }
         return $this;
+    }
+
+    public function getBlock($key)
+    {
+        $block = $this->getChild($key);
+        if($block)
+        {
+            return $block;
+        }
+        $block = Ccc::getBlock($key);
+        if($block)
+        {
+            $block->setLayout($this->getLayout());
+            return $block;
+        }
+        return null;
     }
 }

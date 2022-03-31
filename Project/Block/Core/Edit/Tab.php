@@ -3,8 +3,8 @@
 class Block_Core_Edit_Tab extends Block_Core_Template   
 {
     protected $tabs = [];
-    protected $edit = null;
     protected $currentTab = null;
+    protected $edit = null;
 
     public function __construct()
     {
