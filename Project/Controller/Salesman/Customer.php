@@ -19,6 +19,26 @@ class Controller_Salesman_Customer extends Controller_Admin_Action
         $this->renderLayout();
     }
 
+    public function gridBlockAction()
+    {
+        $salesmanCustomerGrid = Ccc::getBlock('Salesman_Customer_Grid')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $salesmanCustomerGrid
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
+    }
+
     public function saveAction()
     {
         try
@@ -43,13 +63,13 @@ class Controller_Salesman_Customer extends Controller_Admin_Action
                     }
                 }
                 $this->getMessage()->addMessage("Data saved.");
-                $this->redirect('grid','Salesman_Customer');
+                $this->gridBlockAction();
             }
         }
         catch (Exception $e)
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','Salesman_Customer');
+            $this->gridBlockAction();
         }
         
     }

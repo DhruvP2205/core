@@ -19,13 +19,57 @@ class Controller_Config extends Controller_Admin_Action
         $this->renderLayout();
     }
 
-    public function grid1Action()
+    public function indexAction()
     {
         $this->setTitle('Config');
         $content = $this->getLayout()->getContent();
-        $configGrid = Ccc::getBlock('Config_Grid');
-        $content->addChild($configGrid,'Grid');
-        $this->renderContent();
+        $configGrid = Ccc::getBlock('Config_Index');
+        $content->addChild($configGrid);
+        $this->renderLayout();
+    }
+
+    public function gridBlockAction()
+    {
+        $configGrid = Ccc::getBlock('Config_Grid')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $configGrid
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
+    }
+
+    public function addBlockAction()
+    {
+        $configModel = Ccc::getModel("Config");
+        Ccc::register('config',$configModel);
+
+        $configEdit = $this->getLayout()->getBlock('Config_Edit')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $configEdit
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
     }
 
     public function addAction()
@@ -75,13 +119,59 @@ class Controller_Config extends Controller_Admin_Action
                 throw new Exception("Unable to Save Record.");
             }
             $message = $this->getMessage()->addMessage('Your Data saveed Successfully.');
-            echo $message->getMessages()['success'];
+            $this->gridBlockAction();
         } 
         catch (Exception $e) 
         {
             $message = $this->getMessage()->addMessage($e->getMessage(),3);
-            echo $message->getMessages()['success'];
+            $this->gridBlockAction();
         }
+    }
+
+    public function editBlockAction()
+    {
+        try
+        {
+            $this->setTitle('Edit Config');
+            $configModel = Ccc::getModel('config');
+            $request = $this->getRequest();
+            $id = (int)$request->getRequest('id');
+
+            if(!$id)
+            {
+                throw new Exception("Request Invalid.");
+            }
+            
+            $config = $configModel->load($id);
+            
+            if(!$config)
+            {   
+                throw new Exception("System is unable to find record.");
+            }
+            Ccc::register('config',$config);
+
+            $configEdit = Ccc::getBlock('Config_Edit')->toHtml();
+            $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+            $response = [
+                'status' => 'success',
+                'elements' => [
+                    [
+                        'element' => '#indexContent',
+                        'content' => $configEdit
+                    ],
+                    [
+                        'element' => '#adminMessage',
+                        'content' => $messageBlock
+                    ]
+                ]
+            ];
+            $this->renderJson($response);
+        }
+        catch (Exception $e)
+        {
+            $this->getMessage()->addMessage($e->getMessage(),3);
+            $this->gridBlockAction();
+        }   
     }
 
     public function editAction()
@@ -134,12 +224,12 @@ class Controller_Config extends Controller_Admin_Action
             }
             $result->delete();
             $message = $this->getMessage()->addMessage('Data Deleted.');
-            echo $message->getMessages()['success'];
+            $this->gridBlockAction();
         }
         catch(Exception $e)
         {
             $message = $this->getMessage()->addMessage($e->getMessage(),3);
-            echo $message->getMessages()['success'];
+            $this->gridBlockAction();
         }
     }
 }

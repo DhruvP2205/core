@@ -1,275 +1,71 @@
-<?php 
-$customers = $this->getCustomers();
+<?php $customers = $this->getCustomers(); 
 $cart = $this->getCart();
-$customer = $cart->getCustomer();
-$billingAddress = $cart->getBillingAddress();
-$shippingAddress = $cart->getShippingAddress();
-$products = $this->getProducts();
-$item = $cart->getItem();
-$items = $this->getItems();
-$shippingMethods = $this->getShippingMethod();
-$paymentMethods = $this->getPaymentMethod();
-$disabled = (!$items) ? 'disabled' : "";
-?>
-<select id="selectcustomer" onchange="changeCustomer()">
-    <option value="none">Select</option>
-    <?php foreach($customers as $cust): 
-        print_r($cust->customerId); ?>
-    <option value="<?php echo $cust->customerId ?>">Id: <?php echo $cust->customerId ?> Name: <?php echo $cust->firstName?> Email: <?php $cust->email; ?></option>
-    <?php endforeach; ?>
-</select>
-<h3>Customer Data</h3>
-<table border="1">
-    <tr>
-        <td><label>Email: </label><input type="email" name="email" value="<?php echo $customer->email; ?>"></td>
-        <td><label>Mobile: </label><input type="number" name="mobile" value="<?php echo $customer->mobile; ?>"></td>
-    </tr>
-</table>
-<br>
-<br>
-<form action="<?php echo $this->getUrl('saveCartAddress') ?>" method="POST">
-    <table border="1">
-        <tr>
-            <th>Billing Address</th>
-            <th>Shipping Address</th>
-        </tr>
-        <tr>
-            <td>
-                <table border="1">
+$customer = $cart->getCustomer(); ?>
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Cart Information</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Select Customer</label>
+                    <select class="form-control" id="cartChange" onchange="changeCustomer()">
+                        <option value="none">Select</option>
+                        <?php foreach($customers as $cust): 
+                            print_r($cust->customerId); ?>
+                            <option value="<?php echo $cust->customerId ?>">Id: <?php echo $cust->customerId ?>&nbsp;&nbsp;&nbsp; Name: <?php echo $cust->firstName?>&nbsp;&nbsp;&nbsp; Email: <?php echo $cust->email; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div id="customerDetails">
+            <table class="table table-bordered table-striped">
+                <thead>
                     <tr>
-                        <input type="hidden" name="billingAddress[billingAddress]" value="1">
-                        <input type="hidden" name="billingAddress[shipingAddress]" value="2">
-                        <td>First Name</td>
-                        <td><input type="text" name="billingAddress[firstName]" id="billingAddress[firstName]" value="<?php echo $billingAddress->firstName; ?>"></td>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
                     </tr>
+                </thead>
+                <tbody>
                     <tr>
-                        <td>Last Name</td>
-                        <td><input type="text" name="billingAddress[lastName]" id="billingAddress[lastName]" value="<?php echo $billingAddress->lastName; ?>"></td>
+                        <td><?php echo $customer->firstName; ?></td>
+                        <td><?php echo $customer->lastName; ?></td>
+                        <td><?php echo $customer->email; ?></td>
+                        <td><?php echo $customer->mobile; ?></td>
                     </tr>
-                    <tr>
-                        <td>Address</td>
-                        <td><textarea name="billingAddress[address]" id="billingAddress[address]" rows="4" cols="50"><?php echo $billingAddress->address; ?></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>Zip code</td>
-                        <td><input type="text" name="billingAddress[zipcode]" id="billingAddress[zipcode]" value="<?php echo $billingAddress->zipcode; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>City</td>
-                        <td><input type="text" name="billingAddress[city]" id="billingAddress[city]" value="<?php echo $billingAddress->city; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>State</td>
-                        <td><input type="text" name="billingAddress[state]" id="billingAddress[state]" value="<?php echo $billingAddress->state; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>Country</td>
-                        <td><input type="text" name="billingAddress[country]" id="billingAddress[country]" value="<?php echo $billingAddress->country; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input type="checkbox" name="saveToBillingBook" value=1>Save to Address Book</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input type="checkbox" name="copyAddress" id="copyAddress" onchange="sameAddress()" />Mark As Shiping</td>
-                    </tr>
-                </table>
-            </td>
-            <td>
-                <table border="1">
-                    <tr>
-                        <input type="hidden" name="shippingAddress[billingAddress]" value="2">
-                        <input type="hidden" name="shippingAddress[shipingAddress]" value="1">
-                        <td>First Name</td>
-                        <td><input type="text" name="shippingAddress[firstName]" id="shippingAddress[firstName]" value="<?php echo $shippingAddress->firstName; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>Last Name</td>
-                        <td><input type="text" name="shippingAddress[lastName]" id="shippingAddress[lastName]" value="<?php echo $shippingAddress->lastName; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>Address</td>
-                        <td><textarea name="shippingAddress[address]" id="shippingAddress[address]" rows="4" cols="50"><?php echo $shippingAddress->address; ?></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>Zip code</td>
-                        <td><input type="text" name="shippingAddress[zipcode]" id="shippingAddress[zipcode]" value="<?php echo $shippingAddress->zipcode; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>City</td>
-                        <td><input type="text" name="shippingAddress[city]" id="shippingAddress[city]" value="<?php echo $shippingAddress->city; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>State</td>
-                        <td><input type="text" name="shippingAddress[state]" id="shippingAddress[state]" value="<?php echo $shippingAddress->state; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>Country</td>
-                        <td><input type="text" name="shippingAddress[country]" id="shippingAddress[country]" value="<?php echo $shippingAddress->country; ?>"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input type="checkbox" name="saveToShippingBook">Save to Address Book</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="Save Address">
-</form>
-<br>
-<br>
-<table border="1">
-    <tr>
-        <th>Payment Method</th>
-        <th>Shiping Method</th>
-    </tr>
-    <tr>
-        <td>
-            <table>
-                <form action="<?php echo $this->getUrl('savePaymentMethod');?>" method="POST">
-                    <?php foreach($paymentMethods as $paymentMethod): ?>
-                    <tr>
-                        <td><input type="radio" name="paymentMethod" value="<?php echo $paymentMethod->methodId ?>" <?php echo ($cart->paymentMethod == $paymentMethod->methodId) ? 'checked': ''; ?>><?php echo $paymentMethod->name?></td>
-                    </tr>
-                    <?php endforeach;?>
-                    <tr>
-                        <td><input type="submit" value="Update"></td>
-                    </tr>
-                </form>
+                </tbody>
             </table>
-        </td>
-        <td>
-            <table>
-                <form action="<?php echo $this->getUrl('saveShipingMethod');?>" method="POST">
-                    <?php foreach($shippingMethods as $shippingMethod): ?>
-                    <tr>
-                        <td><input type="radio" name="shippingMethod" value="<?php echo $shippingMethod->methodId ?>" <?php echo ($cart->shippingMethod == $shippingMethod->methodId) ? 'checked': ''; ?>><?php echo $shippingMethod->name?></td>
-                        <td><?php echo $shippingMethod->charge ?></td>
-                    </tr>
-                    <?php endforeach;?>
-                    <tr>
-                        <td colspan="2"><input type="submit" value="Update"></td>
-                    </tr>
-                </form>
-            </table>
-        </td>
-    </tr>
-</table>
-<br>
-<br>
-<div id="productTable">
-    <form action="<?php echo $this->getUrl('addCartItem');?>" method="POST">
-        <input type="submit" value="Add Item">
-        <button type="button" id="hideProduct">Cancel</button>
-        <table border="1" id="productTable">
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <!-- <th>Total</th> -->
-                <th>Action</th>
-            </tr>
-            <?php if(!$products): ?>
-            <tr>
-                <td colspan="6">Products not available!</td>
-            </tr>
-            <?php else: ?>
-            <?php $i = 0; ?>
-            <?php foreach($products as $product): ?>
-            <tr>
-                <?php if($product->base): ?>
-                <td><img src="<?php  echo $product->getBase()->getImgPath();?>" alt="No Image Found" width="50" height="50"></td>
-                <?php else: ?>
-                <td>No Base Image</td>
-                <?php endif; ?>
-                <td><?php echo $product->name; ?></td>
-                <td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" min="1"></td>
-                <td><?php echo $product->price; ?></td>
-                <!-- <td>200</td> -->
-                <td><input type="checkbox" name="cartItem[<?php echo $i ?>][productId]" value="<?php echo $product->productId ?>"></td>
-            </tr>
-            <?php $i++; ?>
-            <?php endforeach; ?>
-            <?php endif; ?>
-        </table>
-    </form>
-</div>
-<br>
-<br>
-<div>
-    <form action="<?php echo $this->getUrl('cartItemUpdate'); ?>" method="POST">
-        <input type="submit" value="Update">
-        <button type="button" value="" id="showProduct">New Item</button>
-        <table border="1">
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Row Total</th>
-                <th>Delete</th>
-            </tr>
-            <?php if(!$items): ?>
-            <tr>
-                <td colspan="6">no item found</td>
-            </tr>
-            <?php else: ?>
-            <?php $i = 0; ?>
-            <?php foreach($items as $item): ?>
-            <tr>
-                <input type="hidden" name="cartItem[<?php echo $i ?>][itemId]" value="<?php echo $item->itemId ?>">
-                <input type="hidden" name="cartItem[<?php echo $i ?>][productId]" value="<?php echo $item->productId ?>">
-                <td><img src="<?php echo $item->getProduct()->getBase()->getImgPath(); ?>" alt="No Image Found" width="50" height="50"></td>
-                <td><?php echo $item->getProduct()->name; ?></td>
-                <td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="<?php echo $item->quantity; ?>" min="1"></td>
-                <td><?php echo $item->getProduct()->price; ?></td>
-                <td align="right"><?php echo $item->itemTotal; ?></td>
-                <td align="center"><a href="<?php echo $this->getUrl('deleteCartItem',null,['itemId' => $item->itemId]) ?>">Remove</a></td>
-            </tr>
-            <?php $i++; ?>
-            <?php endforeach; ?>
-            <?php endif;?>
-            <tr>
-                <td colspan="5" align="right"><?php echo $this->getTotal(); ?></td>
-            </tr>
-        </table>
-    </form>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div id="cartAddress">
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div id="paymentShipping">
+        </div>
+    </div>
     
+    <div class="card-body">
+        <div id="cartProduct">
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div id="cartSubTotal" class="col-sm-6">
+        </div>
+    </div>
 </div>
-<br>
-<br>
-<form action="<?php echo $this->getUrl('placeOrder') ?>" method="POST">
-    <table>
-        <tr>
-            <td width="70%" align="right">Subtotal</td>
-            <td><?php echo (!$this->getTotal()) ? '0' : $this->getTotal(); ?></td>
-        </tr>
-        <tr>
-            <td width="70%" align="right">Shipping</td>
-            <td><?php echo (!$cart->shippingCharge) ? '0' : $cart->shippingCharge;?></td>
-        </tr>
-        <tr>
-            <td width="70%" align="right">Tax</td>
-            <td><?php echo (!$this->getTax($cart->cartId)) ? '0' : $this->getTax($cart->cartId); ?></td>
-        </tr>
-        <tr>
-            <td width="70%" align="right">Discount</td>
-            <td><?php echo $cart->discount; ?></td>
-        </tr>
-        <tr>
-            <td width="70%" align="right">Grand Total</td>
-            <input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + ($cart->shippingCharge) + $this->getTax($cart->cartId) - ($cart->discount); ?>">
-            <input type="hidden" name="discount" value="<?php echo $cart->discount;?>">
-            <input type="hidden" name="taxAmount" value="<?php echo $this->getTax($cart->cartId); ?>">
-            <td><?php echo $this->getTotal() + ($cart->shippingCharge) + $this->getTax($cart->cartId) - ($cart->discount); ?></td>
-        </tr>
-        <tr>
-            <td width="70%" align="right"></td>
-            <td><input type="submit" name="Place Order" <?php echo $disabled; ?> /></td>
-        </tr>
-    </table>
-</form>
-<br>
+
 
 <script type="text/javascript">
     function changeCustomer() 
@@ -312,6 +108,18 @@ $disabled = (!$items) ? 'disabled' : "";
         });
         $("#hideProduct").click(function(){
             $("#productTable").hide();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        admin.setUrl("<?php echo $this->getUrl('indexBlock'); ?>");
+        admin.load();
+
+        $("#cartChange").change(function(){
+            admin.setData({'id' : $(this).val()});
+            admin.setUrl("<?php echo $this->getUrl('addCart',null,['id'=>null]);?>");
+            admin.load();
         });
     });
 </script>

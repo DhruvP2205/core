@@ -83,12 +83,39 @@ class Block_Core_Grid extends Block_Core_Template
         return $this;
     }
 
-    public function getColumnData($column,$collection)
+    public function getColumnData($column, $collection)
     {
         $key = $column['key'];
         if($key == 'status')
         {
             return $collection->getStatus($collection->status);
+        }
+        if($key == 'base')
+        {
+            if($collection->getBase())
+            {
+                $image = $collection->getBase()->getImgPath();
+                return "<img src='{$image}' alt='' width='50' height='50'>";
+            }
+            return "Image Not Set.";
+        }
+        if($key == 'thumb')
+        {
+            if($collection->getThumb())
+            {
+                $image = $collection->getThumb()->getImgPath();
+                return "<img src='{$image}' alt='' width='50' height='50'>";
+            }
+            return "Image Not Set.";
+        }
+        if($key == 'small')
+        {
+            if($collection->getThumb())
+            {
+                $image = $collection->getSmall()->getImgPath();
+                return "<img src='{$image}' alt='' width='50' height='50'>";
+            }
+            return "Image Not Set.";
         }
         return $collection->$key;
     }

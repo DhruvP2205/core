@@ -12,6 +12,7 @@ class Controller_Admin extends Controller_Admin_Action
 
     public function indexAction()
     {
+        $this->setTitle('Admin');
         $content = $this->getLayout()->getContent();
         $adminGrid = Ccc::getBlock('Admin_Index');
         $content->addChild($adminGrid);
@@ -174,7 +175,7 @@ class Controller_Admin extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
-            $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->gridBlockAction();
         }   
     }

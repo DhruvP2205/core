@@ -1,5 +1,5 @@
 <?php $orders = $this->getOrders(); ?>
-<a href="<?php echo $this->getUrl('edit','cart') ?>"><button>Add New</button></a>
+<button class="btn btn-block btn-success" type="button" id="addNew">Add New Cart</button>
 <br>
 <br>
 <br>
@@ -29,8 +29,24 @@
         <td><?php echo $order->email ?></td>
         <td><?php echo $order->mobile ?></td>
         <td><?php echo $order->grandTotal ?></td>
-        <td><a href="<?php echo $this->getUrl('edit','order',['id' => $order->orderId],true); ?>">View Order</a></td>
+        <td><button type="button" class="order btn btn-success" value="<?php echo $order->orderId; ?>">View Order</button></td>
     </tr>
     <?php endforeach; ?>
     <?php endif; ?>
 </table>
+
+<script type="text/javascript">
+    $("#addNew").click(function(){
+        admin.setData({'id' : null});
+        admin.setUrl("<?php echo $this->getUrl('editBlock',null,['id' => null]); ?>");
+        admin.load();
+    });
+
+    $(".order").click(function(){
+        var data = $(this).val();
+        admin.setData({'id' : data});
+        admin.setUrl("<?php echo $this->getUrl('edit','order',['id' => null]); ?>");
+        admin.setType('GET');
+        admin.load();
+    });
+</script>

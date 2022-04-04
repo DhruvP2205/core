@@ -1,6 +1,7 @@
 <?php 
     $childrens = $this->getChildren();
-    foreach ($childrens as $child) {
+    foreach ($childrens as $child)
+    {
         echo $child->toHtml();
     }
 ?>

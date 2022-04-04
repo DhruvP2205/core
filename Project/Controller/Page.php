@@ -19,6 +19,59 @@ class Controller_Page extends Controller_Admin_Action
         $this->renderLayout();
     }
 
+    public function indexAction()
+    {
+        $this->setTitle('Page');
+        $content = $this->getLayout()->getContent();
+        $pageGrid = Ccc::getBlock('Page_Index');
+        $content->addChild($pageGrid);
+        $this->renderLayout();
+    }
+
+    public function gridBlockAction()
+    {
+        $pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $pageGrid
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
+    }
+
+    public function addBlockAction()
+    {
+        $pageModel = Ccc::getModel("Page");
+        Ccc::register('page',$pageModel);
+
+        $pageEdit = $this->getLayout()->getBlock('Page_Edit')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $pageEdit
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
+    }
+
     public function addAction()
     {
         $this->setTitle('Add Page');
@@ -71,13 +124,59 @@ class Controller_Page extends Controller_Admin_Action
                 throw new Exception("Unable to Save Record.");
             } 
             $this->getMessage()->addMessage('Your Data saved Successfully.');
-            $this->redirect('grid','page',[],true);
+            $this->gridBlockAction();
         } 
         catch (Exception $e) 
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','page',[],true);
+            $this->gridBlockAction();
         }
+    }
+
+    public function editBlockAction()
+    {
+        try
+        {
+            $this->setTitle('Edit Page');
+            $pageModel = Ccc::getModel('Page');
+            $request = $this->getRequest();
+            $id = (int)$request->getRequest('id');
+
+            if(!$id)
+            {
+                throw new Exception("Request Invalid.");
+            }
+            
+            $page = $pageModel->load($id);
+            
+            if(!$page)
+            {   
+                throw new Exception("System is unable to find record.");
+            }
+            Ccc::register('page',$page);
+
+            $pageEdit = Ccc::getBlock('Page_Edit')->toHtml();
+            $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+            $response = [
+                'status' => 'success',
+                'elements' => [
+                    [
+                        'element' => '#indexContent',
+                        'content' => $pageEdit
+                    ],
+                    [
+                        'element' => '#adminMessage',
+                        'content' => $messageBlock
+                    ]
+                ]
+            ];
+            $this->renderJson($response);
+        }
+        catch (Exception $e)
+        {
+            $this->getMessage()->addMessage($e->getMessage(),3);
+            $this->gridBlockAction();
+        }   
     }
 
     public function editAction()
@@ -153,12 +252,12 @@ class Controller_Page extends Controller_Admin_Action
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect('grid','page',[],true);
+            $this->gridBlockAction();
         }
         catch(Exception $e)
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','page',[],true);
+            $this->gridBlockAction();
         }
     }
 }
