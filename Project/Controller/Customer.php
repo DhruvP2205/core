@@ -12,6 +12,7 @@ class Controller_Customer extends Controller_Admin_Action
 
     public function indexAction()
     {
+        $this->setTitle('Customer');
         $content = $this->getLayout()->getContent();
         $adminGrid = Ccc::getBlock('Admin_Index');
         $content->addChild($adminGrid);
@@ -82,18 +83,15 @@ class Controller_Customer extends Controller_Admin_Action
             $customerId = $request->getRequest('id');
             if(!$customerId)
             {
-                $this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-                throw new Exception("Error Processing Request", 1);         
+                throw new Exception("Error Processing Request");         
             }
             if(!(int)$customerId)
             {
-                $this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
                 throw new Exception("Error Processing Request", 1);         
             }
             $customer = $customerModel->load($customerId);
             if(!$customer)
             {
-                $this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
                 throw new Exception("Error Processing Request", 1);         
             }
             $billingAddress = $customer->getBillingAddress();
@@ -122,7 +120,7 @@ class Controller_Customer extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
-            $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->gridBlockAction();
         }   
     }
@@ -156,7 +154,7 @@ class Controller_Customer extends Controller_Admin_Action
         {
             throw new Exception("Unable to insert Customer.");
         }
-        $message = $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
+        $message = $this->getMessage()->addMessage('Customer data saved succesfully.',1);
         return $save;
     }
 
@@ -226,7 +224,7 @@ class Controller_Customer extends Controller_Admin_Action
         {
             throw new Exception("Customer Details Not Saved.");
         }
-        $message = $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
+        $message = $this->getMessage()->addMessage('Customer data saved succesfully.',1);
     }
 
     public function saveAction()
@@ -253,7 +251,7 @@ class Controller_Customer extends Controller_Admin_Action
         catch (Exception $e)
         {
             $message = $this->getMessage()->addMessage($e->getMessage(),3);
-            echo $message->getMessages()['error'];
+            $this->gridBlockAction();
         }
     }
 
@@ -286,7 +284,6 @@ class Controller_Customer extends Controller_Admin_Action
         catch (Exception $e) 
         {
             $message = $this->getMessage()->addMessage($e->getMessage(),3);
-            echo $message->getMessages()['error'];
             $this->gridBlockAction();
         }       
     }

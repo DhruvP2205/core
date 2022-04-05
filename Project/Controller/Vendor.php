@@ -9,25 +9,65 @@ class Controller_Vendor extends Controller_Admin_Action
             $this->redirect('login','admin_login');
         }
     }
-    
-    public function gridAction()
+
+    public function indexAction()
     {
         $this->setTitle('Vendor');
         $content = $this->getLayout()->getContent();
-        $vendorGrid = Ccc::getBlock('Vendor_Grid');
-        $content->addChild($vendorGrid,'Grid');
+        $vendorGrid = Ccc::getBlock('Vendor_Index');
+        $content->addChild($vendorGrid);
+
         $this->renderLayout();
     }
 
-    public function addAction()
+    public function gridBlockAction()
     {
-        $this->setTitle('Add Vendor');
-        $vendorModel = Ccc::getModel('Vendor'); 
-        $addressModel = Ccc::getModel('Vendor_Address');
-        $content = $this->getLayout()->getContent();
-        $vendorAdd = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendorModel,'address'=>$addressModel]);
-        $content->addChild($vendorAdd,'Add');
-        $this->renderLayout();
+        $vendorGrid = Ccc::getBlock('Vendor_Grid')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $vendorGrid
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
+    }
+
+    public function addBlockAction()
+    {
+        $vendorModel = Ccc::getModel("Vendor");
+        $vendorAddress = $vendorModel->getAddress();
+        $vendor = $vendorModel;
+        $address = $vendorModel;
+
+        Ccc::register('vendor',$vendorModel);
+        Ccc::register('address',$vendorModel);
+
+        $vendorEdit = $this->getLayout()->getBlock('Vendor_Edit')->toHtml();
+
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $vendorEdit
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
     }
 
     protected function saveVendor()
@@ -70,10 +110,23 @@ class Controller_Vendor extends Controller_Admin_Action
         return $result;
     }
 
-    protected function saveAddress($vendor)
+    protected function saveAddress($vendor = null)
     {
-        $address = $vendor->getAddress();
         $request = $this->getRequest();
+        if(!$vendor)
+        {
+            $vendorId = $request->getRequest('id');
+            if(!$vendorId)
+            {
+                throw new Exception("First create vendor.");
+            }
+            $vendor = Ccc::getModel('vendor')->load($vendorId);
+        }
+        if(!$request->getPost())
+        {
+            throw new Exception("Invalid Request.");
+        }
+        $address = $vendor->getAddress();
         if(!$request->getPost('address'))
         {
             throw new Exception("Invalid Request.");
@@ -89,7 +142,6 @@ class Controller_Vendor extends Controller_Admin_Action
         {
             unset($address->addressId);
         }
-
         $address->setData($postData);
         
         $address->vendorId = $vendor->vendorId;
@@ -107,57 +159,81 @@ class Controller_Vendor extends Controller_Admin_Action
     {
         try
         {
-            $vendor = $this->saveVendor();
-            $this->saveAddress($vendor);
-            $this->redirect('grid','vendor',[],true);
+            $request = $this->getRequest();
+            if($request->getPost('vendor'))
+            {
+                $vendor = $this->saveVendor();
+                if(!$vendor)
+                {
+                    throw new Exception("System is unable to Save.", 1);
+                }
+                $this->saveAddress($vendor);
+            }
+            if($request->getPost('address'))
+            {
+                $this->saveAddress();         
+            }
+            $message = $this->getMessage()->addMessage('Vendor Inserted succesfully.',1);
+            $this->gridBlockAction();
         }
         catch (Exception $e) 
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','vendor',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            $this->gridBlockAction();
         }
     }
 
-    public function editAction()
+    public function editBlockAction()
     {
         try
         {
-            $this->setTitle('Edit Vendor');
             $vendorModel = Ccc::getModel('Vendor');
             $addressModel = Ccc::getModel('vendor_address');
 
             $request = $this->getRequest();
-            $id = (int)$request->getRequest('id');
-            if(!$id)
+            $vendorId = $request->getRequest('id');
+            if(!$vendorId)
             {
-                throw new Exception("Request Invalid.");
+                throw new Exception("Error Processing Request");         
             }
-            
-            $vendor = $vendorModel->load($id);
-            
+            if(!(int)$vendorId)
+            {
+                throw new Exception("Error Processing Request", 1);         
+            }
+            $vendor = $vendorModel->load($vendorId);
             if(!$vendor)
-            {   
-                throw new Exception("System is unable to find record.");
-            }
-
-            $address = $addressModel->load($id,'vendorId');
-            if(!$address)
             {
-                $address = Ccc::getModel('Vendor_Address');   
+                throw new Exception("Error Processing Request", 1);         
             }
+            $address = $vendor->getAddress();
 
-            $content = $this->getLayout()->getContent();
-            $vendorEdit = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
-            $content->addChild($vendorEdit,'Edit');
-            $this->renderLayout();
+            Ccc::register('vendor',$vendor);
+            Ccc::register('address',$address);
+
+            $vendorEdit = Ccc::getBlock('vendor_Edit')->toHtml();
+            $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+            $response = [
+                'status' => 'success',
+                'elements' => [
+                    [
+                        'element' => '#indexContent',
+                        'content' => $vendorEdit
+                    ],
+                    [
+                        'element' => '#adminMessage',
+                        'content' => $messageBlock
+                    ]
+                ]
+            ];
+            $this->renderJson($response);
         }
-        catch (Exception $e) 
+        catch (Exception $e)
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect($this->getView()->getUrl('grid','vendor',[],true));
-        }
+            $this->gridBlockAction();
+        }   
     }
-
+    
     public function deleteAction()
     {
         try 
@@ -180,13 +256,13 @@ class Controller_Vendor extends Controller_Admin_Action
                 throw new Exception("Unable to Delete Record.");
             }
             $result->delete();
-            $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect('grid','vendor',[],true);
+            $message = $this->getMessage()->addMessage('Data deleted.');
+            $this->gridBlockAction();
         } 
         catch (Exception $e) 
         {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','vendor',[],true);
+            $message = $this->getMessage()->addMessage($e->getMessage(),3);
+            $this->gridBlockAction();
         }       
     }
 }

@@ -9,24 +9,58 @@ class Controller_Salesman extends Controller_Admin_Action
             $this->redirect('login','admin_login');
         }
     }
-    
-    public function gridAction()
+
+    public function indexAction()
     {
         $this->setTitle('Salesman');
         $content = $this->getLayout()->getContent();
-        $salesmanGrid = Ccc::getBlock('Salesman_Grid');
-        $content->addChild($salesmanGrid,'Grid');
+        $salesmanGrid = Ccc::getBlock('Salesman_Index');
+        $content->addChild($salesmanGrid);
         $this->renderLayout();
     }
 
-    public function addAction()
+    public function gridBlockAction()
     {
-        $this->setTitle('Add Salesman');
-        $salesmanModel = Ccc::getModel('Salesman');
-        $content = $this->getLayout()->getContent();
-        $salesmanAdd = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel]);
-        $content->addChild($salesmanAdd,'Add');
-        $this->renderLayout();
+        $salesmanGrid = Ccc::getBlock('Salesman_Grid')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $salesmanGrid
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
+    }
+
+    public function addBlockAction()
+    {
+        $salesmanModel = Ccc::getModel("Salesman");
+        Ccc::register('salesman',$salesmanModel);
+
+        $salesmanEdit = $this->getLayout()->getBlock('Salesman_Edit')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $salesmanEdit
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
     }
 
     public function saveAction()
@@ -60,16 +94,16 @@ class Controller_Salesman extends Controller_Admin_Action
                 throw new Exception("Unable to insert Salesman.");
             }
             $this->getMessage()->addMessage('Salesman Inserted succesfully.',1); 
-            $this->redirect('grid','salesman',[],true);
+            $this->gridBlockAction();
         }
         catch (Exception $e)
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','Salesman',[],true);
+            $this->gridBlockAction();
         }
     }
 
-    public function editAction()
+    public function editBlockAction()
     {
         try
         {
@@ -80,29 +114,41 @@ class Controller_Salesman extends Controller_Admin_Action
 
             if(!$id)
             {
-                throw new Exception("Error Processing Request");         
+                throw new Exception("Request Invalid.");
             }
             
             $salesman = $salesmanModel->load($id);
             
             if(!$salesman)
             {   
-                throw new Exception("Error Processing Request");        
+                throw new Exception("System is unable to find record.");
             }
+            Ccc::register('salesman',$salesman);
 
-            $content = $this->getLayout()->getContent();
-            $salesmanEdit = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesman]);
-            $content->addChild($salesmanEdit,'Edit');
-            $this->renderLayout();
+            $salesmanEdit = Ccc::getBlock('Salesman_Edit')->toHtml();
+            $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+            $response = [
+                'status' => 'success',
+                'elements' => [
+                    [
+                        'element' => '#indexContent',
+                        'content' => $salesmanEdit
+                    ],
+                    [
+                        'element' => '#adminMessage',
+                        'content' => $messageBlock
+                    ]
+                ]
+            ];
+            $this->renderJson($response);
         }
         catch (Exception $e)
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','salesman',[],true);
-        }
+            $this->gridBlockAction();
+        }   
     }
-
-
+    
     public function deleteAction()
     {
         try 
@@ -120,12 +166,18 @@ class Controller_Salesman extends Controller_Admin_Action
             $salesmanId = (int)$request->getRequest('id');
 
             $customers = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `salesmanId` = {$salesmanId}");
-            foreach($customers as $customer)
+            if($customers)
             {
-                $customerPrices = $customerPriceModel->fetchAll("SELECT `entityId` FROM `customer_price` WHERE `customerId` = {$customer->customerId}");
-                foreach ($customerPrices as $customerPrice) 
+                foreach($customers as $customer)
                 {
-                    $customerPriceModel->load($customerPrice->entityId)->delete();
+                    $customerPrices = $customerPriceModel->fetchAll("SELECT `entityId` FROM `customer_price` WHERE `customerId` = {$customer->customerId}");
+                    if($customerPrices)
+                    {
+                        foreach ($customerPrices as $customerPrice) 
+                        {
+                            $customerPriceModel->load($customerPrice->entityId)->delete();
+                        }
+                    }
                 }
             }
 
@@ -136,12 +188,12 @@ class Controller_Salesman extends Controller_Admin_Action
             }
             $result->delete();
             $this->getMessage()->addMessage('Data Deleted.');
-            $this->redirect('grid','salesman',[],true);
+            $this->gridBlockAction();
         } 
         catch (Exception $e)
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','salesman',[],true);
+            $this->gridBlockAction();
         }
     }
 }

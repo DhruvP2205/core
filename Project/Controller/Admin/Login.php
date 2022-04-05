@@ -42,7 +42,7 @@ class Controller_Admin_Login extends Controller_Admin_Action
 
             $loginModel->login($result[0]->email);
             $this->getMessage()->addMessage('You are logged in!');
-            $this->redirect('grid','product',[],true);
+            $this->redirect('index','product',[],true);
         }
         catch (Exception $e)
         {

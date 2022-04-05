@@ -70,12 +70,38 @@ var admin = {
         });
     },
 
-    manageElemants : function(elements){
+    manageElemants : function(elements) {
         jQuery(elements).each(function(index,element) {
-            jQuery(element.element).html(element.content);
-            if(element.classAdd != undefined){
-                jQuery(element.element).addClass(element.classAdd);
+            if(element.element == '#adminMessage')
+            {
+                if(element.content)
+                {
+                    let text = element.content;
+                    const myArray = text.split(":");
+                    const type = myArray[0];
+                    const msg = myArray[1];
+                    if(type == 'success ')
+                    {
+                        toastr.success(msg);
+                    }
+                    else if(type == 'warning ')
+                    {
+                        toastr.warning(msg);
+                    }
+                    else if(type == 'error ')
+                    {
+                        toastr.error(msg);
+                    }
+                }
+            }
+            else
+            {
+                jQuery(element.element).html(element.content);
+                if(element.classAdd != undefined)
+                {
+                    jQuery(element.element).addClass(element.classAdd);
+                }
             }
         });
     }
-};
+}

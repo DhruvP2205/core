@@ -74,10 +74,13 @@ class Block_Config_Grid extends Block_Core_Grid
         
         $configs = $configModel->fetchAll("SELECT * FROM `config` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         $configColumn = [];
-        foreach ($configs as $config) 
+        if($configs)
         {
-            array_push($configColumn, $config);
-        }        
+            foreach ($configs as $config) 
+            {
+                array_push($configColumn, $config);
+            }
+        }
         return $configColumn;
     }
 }

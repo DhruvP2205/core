@@ -1,10 +1,80 @@
-<?php Ccc::loadClass('Block_Core_Template');
+<?php Ccc::loadClass('Block_Core_Grid');
 
-class Block_Salesman_Grid extends Block_Core_Template   
+class Block_Salesman_Grid extends Block_Core_Grid
 { 
     public function __construct()
     {
-        $this->setTemplate('view/salesman/grid.php');
+        parent::__construct();
+        $this->prepareCollections();
+    }
+
+    public function prepareCollections()
+    {
+        $this->addColumn([
+        'title' => 'Salesman Id',
+        'type' => 'int',
+        'key' =>'salesmanId'
+        ],'id');
+
+        $this->addColumn([
+        'title' => 'First Name',
+        'type' => 'varchar',
+        'key' =>'firstName'
+        ],'First Name');
+
+        $this->addColumn([
+        'title' => 'Last Name',
+        'type' => 'varchar',
+        'key' =>'lastName'
+        ],'Last Name');
+
+        $this->addColumn([
+        'title' => 'Email',
+        'type' => 'varchar',
+        'key' =>'email'
+        ],'Email');
+
+        $this->addColumn([
+        'title' => 'Mobile',
+        'type' => 'int',
+        'key' =>'mobile'
+        ],'Mobile');
+
+        $this->addColumn([
+        'title' => 'Discount',
+        'type' => 'int',
+        'key' =>'discount'
+        ],'Discount');
+
+        $this->addColumn([
+        'title' => 'Status',
+        'type' => 'int',
+        'key' =>'status'
+        ],'Status');
+
+        $this->addColumn([
+        'title' => 'Created Date',
+        'type' => 'datetime',
+        'key' =>'createdDate'
+        ],'Created Date');
+
+        $this->addColumn([
+        'title' => 'Updated Date',
+        'type' => 'datetime',
+        'key' =>'updatedDate'
+        ],'Updated Date');
+
+        $this->addAction(['title' => 'edit','method' => 'getEditUrl','class' => 'salesman' ],'Edit');
+        $this->addAction(['title' => 'delete','method' => 'getDeleteUrl','class' => 'salesman' ],'Delete');
+        $this->addAction(['title' => 'manage-customer','method' => 'getSalesmanUrl','class' => 'salesman_customer' ],'Salesman');
+        $this->prepareCollectionContent();
+    }
+
+    public function prepareCollectionContent()
+    {
+        $salesmans = $this->getSalesmans();
+        $this->setCollection($salesmans);
+        return $this;
     }
 
     public function getSalesmans()
@@ -22,6 +92,11 @@ class Block_Salesman_Grid extends Block_Core_Template
         $this->setPager($pagerModel);
 
         $salesmans = $salesmanModel->fetchAll("SELECT * FROM `salesman` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
-        return $salesmans;
+        $salesmanColumn = [];
+        foreach ($salesmans as $salesman) 
+        {
+            array_push($salesmanColumn, $salesman);
+        }        
+        return $salesmanColumn;
     }
 }

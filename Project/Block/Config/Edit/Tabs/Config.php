@@ -1,7 +1,7 @@
-<?php Ccc::loadClass('Block_Core_Template');
+<?php Ccc::loadClass('Block_Core_Edit_Tabs_Content');
 
-class Block_Config_Edit_Tabs_Config extends Block_Core_Template   
-{ 
+class Block_Config_Edit_Tabs_Config extends Block_Core_Edit_Tabs_Content
+{
     public function __construct()
     {
         $this->setTemplate('view/config/edit/tabs/config.php');

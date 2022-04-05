@@ -1,17 +1,19 @@
-<!-- <?php //$tabs = $this->getTabs(); ?>
-<?php //foreach($tabs as $key => $tab): ?>
-    <a href="<?php //echo ($this->getCurrentTab() == $key) ? '#' : $tab['url'] ?>"  <?php //echo ($this->getCurrentTab() == $key) ?'style ="color:green;"' : 'style ="color:red;"' ; ?>> <?php //echo $tab['title'];?> </a>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<?php //endforeach;?>
- -->
-
-
 <?php $tabs = $this->getTabs(); ?>
-<?php foreach($tabs as $key => $tab): ?>
-    <button type="button" class="loadTab" value="<?php echo $tab['url'] ?>" <?php echo ($this->getCurrentTab() == $key) ? 'style ="color:"green;' : 'style ="color:red";' ; ?> <?php echo ($this->getCurrentTab() == $key) ? 'disabled' : '' ?>><?php echo $tab['title'];?></button>
-<?php endforeach;?>
-
-
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary card-tabs">
+            <div class="card-header p-0 pt-1">
+                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                    <?php foreach($tabs as $key => $tab): ?>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link loadTab <?php echo ($this->getCurrentTab() == $key) ? 'active' : '' ; ?>" data-toggle="pill" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true" value="<?php echo $tab['url'] ?>" <?php echo ($this->getCurrentTab() == $key) ? 'disabled' : '' ?>><?php echo $tab['title'];?></button>
+                    </li>
+                    <?php endforeach;?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     jQuery(".loadTab").click(function(){
         admin.setUrl($(this).val());

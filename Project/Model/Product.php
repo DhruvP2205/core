@@ -32,34 +32,7 @@ class Model_Product extends Model_Core_Row
             return $statuses[$key];
         }
         return self::STATUS_DISABLED_DEFAULT;
-    }
-
-    public function saveCategories(array $categoryIds)
-    {
-        if(!$categoryIds || !array_key_exists('exists', $categoryIds))
-        {
-            $categoryIds['exists'] = [];
-        }
-
-        $productCategoryModel = Ccc::getModel('Product_Category');
-        $categoryProduct = $productCategoryModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = {$this->productId} ");
-        
-        foreach($categoryProduct as $category)
-        {
-            if(!in_array($category->categoryId, $categoryIds['exists']))
-            {
-                $productCategoryModel->load($category->entityId)->delete();
-            }
-        }
-
-        foreach($categoryIds['new'] as $categoryId)
-        {
-            $productCategoryModel = Ccc::getModel('Product_Category');
-            $productCategoryModel->productId = $this->productId;
-            $productCategoryModel->categoryId = $categoryId;
-            $productCategoryModel->save();
-        }
-    }
+    }   
 
     public function setMedia($media)
     {
@@ -70,7 +43,7 @@ class Model_Product extends Model_Core_Row
     public function getMedia($reload = false)
     {
         $mediaModel = Ccc::getModel('Product_Media');
-        if(!$this->media)
+        if(!$this->productId)
         {
             return $mediaModel;
         }
@@ -79,7 +52,7 @@ class Model_Product extends Model_Core_Row
             return $this->media;
         }
 
-        $media = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `productId` = {$this->productId}");
+        $media = $mediaModel->fetchAll("SELECT * FROM `product_media` WHERE `productId` = {$this->productId}");
         if(!$media)
         {
             return $mediaModel;
@@ -99,7 +72,7 @@ class Model_Product extends Model_Core_Row
         $mediaModel = Ccc::getModel('Product_Media'); 
         if(!$this->base)
         {
-            return $mediaModel;
+            return null;
         }
         $base = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `mediaId` = {$this->base}");
         if(!$base)
@@ -120,7 +93,7 @@ class Model_Product extends Model_Core_Row
         $mediaModel = Ccc::getModel('Product_Media'); 
         if(!$this->small)
         {
-            return $mediaModel;
+            return null;
         }
         $small = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `mediaId` = {$this->small}");
         if(!$small)
@@ -141,7 +114,7 @@ class Model_Product extends Model_Core_Row
         $mediaModel = Ccc::getModel('Product_Media'); 
         if(!$this->thumb)
         {
-            return $mediaModel;
+            return null;
         }
         $thumb = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `mediaId` = {$this->thumb}");
         if(!$thumb)
@@ -149,5 +122,29 @@ class Model_Product extends Model_Core_Row
             return $mediaModel;
         }
         return $thumb;
+    }
+
+    public function saveCategories(array $categoryIds)
+    {
+        $categoryProductModel = Ccc::getModel('Product_Category');
+        $categoryProduct = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = '$this->productId' "); 
+        
+        foreach($categoryProduct as $category)
+        {
+            if(!in_array($category->categoryId, $categoryIds['exists']))
+            {
+                $categoryProductModel->load($category->entityId)->delete();
+            }
+        }
+        if(array_key_exists('new',$categoryIds))
+        {
+            foreach($categoryIds['new'] as $categoryId)
+            {
+                $categoryProductModel = Ccc::getModel('Product_Category');
+                $categoryProductModel->productId = $this->productId;
+                $categoryProductModel->categoryId = $categoryId;
+                $categoryProductModel->save();
+            }
+        }
     }
 }

@@ -9,34 +9,58 @@ class Controller_Config extends Controller_Admin_Action
             $this->redirect('login','admin_login');
         }
     }
-    
-    public function gridAction()
+
+    public function indexAction()
     {
         $this->setTitle('Config');
         $content = $this->getLayout()->getContent();
-        $configGrid = Ccc::getBlock('Config_Grid');
-        $content->addChild($configGrid,'Grid');
+        $configGrid = Ccc::getBlock('Config_Index');
+        $content->addChild($configGrid);
         $this->renderLayout();
     }
 
-    public function grid1Action()
+    public function gridBlockAction()
     {
-        $this->setTitle('Config');
-        $content = $this->getLayout()->getContent();
-        $configGrid = Ccc::getBlock('Config_Grid');
-        $content->addChild($configGrid,'Grid');
-        $this->renderContent();
+        $configGrid = Ccc::getBlock('Config_Grid')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $configGrid
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
     }
 
-    public function addAction()
+    public function addBlockAction()
     {
-        $this->setTitle('Add Config');
-        $configModel = Ccc::getModel('Config');
-        $content = $this->getLayout()->getContent();
-        $configAdd = Ccc::getBlock('Config_Edit');
+        $configModel = Ccc::getModel("Config");
         Ccc::register('config',$configModel);
-        $content->addChild($configAdd,'Add');
-        $this->renderContent();
+
+        $configEdit = $this->getLayout()->getBlock('Config_Edit')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $configEdit
+                ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
     }
 
     public function saveAction()
@@ -75,45 +99,60 @@ class Controller_Config extends Controller_Admin_Action
                 throw new Exception("Unable to Save Record.");
             }
             $message = $this->getMessage()->addMessage('Your Data saveed Successfully.');
-            echo $message->getMessages()['success'];
+            $this->gridBlockAction();
         } 
         catch (Exception $e) 
         {
             $message = $this->getMessage()->addMessage($e->getMessage(),3);
-            echo $message->getMessages()['success'];
+            $this->gridBlockAction();
         }
     }
 
-    public function editAction()
+    public function editBlockAction()
     {
-        try 
+        try
         {
             $this->setTitle('Edit Config');
-            $configModel = Ccc::getModel('Config');
+            $configModel = Ccc::getModel('config');
             $request = $this->getRequest();
             $id = (int)$request->getRequest('id');
+
             if(!$id)
             {
                 throw new Exception("Request Invalid.");
             }
+            
             $config = $configModel->load($id);
+            
             if(!$config)
-            {
-                throw new Exception("System is unable to find record."); 
+            {   
+                throw new Exception("System is unable to find record.");
             }
-            $content = $this->getLayout()->getContent();
-            $configEdit = Ccc::getBlock('Config_Edit');
             Ccc::register('config',$config);
-            $content->addChild($configEdit,'Edit');
-            $this->renderContent();
-        }    
-        catch (Exception $e) 
-        {
-            $message = $this->getMessage()->addMessage($e->getMessage(),3);
-            echo $message->getMessages()['success'];
-        }
-    }
 
+            $configEdit = Ccc::getBlock('Config_Edit')->toHtml();
+            $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+            $response = [
+                'status' => 'success',
+                'elements' => [
+                    [
+                        'element' => '#indexContent',
+                        'content' => $configEdit
+                    ],
+                    [
+                        'element' => '#adminMessage',
+                        'content' => $messageBlock
+                    ]
+                ]
+            ];
+            $this->renderJson($response);
+        }
+        catch (Exception $e)
+        {
+            $this->getMessage()->addMessage($e->getMessage(),3);
+            $this->gridBlockAction();
+        }   
+    }
 
     public function deleteAction()
     {
@@ -134,12 +173,12 @@ class Controller_Config extends Controller_Admin_Action
             }
             $result->delete();
             $message = $this->getMessage()->addMessage('Data Deleted.');
-            echo $message->getMessages()['success'];
+            $this->gridBlockAction();
         }
         catch(Exception $e)
         {
             $message = $this->getMessage()->addMessage($e->getMessage(),3);
-            echo $message->getMessages()['success'];
+            $this->gridBlockAction();
         }
     }
 }

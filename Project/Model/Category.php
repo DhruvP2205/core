@@ -41,15 +41,15 @@ class Model_Category extends Model_Core_Row
     public function getMedia($reload = false)
     {
         $mediaModel = Ccc::getModel('Category_Media'); 
-        if(!$this->media)
+        if(!$this->categoryId)
         {
-            return null;
+            return $mediaModel;
         }
         if($this->media && !$reload)
         {
             return $this->media;
         }
-        $media = $mediaModel->fetchRow("SELECT * FROM `category_media` WHERE `categoryId` = {$this->categoryId}");
+        $media = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `categoryId` = {$this->categoryId}");
         if(!$media)
         {
             return null;
@@ -101,5 +101,27 @@ class Model_Category extends Model_Core_Row
             return $mediaModel;
         }
         return $thumb;
+    }
+
+    public function getPath()
+    {
+        $categoryId = $this->categoryId;
+        $path = $this->path;
+        $finalPath = NULL;
+        $path = explode("/",$path);
+        foreach ($path as $path1)
+        {
+            $categoryModel = Ccc::getModel('Category');
+            $category = $categoryModel->fetchRow("SELECT * FROM `category` WHERE `categoryId` = '$path1' ");
+            if($path1 != $categoryId)
+            {
+                $finalPath .= $category->name ."=>";
+            }
+            else
+            {
+                $finalPath .= $category->name;
+            }
+        }
+        return $finalPath;
     }
 }

@@ -12,6 +12,7 @@ class Controller_Admin extends Controller_Admin_Action
 
     public function indexAction()
     {
+        $this->setTitle('Admin');
         $content = $this->getLayout()->getContent();
         $adminGrid = Ccc::getBlock('Admin_Index');
         $content->addChild($adminGrid);
@@ -60,26 +61,6 @@ class Controller_Admin extends Controller_Admin_Action
             ]
         ];
         $this->renderJson($response);
-    }
-
-    public function gridAction()
-    {
-        $this->setTitle('Admin');
-        $adminGrid = Ccc::getBlock('Admin_Grid');
-        $content = $this->getLayout()->getContent();
-        $content->addChild($adminGrid,'Grid');
-        $this->renderLayout();
-    }
-
-    public function addAction()
-    {
-        $this->setTitle('Add Admin');
-        $adminModel = Ccc::getModel('Admin');
-        $content = $this->getLayout()->getContent();
-        $adminAdd = Ccc::getBlock('Admin_Edit');
-        Ccc::register('admin',$adminModel);
-        $content->addChild($adminAdd,'Add');
-        $this->renderLayout();
     }
 
     public function saveAction()
@@ -174,7 +155,7 @@ class Controller_Admin extends Controller_Admin_Action
         }
         catch (Exception $e)
         {
-            $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+            $this->getMessage()->addMessage($e->getMessage(),3);
             $this->gridBlockAction();
         }   
     }
