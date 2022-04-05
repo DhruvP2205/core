@@ -45,6 +45,7 @@ class Model_Core_Row_Resource
         {
             if($value != null) 
             {
+                $value = mysqli_real_escape_string($this->getConnect(), $value);
                 array_push($columnName, $columnKey);
                 array_push($columnValue, $value);
             }
@@ -74,6 +75,7 @@ class Model_Core_Row_Resource
             }
             else 
             {
+                $columnValue = mysqli_real_escape_string($this->getConnect(), $columnValue);
                 $valueArray[] = "$columnName='$columnValue'";
             }
         }
@@ -110,5 +112,10 @@ class Model_Core_Row_Resource
     {
         $result = $this->getAdapter()->fetchRow($query);
         return $result;
+    }
+
+    public function getConnect()
+    {
+        return $this->getAdapter()->connect();
     }
 }

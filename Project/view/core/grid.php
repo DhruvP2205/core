@@ -45,6 +45,9 @@
         </tr>
     </thead>
     <tbody>
+        <?php if(!$collections): ?>
+        <tr><td>No Data Found.</td></tr>
+        <?php else: ?>
         <?php foreach ($collections as $collection) :?>
         <tr>
             <?php foreach ($columns as $key => $column):?>
@@ -56,6 +59,7 @@
             <?php endforeach; ?>
         </tr>
         <?php endforeach; ?>
+        <?php endif;?>
     </tbody>
 </table>
 <script type="text/javascript">

@@ -10,53 +10,103 @@ class Controller_Order extends Controller_Admin_Action
         }
     }
 
-    public function gridAction()
+    public function gridBlockAction()
     {
-        $this->setTitle('Order');
-        $orderGrid = Ccc::getBlock('Order_Grid');
-        $content = $this->getLayout()->getContent();
-        $content->addChild($orderGrid,'Grid');
-        $this->renderLayout();
+        $orderGrid = Ccc::getBlock('Order_Grid')->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $orderGrid,
+                    ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
     }
 
-    public function editAction()
+    public function editBlockAction()
     {
         try
         {
-            $this->setTitle('Order Edit');
             $orderModel = Ccc::getModel("Order");
-            
             $request = $this->getRequest();
             $orderId = $request->getRequest('id');
             if(!$orderId)
             {
-                throw new Exception('Invalid Request.');          
+                throw new Exception('Invalid Request', 1);          
             }
-
             if(!(int)$orderId)
             {
-                throw new Exception('Invalid Request.');
+                throw new Exception('Invalid Request', 1);
             }
-
             $order = $orderModel->load($orderId);
             if(!$order)
             {
-                throw new Exception('Data not found.');
+                throw new Exception('Invalid Request', 1);
             }
     
-            $content = $this->getLayout()->getContent();
-            $orderEdit = Ccc::getBlock('Order_Edit');
-            
-            $items = $order->getItems();
-            $orderEdit = Ccc::getBlock('Order_Edit')->setData(['order' => $order]);
+            Ccc::register('order',$order);
 
-            $content->addChild($orderEdit);
-            $this->renderLayout();
+            $orderEdit = Ccc::getBlock('Order_Edit')->toHtml();
+            $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+            $response = [
+                'status' => 'success',
+                'elements' => [
+                    [
+                        'element' => '#indexContent',
+                        'content' => $orderEdit,
+                        ],
+                    [
+                        'element' => '#adminMessage',
+                        'content' => $messageBlock
+                    ]
+                ]
+            ];
+            $this->getMessage()->addMessage('Order status changed.');
+            $this->renderJson($response);
+        }catch (Exception $e)
+        {
+            $this->getMessage()->addMessage($e->getMessage(),3);
+            $this->gridBlockAction();
+        }
+    }
+
+    public function statusUpdateAction()
+    {
+        try
+        {
+            $request = $this->getRequest();
+            $orderId = $request->getRequest('id');
+            $order = Ccc::getModel('Order')->load($orderId);
+            $comment = $order->getComment();
+            $postData = $request->getPost('order');
+            $order->status = $postData['status'];
+            $order->state = $postData['state'];
+            $result = $order->save();
+            if(!$result)
+            {
+                throw new Exception("Status Not Updated.", 1);
+            }
+            $comment->setData($postData);
+            $comment->orderId = $orderId;
+            unset($comment->state);
+            $success = $comment->save();
+            if(!$success)
+            {
+                throw new Exception("Comment Not Saved", 1);
+            }
+            $this->editBlockAction();
         }
         catch (Exception $e)
         {
             $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','order');
+            $this->editBlockAction();
         }
     }
 }

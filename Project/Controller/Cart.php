@@ -57,6 +57,7 @@ class Controller_cart extends Controller_Admin_Action
     public function gridBlockAction()
     {
         $this->getCart()->unsetCart();
+        $this->getMessage()->addMessage('Cart Grid');
         $cartGrid = Ccc::getBlock('Cart_Grid')->toHtml();
         $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
         $response = [
@@ -93,34 +94,6 @@ class Controller_cart extends Controller_Admin_Action
             ]
         ];
         $this->renderJson($response);
-    }
-
-    public function gridAction()
-    {
-        $this->setTitle('Cart');
-        $this->getCart()->unsetCart();
-        $cartGrid = Ccc::getBlock('Cart_Grid');
-        $content = $this->getLayout()->getContent();
-        $content->addChild($cartGrid,'Grid');
-        $this->renderLayout();
-    }
-
-    public function editAction()
-    {
-        try
-        {
-            $this->setTitle('Edit Cart');
-
-            $content = $this->getLayout()->getContent();
-            $cartEdit = Ccc::getBlock('Cart_Edit');
-            $content->addChild($cartEdit);
-            $this->renderLayout();
-        }
-        catch (Exception $e)
-        {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','cart',[],true);
-        }
     }
 
     public function addCartAction()
@@ -635,6 +608,7 @@ class Controller_cart extends Controller_Admin_Action
                 throw new Exception("Request Invalid.");
             }
             $customer = $cart->getCustomer();
+            $orderModel = Ccc::getModel('order');
             
             $orderModel->customerId = $cart->customerId;
             $orderModel->firstName = $customer->firstName;

@@ -61,7 +61,7 @@ $customer = $cart->getCustomer(); ?>
     </div>
 
     <div class="card-body">
-        <div id="cartSubTotal" class="col-sm-6">
+        <div id="cartSubTotal">
         </div>
     </div>
 </div>

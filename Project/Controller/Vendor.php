@@ -69,26 +69,6 @@ class Controller_Vendor extends Controller_Admin_Action
         ];
         $this->renderJson($response);
     }
-    
-    public function gridAction()
-    {
-        $this->setTitle('Vendor');
-        $content = $this->getLayout()->getContent();
-        $vendorGrid = Ccc::getBlock('Vendor_Grid');
-        $content->addChild($vendorGrid,'Grid');
-        $this->renderLayout();
-    }
-
-    public function addAction()
-    {
-        $this->setTitle('Add Vendor');
-        $vendorModel = Ccc::getModel('Vendor'); 
-        $addressModel = Ccc::getModel('Vendor_Address');
-        $content = $this->getLayout()->getContent();
-        $vendorAdd = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendorModel,'address'=>$addressModel]);
-        $content->addChild($vendorAdd,'Add');
-        $this->renderLayout();
-    }
 
     protected function saveVendor()
     {
@@ -253,46 +233,7 @@ class Controller_Vendor extends Controller_Admin_Action
             $this->gridBlockAction();
         }   
     }
-
-    public function editAction()
-    {
-        try
-        {
-            $this->setTitle('Edit Vendor');
-            
-
-            $request = $this->getRequest();
-            $id = (int)$request->getRequest('id');
-            if(!$id)
-            {
-                throw new Exception("Request Invalid.");
-            }
-            
-            $vendor = $vendorModel->load($id);
-            
-            if(!$vendor)
-            {   
-                throw new Exception("System is unable to find record.");
-            }
-
-            $address = $addressModel->load($id,'vendorId');
-            if(!$address)
-            {
-                $address = Ccc::getModel('Vendor_Address');   
-            }
-
-            $content = $this->getLayout()->getContent();
-            $vendorEdit = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
-            $content->addChild($vendorEdit,'Edit');
-            $this->renderLayout();
-        }
-        catch (Exception $e) 
-        {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect($this->getView()->getUrl('grid','vendor',[],true));
-        }
-    }
-
+    
     public function deleteAction()
     {
         try 

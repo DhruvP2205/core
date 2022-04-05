@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="skin/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="skin/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="skin/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="skin/assets/plugins/toastr/toastr.min.css">
   
     <title><?php echo $this->getTitle(); ?></title>
 </head>

@@ -17,44 +17,56 @@ $paymentMethods = $this->getPaymentMethod(); ?>
                         </div>
                         <div class="card-body">
                             <div class="form-group row">
-                                <?php foreach($paymentMethods as $paymentMethod): ?>
-                                <tr>
-                                    <td><input type="radio" name="paymentMethod" value="<?php echo $paymentMethod->methodId ?>" <?php echo ($cart->paymentMethod == $paymentMethod->methodId) ? 'checked': ''; ?>><?php echo $paymentMethod->name?></td>
-                                </tr>
-                                <?php endforeach;?>
-<table border="1">
-    <tr>
-        <th>Payment Method</th>
-        <th>Shiping Method</th>
-    </tr>
-    <tr>
-        <td>
-            <table>
-                    <?php foreach($paymentMethods as $paymentMethod): ?>
-                    <tr>
-                        <td><input type="radio" name="paymentMethod" value="<?php echo $paymentMethod->methodId ?>" <?php echo ($cart->paymentMethod == $paymentMethod->methodId) ? 'checked': ''; ?>><?php echo $paymentMethod->name?></td>
-                    </tr>
-                    <?php endforeach;?>
-                    <tr>
-                        <td><input type="button" id="cartPaymentMethodSubmitBtn" class="btn btn-primary" name="submit" value="Update"></td>
-                    </tr>
-            </table>
-        </td>
-        <td>
-            <table>
-                    <?php foreach($shippingMethods as $shippingMethod): ?>
-                    <tr>
-                        <td><input type="radio" name="shippingMethod" value="<?php echo $shippingMethod->methodId ?>" <?php echo ($cart->shippingMethod == $shippingMethod->methodId) ? 'checked': ''; ?>><?php echo $shippingMethod->name?></td>
-                        <td><?php echo $shippingMethod->charge ?></td>
-                    </tr>
-                    <?php endforeach;?>
-                    <tr>
-                        <td colspan="2"><input type="button" id="cartShipingMethodSubmitBtn" class="btn btn-primary" name="submit" value="Update"></td>
-                    </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+                                <table class="table table-bordered table-striped">
+                                    <tbody>
+                                        <?php foreach($paymentMethods as $paymentMethod): ?>
+                                        <tr>
+                                            <td>
+                                                <input type="radio" name="paymentMethod" value="<?php echo $paymentMethod->methodId ?>" <?php echo ($cart->paymentMethod == $paymentMethod->methodId) ? 'checked': ''; ?>> &nbsp;<?php echo $paymentMethod->name?>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach;?>
+                                        <tr>
+                                            <td><input type="button" id="cartPaymentMethodSubmitBtn" class="col-sm-12 btn btn-success" name="submit" value="Update"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Shipping Charge</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <table class="table table-bordered table-striped">
+                                    <tbody>
+                                        <?php foreach($shippingMethods as $shippingMethod): ?>
+                                        <tr>
+                                            <td>
+                                                <input type="radio" name="shippingMethod" value="<?php echo $shippingMethod->methodId ?>" <?php echo ($cart->shippingMethod == $shippingMethod->methodId) ? 'checked': ''; ?>> &nbsp;<?php echo $shippingMethod->name?>
+                                            </td>
+                                            <td>
+                                                <?php echo $shippingMethod->charge ?>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach;?>
+                                        <tr>
+                                            <td colspan="2"><input type="button" id="cartShipingMethodSubmitBtn" class="col-sm-12 btn btn-success" name="submit" value="Update"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $("#cartPaymentMethodSubmitBtn").click(function(){

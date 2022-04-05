@@ -154,7 +154,7 @@ class Controller_Customer extends Controller_Admin_Action
         {
             throw new Exception("Unable to insert Customer.");
         }
-        $message = $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
+        $message = $this->getMessage()->addMessage('Customer data saved succesfully.',1);
         return $save;
     }
 
@@ -224,7 +224,7 @@ class Controller_Customer extends Controller_Admin_Action
         {
             throw new Exception("Customer Details Not Saved.");
         }
-        $message = $this->getMessage()->addMessage('Customer Inserted succesfully.',1);
+        $message = $this->getMessage()->addMessage('Customer data saved succesfully.',1);
     }
 
     public function saveAction()

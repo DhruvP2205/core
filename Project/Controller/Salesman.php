@@ -63,25 +63,6 @@ class Controller_Salesman extends Controller_Admin_Action
         $this->renderJson($response);
     }
 
-    public function gridAction()
-    {
-        $this->setTitle('Salesman');
-        $content = $this->getLayout()->getContent();
-        $salesmanGrid = Ccc::getBlock('Salesman_Grid');
-        $content->addChild($salesmanGrid,'Grid');
-        $this->renderLayout();
-    }
-
-    public function addAction()
-    {
-        $this->setTitle('Add Salesman');
-        $salesmanModel = Ccc::getModel('Salesman');
-        $content = $this->getLayout()->getContent();
-        $salesmanAdd = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel]);
-        $content->addChild($salesmanAdd,'Add');
-        $this->renderLayout();
-    }
-
     public function saveAction()
     {
         try
@@ -167,41 +148,7 @@ class Controller_Salesman extends Controller_Admin_Action
             $this->gridBlockAction();
         }   
     }
-
-    public function editAction()
-    {
-        try
-        {
-            $this->setTitle('Edit Salesman');
-            $salesmanModel = Ccc::getModel('Salesman');
-            $request = $this->getRequest();
-            $id = (int)$request->getRequest('id');
-
-            if(!$id)
-            {
-                throw new Exception("Error Processing Request");         
-            }
-            
-            $salesman = $salesmanModel->load($id);
-            
-            if(!$salesman)
-            {   
-                throw new Exception("Error Processing Request");        
-            }
-
-            $content = $this->getLayout()->getContent();
-            $salesmanEdit = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesman]);
-            $content->addChild($salesmanEdit,'Edit');
-            $this->renderLayout();
-        }
-        catch (Exception $e)
-        {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','salesman',[],true);
-        }
-    }
-
-
+    
     public function deleteAction()
     {
         try 
@@ -224,9 +171,12 @@ class Controller_Salesman extends Controller_Admin_Action
                 foreach($customers as $customer)
                 {
                     $customerPrices = $customerPriceModel->fetchAll("SELECT `entityId` FROM `customer_price` WHERE `customerId` = {$customer->customerId}");
-                    foreach ($customerPrices as $customerPrice) 
+                    if($customerPrices)
                     {
-                        $customerPriceModel->load($customerPrice->entityId)->delete();
+                        foreach ($customerPrices as $customerPrice) 
+                        {
+                            $customerPriceModel->load($customerPrice->entityId)->delete();
+                        }
                     }
                 }
             }

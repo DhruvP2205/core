@@ -118,25 +118,6 @@ class Controller_Product extends Controller_Admin_Action
             $this->gridBlockAction();
         }   
     }
-    
-    public function gridAction()
-    {
-        $this->setTitle('Product');
-        $content = $this->getLayout()->getContent();
-        $productGrid = Ccc::getBlock('Product_Grid');
-        $content->addChild($productGrid,'Grid');
-        $this->renderLayout();
-    }
-
-    public function addAction()
-    {
-        $this->setTitle('Add Product');
-        $productModel = Ccc::getModel('Product');
-        $content = $this->getLayout()->getContent();
-        $productAdd = Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel]);
-        $content->addChild($productAdd,'Add');
-        $this->renderLayout();
-    }
 
     public function saveAction()
     {
@@ -347,38 +328,6 @@ class Controller_Product extends Controller_Admin_Action
             $this->getMessage()->addMessage($e->getMessage(),3);
             $this->editBlockAction();
         }   
-    }
-
-
-    public function editAction()
-    {
-        try 
-        {
-            $this->setTitle('Edit Product');
-            $productModel = Ccc::getModel('Product');
-            $request = $this->getRequest();
-            $id = (int)$request->getRequest('id');
-
-            if(!$id)
-            {
-                throw new Exception("Invalid Request.");
-            }
-
-            $product = $productModel->load($id);
-
-            if(!$product)
-            {
-                throw new Exception("System is unable to find record."); 
-            }
-            $content = $this->getLayout()->getContent();
-            $productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$product]);
-            $content->addChild($productEdit,'Edit');
-            $this->renderLayout();
-        } 
-        catch (Exception $e) 
-        {
-            throw new Exception("System is unable to find record.");
-        }
     }
 
     public function deleteAction()

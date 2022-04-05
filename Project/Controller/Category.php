@@ -123,25 +123,6 @@ class Controller_Category extends Controller_Admin_Action
             $this->gridBlockAction();
         }   
     }
-    
-    public function gridAction()
-    {
-        $this->setTitle('Category');
-        $content = $this->getLayout()->getContent();
-        $categoryGrid = Ccc::getBlock('Category_Grid');
-        $content->addChild($categoryGrid,'Grid');
-        $this->renderLayout();
-    }
-
-    public function addAction()
-    {
-        $this->setTitle('Add Category');
-        $categoryModel = Ccc::getModel('Category');
-        $content = $this->getLayout()->getContent();
-        $categoryAdd = Ccc::getBlock('category_Edit')->setData(['category'=>$categoryModel]);
-        $content->addChild($categoryAdd,'Add');
-        $this->renderLayout();
-    }
 
     public function saveAction()
     {
@@ -398,18 +379,26 @@ class Controller_Category extends Controller_Admin_Action
                                 throw new Exception("Invalid request.");
                             }
                             unlink(Ccc::getBlock('Category_Grid')->getBaseUrl("Media/category/"). $media->name);
-
-                            if($postData['media']['base'] == $remove)
+                            if(array_key_exists('base',$postData['media']))
                             {
-                                unset($postData['media']['base']);
-                            }   
-                            if($postData['media']['thumb'] == $remove)
-                            {
-                                unset($postData['media']['thumb']);
+                                if($postData['media']['base'] == $remove)
+                                {
+                                    unset($postData['media']['base']);
+                                }
                             }
-                            if($postData['media']['small'] == $remove)
+                            if(array_key_exists('thumb',$postData['media']))
                             {
-                                unset($postData['media']['small']);
+                                if($postData['media']['thumb'] == $remove)
+                                {
+                                    unset($postData['media']['thumb']);
+                                }
+                            }
+                            if(array_key_exists('small',$postData['media']))
+                            {
+                                if($postData['media']['small'] == $remove)
+                                {
+                                    unset($postData['media']['small']);
+                                }
                             }
                         }
                     }
@@ -437,6 +426,11 @@ class Controller_Category extends Controller_Admin_Action
                     }
                     unset($mediaData->gallery);
 
+                    if(array_key_exists('base',$postData['media'])){
+                                if($postData['media']['base'] == $remove){
+                                    unset($postData['media']['base']);
+                                }   
+                            }
                     if(array_key_exists('base',$postData['media']))
                     {
                         $categoryData->base = $postData['media']['base'];

@@ -12,7 +12,7 @@ $shippingAddress = $cart->getShippingAddress(); ?>
                 <div class="col-md-6">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Biling Address</h3>
+                            <h3 class="card-title">Billing Address</h3>
                         </div>
                         <div class="card-body">
                             <div class="form-group row">

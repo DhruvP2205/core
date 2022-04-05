@@ -9,15 +9,6 @@ class Controller_Page extends Controller_Admin_Action
             $this->redirect('login','admin_login');
         }
     }
-    
-    public function gridAction()
-    {
-        $this->setTitle('Page');
-        $content = $this->getLayout()->getContent();
-        $pageGrid = Ccc::getBlock('Page_Grid');
-        $content->addChild($pageGrid,'Grid');
-        $this->renderLayout();
-    }
 
     public function indexAction()
     {
@@ -70,16 +61,6 @@ class Controller_Page extends Controller_Admin_Action
             ]
         ];
         $this->renderJson($response);
-    }
-
-    public function addAction()
-    {
-        $this->setTitle('Add Page');
-        $pageModel = Ccc::getModel('Page');
-        $content = $this->getLayout()->getContent();
-        $pageAdd = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel]);
-        $content->addChild($pageAdd,'Add');
-        $this->renderLayout();
     }
 
     public function saveAction()
@@ -177,38 +158,6 @@ class Controller_Page extends Controller_Admin_Action
             $this->getMessage()->addMessage($e->getMessage(),3);
             $this->gridBlockAction();
         }   
-    }
-
-    public function editAction()
-    {
-        try 
-        {
-            $this->setTitle('Edit Page');
-            $pageModel = Ccc::getModel('Page');
-            $request = $this->getRequest();
-            
-            $id = (int)$request->getRequest('id');
-            if(!$id)
-            {
-                throw new Exception("Request Invalid.");
-            }
-            
-            $page = $pageModel->load($id);
-            if(!$page)
-            {
-                throw new Exception("System is unable to find record.");
-            }
-
-            $content = $this->getLayout()->getContent();
-            $pageEdit = Ccc::getBlock('Page_Edit')->setData(['page'=>$page]);
-            $content->addChild($pageEdit,'Edit');
-            $this->renderLayout();
-        }    
-        catch (Exception $e) 
-        {
-            $this->getMessage()->addMessage($e->getMessage(),3);
-            $this->redirect('grid','page',[],true);
-        }
     }
 
     public function deleteAction()

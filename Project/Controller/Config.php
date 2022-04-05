@@ -9,15 +9,6 @@ class Controller_Config extends Controller_Admin_Action
             $this->redirect('login','admin_login');
         }
     }
-    
-    public function gridAction()
-    {
-        $this->setTitle('Config');
-        $content = $this->getLayout()->getContent();
-        $configGrid = Ccc::getBlock('Config_Grid');
-        $content->addChild($configGrid,'Grid');
-        $this->renderLayout();
-    }
 
     public function indexAction()
     {
@@ -70,17 +61,6 @@ class Controller_Config extends Controller_Admin_Action
             ]
         ];
         $this->renderJson($response);
-    }
-
-    public function addAction()
-    {
-        $this->setTitle('Add Config');
-        $configModel = Ccc::getModel('Config');
-        $content = $this->getLayout()->getContent();
-        $configAdd = Ccc::getBlock('Config_Edit');
-        Ccc::register('config',$configModel);
-        $content->addChild($configAdd,'Add');
-        $this->renderContent();
     }
 
     public function saveAction()
@@ -173,37 +153,6 @@ class Controller_Config extends Controller_Admin_Action
             $this->gridBlockAction();
         }   
     }
-
-    public function editAction()
-    {
-        try 
-        {
-            $this->setTitle('Edit Config');
-            $configModel = Ccc::getModel('Config');
-            $request = $this->getRequest();
-            $id = (int)$request->getRequest('id');
-            if(!$id)
-            {
-                throw new Exception("Request Invalid.");
-            }
-            $config = $configModel->load($id);
-            if(!$config)
-            {
-                throw new Exception("System is unable to find record."); 
-            }
-            $content = $this->getLayout()->getContent();
-            $configEdit = Ccc::getBlock('Config_Edit');
-            Ccc::register('config',$config);
-            $content->addChild($configEdit,'Edit');
-            $this->renderContent();
-        }    
-        catch (Exception $e) 
-        {
-            $message = $this->getMessage()->addMessage($e->getMessage(),3);
-            echo $message->getMessages()['success'];
-        }
-    }
-
 
     public function deleteAction()
     {

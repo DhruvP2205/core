@@ -104,7 +104,7 @@ class Model_Cart extends Model_Core_Row
         {
             return $this->item;
         }
-        $item = $itemModel->fetchAll("SELECT * FROM `cart_item` WHERE `cartId` = {$this->cartId}");
+        $item = $itemModel->fetchRow("SELECT * FROM `cart_item` WHERE `cartId` = {$this->cartId}");
         if(!$item)
         {
             return $itemModel;

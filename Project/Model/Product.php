@@ -147,19 +147,4 @@ class Model_Product extends Model_Core_Row
             }
         }
     }
-
-    public function getEditUrl()
-    {
-        return Ccc::getModel('Core_View')->getUrl('edit','Category',['id'=>$this->CategoryId]);
-    }
-
-    public function getDeleteUrl()
-    {
-        return Ccc::getModel('Core_View')->getUrl('delete','Category',['id'=>$this->CategoryId]);
-    }
-
-    public function getMediaUrl()
-    {
-        return Ccc::getModel('Core_View')->getUrl('grid','Category_Media',['id'=>$this->CategoryId]);
-    }
 }

@@ -80,10 +80,13 @@ class Block_Admin_Grid extends Block_Core_Grid
         
         $admins = $adminModel->fetchAll("SELECT * FROM `admin` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         $adminColumn = [];
-        foreach ($admins as $admin) 
+        if($admins)
         {
-            array_push($adminColumn, $admin);
-        }        
+        	foreach ($admins as $admin) 
+	        {
+	            array_push($adminColumn, $admin);
+	        } 
+        }
         return $adminColumn;
     }
 }
