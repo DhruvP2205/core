@@ -93,19 +93,22 @@ class Block_Vendor_Grid extends Block_Core_Grid
         $vendors = $vendorModel->fetchAll("SELECT * FROM `vendor` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
 
         $vendorColumn = [];
-        foreach ($vendors as $vendor)
+        if($vendors)
         {
-            $address = null;
-            foreach($vendor->getAddress()->getData() as $key => $value)
+            foreach ($vendors as $vendor)
             {
-                if($key != 'addressId' && $key != 'vendorId')
+                $address = null;
+                foreach($vendor->getAddress()->getData() as $key => $value)
                 {
-                    $address .= $key." : ".$value."<br>";
+                    if($key != 'addressId' && $key != 'vendorId')
+                    {
+                        $address .= $key." : ".$value."<br>";
+                    }
                 }
+                $vendor->setData(['address' => $address]);
+                array_push($vendorColumn, $vendor);
             }
-            $vendor->setData(['address' => $address]);
-            array_push($vendorColumn, $vendor);
-        }        
+        }
         return $vendorColumn;
     }
 }

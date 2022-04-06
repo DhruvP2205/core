@@ -94,12 +94,11 @@ class Block_Category_Grid extends Block_Core_Grid
         $categoryColumn = [];
         if(!$categories)
         {
-            return null;
+            foreach ($categories as $category) 
+            {
+                array_push($categoryColumn, $category);
+            }
         }
-        foreach ($categories as $category) 
-        {
-            array_push($categoryColumn, $category);
-        }        
         return $categoryColumn;
     }
 }

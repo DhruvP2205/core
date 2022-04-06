@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="skin/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- Toastr -->
     <link rel="stylesheet" href="skin/assets/plugins/toastr/toastr.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="skin/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
   
     <title><?php echo $this->getTitle(); ?></title>
 </head>
