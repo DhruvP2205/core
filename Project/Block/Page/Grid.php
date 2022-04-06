@@ -80,10 +80,13 @@ class Block_Page_Grid extends Block_Core_Grid
         
         $pages = $pageModel->fetchAll("SELECT * FROM `page` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         $pageColumn = [];
-        foreach ($pages as $page) 
+        if($pages)
         {
-            array_push($pageColumn, $page);
-        }        
+            foreach ($pages as $page) 
+            {
+                array_push($pageColumn, $page);
+            }
+        }
         return $pageColumn;
     }
 }

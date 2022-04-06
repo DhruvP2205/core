@@ -99,28 +99,31 @@ class Block_Customer_Grid extends Block_Core_Grid
         $customers = $customerModel->fetchAll("SELECT * FROM `customer` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         
         $customerColumn = [];
-        foreach ($customers as $customer)
+        if($customers)
         {
-            $billing = null;
-            $shipping = null;
-            foreach($customer->getBillingAddress()->getData() as $key => $value)
+            foreach ($customers as $customer)
             {
-                if($key != 'addressId' && $key != 'customerId')
+                $billing = null;
+                $shipping = null;
+                foreach($customer->getBillingAddress()->getData() as $key => $value)
                 {
-                    $billing .= $key." : ".$value."<br>";
+                    if($key != 'addressId' && $key != 'customerId')
+                    {
+                        $billing .= $key." : ".$value."<br>";
+                    }
                 }
-            }
-            foreach($customer->getShippingAddress()->getData() as $key => $value)
-            {
-                if($key != 'addressId' && $key != 'customerId')
+                foreach($customer->getShippingAddress()->getData() as $key => $value)
                 {
-                    $shipping .= $key." : ".$value."<br>";
+                    if($key != 'addressId' && $key != 'customerId')
+                    {
+                        $shipping .= $key." : ".$value."<br>";
+                    }
                 }
+                $customer->setData(['billing' => $billing]);
+                $customer->setData(['shipping' => $shipping]);
+                array_push($customerColumn,$customer);
             }
-            $customer->setData(['billing' => $billing]);
-            $customer->setData(['shipping' => $shipping]);
-            array_push($customerColumn,$customer);
-        }        
+        }
         return $customerColumn;
     }
 }

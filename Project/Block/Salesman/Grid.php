@@ -93,10 +93,13 @@ class Block_Salesman_Grid extends Block_Core_Grid
 
         $salesmans = $salesmanModel->fetchAll("SELECT * FROM `salesman` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         $salesmanColumn = [];
-        foreach ($salesmans as $salesman) 
+        if($salesmans)
         {
-            array_push($salesmanColumn, $salesman);
-        }        
+            foreach ($salesmans as $salesman) 
+            {
+                array_push($salesmanColumn, $salesman);
+            }
+        }
         return $salesmanColumn;
     }
 }

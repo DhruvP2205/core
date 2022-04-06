@@ -76,21 +76,36 @@ var admin = {
             {
                 if(element.content)
                 {
+                    var Toast = Swal.mixin({
+                      toast: true,
+                      position: 'top-end',
+                      showConfirmButton: false,
+                      timer: 3000
+                    });
                     let text = element.content;
                     const myArray = text.split(":");
                     const type = myArray[0];
                     const msg = myArray[1];
-                    if(type == 'success ')
+                    if(type == 'success')
                     {
-                        toastr.success(msg);
+                        Toast.fire({
+                            icon: 'success',
+                            title: msg
+                        });
                     }
-                    else if(type == 'warning ')
+                    else if(type == 'warning')
                     {
-                        toastr.warning(msg);
+                        Toast.fire({
+                            icon: 'warning',
+                            title: msg
+                        });
                     }
-                    else if(type == 'error ')
+                    else if(type == 'error')
                     {
-                        toastr.error(msg);
+                        Toast.fire({
+                            icon: 'error',
+                            title: msg
+                        });
                     }
                 }
             }

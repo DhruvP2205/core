@@ -129,10 +129,13 @@ class Block_Product_Grid extends Block_Core_Grid
 
 		$products = $productModel->fetchAll("SELECT * FROM `product` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
 		$productColumn = [];
-        foreach ($products as $product) 
+        if($products)
         {
-            array_push($productColumn, $product);
-        }        
+            foreach ($products as $product) 
+            {
+                array_push($productColumn, $product);
+            }
+        }
         return $productColumn;
 	}
 }

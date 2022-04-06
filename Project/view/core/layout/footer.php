@@ -1,6 +1,6 @@
 <footer class="main-footer">
 
-  <strong>Copyright &copy; 2022 <a href="#">QuestCom</a>.</strong>
+  <strong>Copyright &copy; 2022 <a href="<?php echo $this->getUrl()?>">QuestCom</a>.</strong>
   All rights reserved.
   <div class="float-right d-none d-sm-inline-block">
     <b>Version</b> 3.2.0
@@ -30,5 +30,6 @@
 <script src="skin/assets/dist/js/pages/dashboard2.js"></script>
 <!-- Toastr -->
 <script src="skin/assets/plugins/toastr/toastr.min.js"></script>
-
+<!-- SweetAlert2 -->
+<script src="skin/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
   
