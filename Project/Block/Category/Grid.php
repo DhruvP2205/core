@@ -92,7 +92,7 @@ class Block_Category_Grid extends Block_Core_Grid
         
         $categories = $categoryModel->fetchAll("SELECT * FROM `category` ORDER BY `path` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         $categoryColumn = [];
-        if(!$categories)
+        if($categories)
         {
             foreach ($categories as $category) 
             {
